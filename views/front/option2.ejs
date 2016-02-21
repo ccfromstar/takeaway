@@ -1,0 +1,117 @@
+<!--业务逻辑-->
+<!--页面逻辑-->
+<% include header %>
+<div style="width:100%">
+	<div class="pagetop"></div>
+	<table style="margin:auto;">
+		<tr>
+			<td style="vertical-align:top;text-align:left;width:250px;">
+				<hr class="line1">
+				<div class="acc"><img src="/img/admin2.png" />账户</div>
+				<hr class="line1">
+        <div class="acc_selected">我的订单</div>
+				<div class="acc_unselceted" onclick="toLocation('option1');">个人信息</div>
+			</td>
+			<td style="width:600px;">
+			<div style="font-size:18px;font-weight:bold;margin-bottom:30px;">查看我的订单</div>
+		<table class="table table-hover" id="table_list">
+        <thead>
+            <tr>
+              <th>日期</th>
+              <th>订单号</th>
+              <th>送达日期</th>
+              <th>金额</th>
+              <th>数量</th>
+              <th>实付金额</th>
+              <th>订单状态</th>
+            </tr>
+        </thead>
+        <tbody>
+        <%for(var i in record){%>
+            <tr style="cursor:pointer;" onclick="getbookingprice('<%=record[i].id%>','<%=record[i].bookingno%>','<%=record[i].status%>','<%=record[i].linkname%>','<%=record[i].linktel%>','<%=record[i].addressname+record[i].addressdetail%>','<%=record[i].sendtime%>','<%=record[i].paytype%>','<%=record[i].invoicetitle%>','<%=record[i].numtotal%>','<%=record[i].pricetotalold%>','<%=record[i].pricetotal%>');">
+              <td><%=record[i].bookingtime%></td>
+              <td><%=record[i].bookingno%></td>
+              
+              <td>次日送达</td>
+              <td>¥ <%=record[i].pricetotalold%></td>
+              <td><%=record[i].numtotal%></td>
+              <td>¥ <%=record[i].pricetotal%></td>
+              <td style="color:red"><%=record[i].status%></td>
+            </tr>
+        <%}%>
+        </tbody>
+        </table>
+         <!--分页符-->
+      <div style='width:100%;text-align:center'>
+          <button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+          当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+          <button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+      </div>  
+      <br/><br/>  
+			</td>
+		</tr>
+	</table>
+	<div style="height:100px;"></div>
+  <!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:700px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table style="width:100%;margin-left:10px;margin-bottom:5px;">
+              <tr>
+                <th style="width:40px;">订单号</th><th id="bk1"></th><th style="width:60px;">订单状态：</th><th style="width:60px;" id="bk2"></th>
+                <td style="width:12px;"></td>
+              </tr>
+            </table>
+            <hr style="margin-top:0px !important;">
+            <div style="margin-left:10px;padding-top:5px;">联系人：<span id="bk3" style="margin-right:30px;"></span> 联系电话：<span id="bk8"></span></div>
+            <div style="margin-left:10px;padding-top:5px;">配送地点：<span id="bk4"></span></div>
+            <div style="margin-left:10px;padding-top:5px;">送达时间：<span id="bk5"></span></div>
+            <div id="bookingdetail"></div>
+            <div style="margin-left:10px;padding-top:5px;">支付状态：<span id="bk6"></span></div>
+            <div style="margin-left:10px;padding-top:5px;">开票信息：<span id="bk7"></span></div>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+  function toPage(i){
+    window.location = "/option2?p="+i;
+  }
+
+  function getbookingprice(id,bk1,bk2,bk3,bk8,bk4,bk5,bk6,bk7,num,price,price1){
+    $.ajax({ type:"POST" , url: "/customer/getbookingdetail",data:{id:id},  success: function(data){
+        var _html = "<table  id='table_list_front' style='margin-top:20px;'>";
+        var j = 0;
+        _html += "<thead><tr><th>序号</th><th>品名</th><th>售价</th><th>优惠价</th><th>数量</th><th>小计</th><th>优惠备注</th></tr></thead> <tbody>"
+        for(var i in data){
+            j += 1;
+            var ap = "";
+            ap = (data[i].remark=="")?"-":data[i].aheadprice;
+            _html += "<tr>";
+            _html += "<td>"+j+"</td>";
+            _html += "<td>"+data[i].name+"</td>";
+            _html += "<td>"+data[i].price+"</td>";
+            _html += "<td>"+ap+"</td>";
+            _html += "<td>"+data[i].num+"</td>";
+            _html += "<td>"+data[i].pricetotal+"</td>";
+            _html += "<td>"+data[i].remark+"</td>";
+            _html += "</tr>";
+        }
+        _html += "<tr><td colspan='4'>合计</td><td style='color:#DB551B'>"+num+"</td><td style='color:#DB551B'>"+price+"</td><td>实付金额：<span style='color:#DB551B'>"+price1+"</span></td></tr>";
+        _html += "</tbody></table>";
+        $("#bookingdetail").html(_html);
+        $("#bk1").html(bk1);
+        $("#bk2").html(bk2);
+        $("#bk3").html(bk3);
+        $("#bk4").html(bk4);
+        $("#bk5").html('次日');
+        $("#bk6").html(bk6);
+        $("#bk7").html(bk7);
+        $("#bk8").html(bk8);
+        $('#addModal').modal('show');
+    }});
+  }
+</script>
+<% include footer %>

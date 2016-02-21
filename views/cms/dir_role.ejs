@@ -1,0 +1,237 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td class="tbleft_gury"><% include left-nav %></td>
+      <td>
+      		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增账户</button>
+			<table class="table table-hover" id="table_list">
+    		<thead>
+      			<tr>
+        			<th>序号</th>
+        			<th>账户名（英文）</th>
+        			<th>登陆密码</th>
+        			<th>姓名</th>
+        			<th>用户权限</th>
+        			<th>操作</th>
+      			</tr>
+    		</thead>
+    		<tbody>
+    		<%for(var i in record){%>
+      			<tr>
+        			<td><%-record[i].id%></td>
+        			<td><%=record[i].username%></td>
+        			<td><%=record[i].password%></td>
+        			<td><%=record[i].name%></td>
+        			<td><%=record[i].role%></td>
+        			<td>
+        				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=record[i].id%>)">编辑</button>
+        				<button type="button" class="btn btn-default btn-xs" onclick="delinfo(<%=record[i].id%>)">删除</button>
+        			</td>
+      			</tr>
+    		<%}%>
+    		</tbody>
+    		</table>
+    		<!--分页符-->
+			<div style='width:100%;text-align:center'>
+  				<button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+  				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+  				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+			</div>  
+			<br/><br/>  	
+      <table class="table table-hover" id="table_list">
+        <thead>
+            <tr>
+              <th>用户权限</th>
+              <th>查看订单</th>
+              <th>客户管理</th>
+              <th>财务管理</th>
+              <th>地址管理</th>
+              <th>菜单管理</th>
+              <th>账户管理</th>
+              <th>系统设置</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>BOSS</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+            </tr>
+            <tr>
+              <td>财务</td>
+              <td>√</td>
+              <td>X</td>
+              <td>√</td>
+              <td>x</td>
+              <td>x</td>
+              <td>x</td>
+              <td>x</td>
+            </tr>
+            <tr>
+              <td>主管</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+              <td>√</td>
+              <td>x</td>
+              <td>√</td>
+            </tr>
+            <tr>
+              <td>操作</td>
+              <td>√</td>
+              <td>√</td>
+              <td>x</td>
+              <td>x</td>
+              <td>x</td>
+              <td>x</td>
+              <td>√</td>
+            </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:800px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td>账户名（英文）</td>
+                    <td><input type="text" class="input-sm form-control" id="username" ></input></td>
+                    <td>姓名</td>
+                    <td><input type="text" class="input-sm form-control" id="name" ></input></td>
+                </tr>
+                <tr>
+                    <td>登陆密码</td>
+                    <td><input type="text" class="input-sm form-control" id="password" ></input></td>
+                    <td>用户权限</td>
+                    <td>
+                    	<select id="role" class="input-sm selectpicker">
+                    		<option value="-">请选择</option>
+                            <option value="BOSS">BOSS</option>
+                            <option value="财务">财务</option>
+                            <option value="主管">主管</option>
+                            <option value="操作">操作</option>
+                        </select>
+                    </td>
+                </tr>
+             </table>
+             <input type="hidden" id="docid" ></input>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+	var _page = "role";
+
+	function newDoc(){
+		$("#username").val("");
+		$("#password").val("");
+		$("#name").val("");
+		$("#role").val("-");
+		$("#docid").val("0");
+
+		$('#addModal').modal('show');
+	}
+
+  function toPage(i){
+    window.location = "/cms/role?p="+i;
+  }
+
+	function editDoc(id){
+        //根据id读取字段
+        $.ajax({ type:"POST" , url: "/"+_page+"/getinfo", data:{id:id}, success: function(data){
+               $("#username").val(data[0].username); 
+               $("#password").val(data[0].password); 
+               $("#name").val(data[0].name);
+               $("#role").val(data[0].role);
+               $("#docid").val(id);
+        }});
+        $('#addModal').modal('show');
+    }
+
+	function submitDoc(){
+		if($("#username").val()==""){
+			$.alert({title: '提示信息',content: '账户名（英文）必填！'});return false;
+		}
+		if($("#password").val()==""){
+			$.alert({title: '提示信息',content: '登陆密码必填！'});return false;
+		}
+		if($("#name").val()==""){
+			$.alert({title: '提示信息',content: '姓名必填！'});return false;
+		}
+		if($("#role").val()=="-"){
+			$.alert({title: '提示信息',content: '用户权限必填！'});return false;
+		}
+		if($("#docid").val()=="0"){
+			//insert
+			$.ajax({ type:"POST" , url: "/"+_page+"/insert", data:{
+                username:$("#username").val(),
+                password:$("#password").val(),
+                name:$("#name").val(),
+                role:$("#role").val(),
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}else{
+			//update
+			$.ajax({ type:"POST" , url: "/"+_page+"/update", data:{
+                username:$("#username").val(),
+                password:$("#password").val(),
+                name:$("#name").val(),
+                role:$("#role").val(),
+                docid:$("#docid").val(),
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}
+    }
+
+    function delinfo(id){
+    	$.confirm({
+    		title: '请确认',
+    		content: '是否确认删除？',
+    		confirm: function(){
+        		$.ajax({ type:"POST" , url: "/"+_page+"/delinfo", data:{id:id}, success: function(data){
+        			if(data==200){
+              			window.location.reload();     
+        			}
+      			}});	
+    		}
+		});
+    }
+
+<%if(info){%>
+    $.alert({title: '提示信息',content: '<%=info%>'});
+<%}%>
+</script>
+<% include footer %>

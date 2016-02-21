@@ -1,0 +1,162 @@
+<!--业务逻辑-->
+<!--页面逻辑-->
+<% include header %>
+<div style="width:100%">
+	<div class="pagetop"></div>
+	<table style="width:450px;margin:auto;">
+		<tr>
+			<td><img src="/img/logoreg.png" /></td>
+			<td>
+				<p style="font-size:22px;color:#40BAD7;font-weight:bold;">注册外卖侠</p>
+				<p style="padding-top:15px;">欢迎使用外卖侠，轻松下单，享受美食。<div>创建账户，一键下单，享受美食。</div></p>
+			</td>
+		</tr>
+	</table>
+	<div style="height:50px;"></div>
+	<table style="width:450px;margin:auto;" class="reg_tab">
+		<tr>
+			<td colspan="2" style="font-size:18px;font-weight:bold">账户</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>姓名</p>
+				<input type="text" class="input form-control" id="name" onblur="checkName(this.value)"></input>
+				<p class="errorinfo" id="error1"></p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>登陆密码</p>
+				<input type="password" class="input form-control" id="password" onblur="checkPwd(this.value)"></input>
+				<p class="errorinfo" id="error2"></p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>手机号码</p>
+				<input type="text" class="input form-control" id="username" onblur="checkMobile(this.value)"></input>
+				<p class="errorinfo" id="error3"></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>输入验证码</p>
+				<input type="text" id="code" class="input form-control"></input>
+			</td>
+			<td style="width:40px;">
+				<div id="btn_send" style="cursor:pointer;margin-top:44px;text-align:center;color:#FFFFFF;font-size:12px;width:120px;background:#40BAD7;height:35px;padding-top:10px;margin-left:20px;border-radius:5px;" >发送验证码</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div style="cursor:pointer;margin-top:35px;text-align:center;color:#FFFFFF;font-size:12px;width:450px;background:#40BAD7;height:35px;padding-top:10px;border-radius:5px;" onclick="reg()">注 册</div>
+			</td>
+		</tr>
+	</table>
+	<div style="height:100px;"></div>
+</div>
+<script type="text/javascript">
+	var code = 0;
+	var _time = 60;
+
+	$(document).ready(function(){
+		$("#btn_send").bind("click",function(){
+			sendSMS();
+		});
+	});
+
+	function checkName(str){
+		var re = /^[\u4e00-\u9fa5 ]{2,10}$/; 
+		if (!re.test(str)) { 
+		 	$("#error1").html("请填写真实姓名！");
+		}else{
+			$("#error1").html("");
+		}
+
+	}
+
+	function checkPwd(str){
+		var re =  /^[\w]{6,12}$/;
+		if (!re.test(str)) { 
+			$("#error2").html("密码格式不对,必须由6-12位数字加字母组成！");
+		}else{
+			$("#error2").html("");
+		}
+	}
+
+	function checkMobile(str){
+		 var re = /^1\d{10}$/; 
+		 if (!re.test(str)) { 
+		 	$("#error3").html("手机号格式错误！");
+		 }else{
+			$("#error3").html("");
+		}
+	}
+
+	function reg(){
+		if($("#name").val()==""){
+	        alert("姓名必填！");return false;
+	    }
+	    if($("#password").val()==""){
+	        alert("登陆密码必填！");return false;
+	    }
+	    if($("#username").val()==""){
+	        alert("手机号必填！");return false;
+	    }
+	    if($("#code").val()==""){
+	        alert("验证码必填！");return false;
+	    }
+
+	    if(Number($("#code").val())!=Number(code)){
+	    	alert("验证码错误！");return false;
+	    }
+	    if($("#error1").html()!="" | $("#error2").html()!="" | $("#error3").html()!="" ){
+	    	alert("有错误信息不能提交！");return false;
+	    }
+
+		$.ajax({ type:"POST" , url: "/role/regUser",data:{name:$("#name").val(),password:$("#password").val(),username:$("#username").val()},  success: function(data){
+       		if(data == "300"){
+       			alert("手机号已注册，不能重复注册！");
+       		}else if(data == "200"){
+       			alert("注册成功！");
+       			window.location = "/";
+       		}
+    	}});
+	}
+
+	//短信发送
+	function sendSMS(){
+		if($("#username").val()==""){
+	        alert("手机号必填！");return false;
+	    }
+	    var re = /^1\d{10}$/; 
+		if (!re.test($("#username").val())) { 
+		 	alert("手机号格式错误！");return false;
+		}
+		//生成随机6位验证码
+		code = addNumber(6);
+
+		_time = 60;
+       	//发送按钮倒计时
+       	$("#btn_send").css("background","#ccc").html("60秒").unbind("click");
+
+		//发送短信
+		$.ajax({ type:"POST" , url: "/role/sendSMS",data:{mobile:$("#username").val(),code:code},  success: function(data){
+       		if(data == "200"){
+       			var t = setInterval(function(){
+       				if(_time == 1){
+       					clearInterval(t);
+       					$("#btn_send").css("background","#40BAD7").html("发送验证码");
+       					$("#btn_send").bind("click",function(){
+						  	sendSMS();
+						});
+       					return false;
+       				}
+       				_time = _time -1;
+       				$("#btn_send").html(_time+"秒");
+       			},1000);
+       		}
+    	}});
+	}
+</script>
+<% include footer %>

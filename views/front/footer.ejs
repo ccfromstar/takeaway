@@ -1,0 +1,20 @@
+<% include login %>
+<div class="footer">
+<table class="footer_table">
+	<tr>
+		<%if(!cuser){%>
+		  	<td style="cursor:pointer;" onclick="showlogin(1)">外卖点单</td>
+    	<%}else{%>
+      		<td style="cursor:pointer;" onclick="toLocation('booking');">外卖点单</td>
+    	<%}%>
+		<td style="cursor:pointer;" onclick="toLocation('/#tab1');">关于我们</td>
+	</tr>
+</table>	
+<div class="footer_div1" style="padding-top:20px;margin-top:20px;">百颖（上海）餐饮服务有限公司版权所有</div>
+<div class="footer_div1">Copyright  2015 www.4000191177.com - All Rights Reserved.</div>
+<div class="footer_div1">客服热线：4000191177</div>
+<div class="footer_div1">沪ICP备15050616号</div>
+<div class="footer_div1" style="padding-bottom:20px;margin-bottom:20px;font-size: 12px;">技术支持@上海荟邮网络科技有限公司</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!--业务逻辑-->
+<%
+	var j = 0;
+	var total = "0,0,0,0,0,0,0,0,0".split(",");
+%>
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td class="tbleft_gury"><% include finance-left-nav %></td>
+      <td>
+      	<div class="menufourth">
+      		报表日期
+      		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly value="<%=bookingdate%>" class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
+      		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
+      		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出月报表</button>
+      	</div>
+      	<table class="table table-hover" id="table_list" >
+    		<thead>
+      			<tr>
+        			<th rowspan="2">日期</th>
+        			<th colspan="2">提前预订单</th>
+        			<th colspan="2">即点即送</th>
+        			<th rowspan="2">微信支付</th>
+        			<th rowspan="2">支付宝支付</th>
+        			<th rowspan="2">货到付款</th>
+        			<th rowspan="2">总数量</th>
+        			<th rowspan="2">总金额</th>
+      			</tr>
+      			<tr>
+        			<th>数量</th>
+        			<th>金额</th>
+        			<th>数量</th>
+        			<th>金额</th>
+      			</tr>
+    		</thead>
+    		<tbody>
+    			<%for(var i=0;i<31;i++){
+    				j = j + 1;
+    				if(Number(num_8[i])!=0){
+    					total[0] = Number(total[0])+Number(num_1[i]);
+    					total[1] = Number(total[1])+Number(num_2[i]);
+    					total[2] = Number(total[2])+Number(num_3[i]);
+    					total[3] = Number(total[3])+Number(num_4[i]);
+    					total[4] = Number(total[4])+Number(num_5[i]);
+    					total[5] = Number(total[5])+Number(num_6[i]);
+    					total[6] = Number(total[6])+Number(num_7[i]);
+    					total[7] = Number(total[7])+Number(num_8[i]);
+    					total[8] = Number(total[8])+Number(num_9[i]);
+    			%>
+    				<tr>
+    					<td><%=bookingdate+"-"+((j+"").length==1?"0"+j:j)%></td>
+    					<td><%=num_1[i]%></td>
+    					<td><%=num_2[i]%></td>
+    					<td><%=num_3[i]%></td>
+    					<td><%=num_4[i]%></td>
+    					<td><%=num_5[i]%></td>
+    					<td><%=num_6[i]%></td>
+    					<td><%=num_7[i]%></td>
+    					<td><%=num_8[i]%></td>
+    					<td><%=num_9[i]%></td>
+    				</tr>
+    			<%}}%>
+    				<tr>
+    					<td>合计</td>
+    					<%for(var i=0;i<9;i++){%>
+    						<td><%=total[i]%></td>
+    					<%}%>
+    				</tr>
+    		</tbody>
+    	</table>
+
+      <table style="margin-left:10px;">
+        <tr>
+          <td>
+            <div id="d_left">统计内容加载中</div>
+          </td>
+          <td>
+            <div id="d_right" style="padding-left:30px;"></div>
+          </td>
+          <td>
+            <div id="d_right_bottmo" style="padding-left:30px;"></div>
+          </td>
+        </tr>
+      </table>
+
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+<script type="text/javascript">
+	function search(){
+		var _m = $("#bookingdate").val();
+  		window.location = "/cms/finance_m?p=1&key="+_m.replace(/-/g,"")+"&bd="+_m;
+	}
+
+  function toExcel(){
+      var _d = $("#bookingdate").val();
+      $.ajax({ type:"POST" , url: "/finance_d/toExcelm", data:{id:_d.replace(/-/g,""),bd:_d}, success: function(data){
+        window.open("/excelop/temp/"+data);
+        }});
+  }
+
+  function getleft(){
+      var _d = $("#bookingdate").val();
+      $.ajax({ type:"POST" , url: "/finance_d/getleft_m", data:{id:_d.replace(/-/g,"")}, success: function(data){
+      var _html = "<div style='padding-left:10px;margin-bottom:10px;'>"+_d+"月菜品明细统计表</div>";
+      _html += "<table class='table table-hover' id='table_list'>";
+        var n = data.name.length;
+        var ydt = 0;var jdt = 0;var ttt = 0;
+        _html += "<thead><tr><th>品名</th><th>总数</th></tr></thead><tbody>"
+        for(var i=0;i<n;i++){
+            _html += "<tr>";
+            _html += "<td>"+data.name[i]+"</td>";
+            _html += "<td>"+data.total[i]+"</td>";
+            _html += "</tr>";
+            ttt = ttt + Number(data.total[i]);
+        }
+        _html += "<tr>";
+        _html += "<td>合计</td>";
+        _html += "<td>"+ttt+"</td>";
+        _html += "</tr>";
+        _html += "</tbody></table>";
+      $("#d_left").html(_html);
+      }});
+    }
+
+  getleft();
+</script>
+<% include footer %>

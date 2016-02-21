@@ -1,0 +1,24 @@
+{
+  "name": "aiyoulun",
+  "version": "1.0.0",
+  "description": "/",
+  "main": "app.js",
+  "scripts": {
+    "test": "/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/"
+  },
+  "keywords": [
+    "/"
+  ],
+  "author": "cc",
+  "license": "/",
+  "dependencies": {
+    "express": "~4.13.3",
+    "morgan": "~1.0.0",
+    "log4js": "*",
+    "ejs": "*"
+  }
+}

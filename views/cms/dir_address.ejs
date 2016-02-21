@@ -1,0 +1,218 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td class="tbleft_gury"><% include left-nav %></td>
+      <td>
+      		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增地址</button>
+			<table class="table table-hover" id="table_list">
+    		<thead>
+      			<tr>
+        			<th>序号</th>
+        			<th>地址</th>
+        			<th>预订配送时间</th>
+        			<th>即时配送时间</th>
+        			<th>送餐员</th>
+        			<th>联系方式</th>
+        			<th>操作</th>
+      			</tr>
+    		</thead>
+    		<tbody>
+    		<%for(var i in address){%>
+      			<tr>
+        			<td><%-address[i].id%></td>
+        			<td><%=address[i].name%></td>
+        			<td>次日<%=address[i].b_starttime%>-<%=address[i].b_endtime%></td>
+        			<td>当日<%=address[i].i_starttime%>-<%=address[i].i_endtime%></td>
+        			<td><%=address[i].sender%></td>
+        			<td><%=address[i].tel%></td>
+        			<td>
+        				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=address[i].id%>)">编辑</button>
+        				<button type="button" class="btn btn-default btn-xs" onclick="delinfo(<%=address[i].id%>)">删除</button>
+        			</td>
+      			</tr>
+    		<%}%>
+    		</tbody>
+    		</table>
+    		<!--分页符-->
+			<div style='width:100%;text-align:center'>
+  				<button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+  				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+  				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+			</div>  
+			<br/><br/>  	
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:800px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td>地址</td>
+                    <td colspan="3"><input type="text" class="input-sm form-control" id="name"></input></td>
+                </tr>   
+                <tr>
+                    <td>预订配送时间</td>
+                    <td colspan="3">
+                    	<div class="floatleftmid">次日</div> 
+                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
+    						<input type="text" class="form-control" id="b_starttime" value="00:00" >
+    						<span class="input-group-addon">
+        						<span class="glyphicon glyphicon-time"></span>
+    						</span>
+						</div></div>
+ 						<div class="floatleftmid"> - </div>
+                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
+    						<input type="text" class="form-control" id="b_endtime" value="00:00" >
+    						<span class="input-group-addon">
+        						<span class="glyphicon glyphicon-time"></span>
+    						</span>
+						</div></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>即时配送时间</td>
+                    <td colspan="3">
+                    	<div class="floatleftmid">当日</div> 
+                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
+    						<input type="text" class="form-control" id="i_starttime" value="00:00" >
+    						<span class="input-group-addon">
+        						<span class="glyphicon glyphicon-time"></span>
+    						</span>
+						</div></div>
+ 						<div class="floatleftmid"> - </div>
+                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
+    						<input type="text" class="form-control" id="i_endtime" value="00:00" >
+    						<span class="input-group-addon">
+        						<span class="glyphicon glyphicon-time"></span>
+    						</span>
+						</div></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>送餐员</td>
+                    <td><input type="text" class="input-sm form-control" id="sender" ></input></td>
+                    <td>联系方式</td>
+                    <td><input type="text" class="input-sm form-control" id="tel" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
+                </tr>
+             </table>
+             <input type="hidden" id="docid" ></input>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+	function newDoc(){
+		$("#name").val("");
+		$("#sender").val("");
+		$("#tel").val("");
+		$("#b_starttime").val("00:00");
+		$("#b_endtime").val("00:00");
+		$("#i_starttime").val("00:00");
+		$("#i_endtime").val("00:00");
+		$("#docid").val("0");
+
+		$('#addModal').modal('show');
+	}
+
+  function toPage(i){
+    window.location = "/cms/address?p="+i;
+  }
+
+	function editDoc(id){
+        //根据id读取字段
+        $.ajax({ type:"POST" , url: "/address/getinfo", data:{id:id}, success: function(data){
+               $("#name").val(data[0].name); 
+               $("#sender").val(data[0].sender); 
+               $("#tel").val(data[0].tel);
+               $("#b_starttime").val(data[0].b_starttime);
+               $("#b_endtime").val(data[0].b_endtime);
+               $("#i_starttime").val(data[0].i_starttime);
+               $("#i_endtime").val(data[0].i_endtime);
+               $("#docid").val(id);
+        }});
+        $('#addModal').modal('show');
+    }
+
+	function submitDoc(){
+		if($("#name").val()==""){
+			$.alert({title: '提示信息',content: '地址必填！'});return false;
+		}
+		if($("#sender").val()==""){
+			$.alert({title: '提示信息',content: '送餐员必填！'});return false;
+		}
+		if($("#tel").val()==""){
+			$.alert({title: '提示信息',content: '联系方式必填！'});return false;
+		}
+		if($("#docid").val()=="0"){
+			//insert
+			$.ajax({ type:"POST" , url: "/address/insert", data:{
+                name:$("#name").val(),
+                b_starttime:$("#b_starttime").val()+":00",
+                b_endtime:$("#b_endtime").val()+":00",
+                i_starttime:$("#i_starttime").val()+":00",
+                i_endtime:$("#i_endtime").val()+":00",
+                sender:$("#sender").val(),
+                tel:$("#tel").val(),
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}else{
+			//update
+			$.ajax({ type:"POST" , url: "/address/update", data:{
+                name:$("#name").val(),
+                b_starttime:$("#b_starttime").val()+":00",
+                b_endtime:$("#b_endtime").val()+":00",
+                i_starttime:$("#i_starttime").val()+":00",
+                i_endtime:$("#i_endtime").val()+":00",
+                sender:$("#sender").val(),
+                tel:$("#tel").val(),
+                docid:$("#docid").val(),
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}
+    }
+
+    function delinfo(id){
+    	$.confirm({
+    		title: '请确认',
+    		content: '是否确认删除？',
+    		confirm: function(){
+        		$.ajax({ type:"POST" , url: "/address/delinfo", data:{id:id}, success: function(data){
+        			if(data==200){
+              			window.location.reload();     
+        			}
+      			}});	
+    		}
+		});
+    }
+
+<%if(info){%>
+    $.alert({title: '提示信息',content: '<%=info%>'});
+<%}%>
+</script>
+<% include footer %>

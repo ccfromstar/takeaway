@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>外卖侠</title>
+<link href="/css/frontlayout.css" rel="stylesheet" type="text/css" />
+<script src="/js/jquery.min.js"></script>
+<link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="/plugin/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/cookiesoperator.js"></script>
+<script type="text/javascript" src="/plugin/craftpip/dist/jquery-confirm.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/plugin/craftpip/css/jquery-confirm.css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
+<script type="text/javascript" src="/js/fun_front.js"></script>
+<script type="text/javascript" src="/js/jquery.qrcode.min.js"></script>
+</head>
+<body>
+<div class="headermenu"></div>
+<div class="logotop"><img style="cursor:pointer;" src="/img/logo.png" onclick="toLocation('/');"></div>
+<%if(!cuser){%>
+<div class="login" onclick="showlogin(0)">登录</div>
+<div class="reg" onclick="toLocation('reg');">注册</div>
+<%}else{%>
+<div class="user_info">
+<table style="margin-top:-15px;">
+    <tr>
+        <td><img src="/img/admin.png" /></td>
+        <td>
+        <div class="topright" onclick="toLocation('option2');">个人中心 </div></td>
+        <td><div class="topright_no" style="margin-left:5px;"> 欢迎您，<%=cuser%></div></td>
+        <td><div class="topright" style="margin-left:5px;" onclick="document.exit_form.submit();">| 退出</div></td>
+    </tr>
+</table>
+</div>
+<form name="exit_form" method="post" action="/role/louout"></form>
+<%}%>
+<div class="aboutus" onclick="toLocation('/#tab1');">ABOUT US</div>
+<!--<a href="<%=code_url%>"><%=code_url%></a>-->
+<script> 
+        function jsApiCall()
+        {
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest',
+                {
+                   "appId":"wxe2a20ae8d978330b",     //公众号名称，由商户传入     
+                   "timeStamp":" 1395712654",         //时间戳，自1970年以来的秒数     
+                   "nonceStr":"e61463f8efa94090b1f366cccfbbb444", //随机串     
+                   "package":"prepay_id=<%=prepay_id%>",     
+                   "signType":"MD5",         //微信签名方式：     
+                   "paySign":"D638E455255EC3AEDE72B599A3998E23" //微信签名
+                },
+                function(res){
+                    WeixinJSBridge.log(res.err_msg);
+                    //alert(res.err_code+res.err_desc+res.err_msg);
+                }
+            );
+        }
+
+        function callpay()
+        {
+            if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                }else if (document.attachEvent){
+                    document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                }
+            }else{
+                jsApiCall();
+            }
+        }
+</script>
+<div style="width:200px;margin:200px auto 0 auto;">
+    <div id="code" style="margin-left:25px"></div>
+    <br/>
+    <img src="/img/abbr.png" style="width:200px;" alt="">
+    <!--付款成功后点击返回<a href="/option2">我的订单</a>-->
+    <table class="table1" style="width:100%;border:1px solid #ccc;margin-top:20px">
+        <tr>
+            <td>交易金额</td>
+            <td><%=total_fee%></td>
+        </tr>
+    </table>
+</div>
+<!--<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;margin-top:200px" type="button" onclick="callpay()" >贡献一下</button>-->
+<style type="text/css">
+    .table1 td{
+        border:1px solid #ccc;
+        text-align: center;
+        padding: 3px;
+    }
+</style>
+<script>
+  $("#code").qrcode({
+    render: "table", //table方式
+    width: 150, //宽度
+    height:150, //高度
+    text: "<%=code_url%>" //任意内容
+  });
+
+  var url = window.location.href;
+  var tmp1 = url.split("?bookingNo=");
+  var tmp2 = tmp1[1].split("&");
+
+  //定时检测如果支付成功了自动调转到我的订单
+    window.setInterval(getPay, 2000); 
+    function getPay(){ 
+        console.log('检测'+tmp2[0]+'支付状态');
+        $.ajax({ type:"POST" , url: "/400/getpay", data:{id:tmp2[0]}, success: function(data){
+            if(data == "200"){
+                window.location = "/option2";
+            }
+        }}); 
+    } 
+</script>
+<div class="footer">
+<table class="footer_table">
+    <tr>
+        <%if(!cuser){%>
+            <td style="cursor:pointer;" onclick="showlogin(1)">外卖点单</td>
+        <%}else{%>
+            <td style="cursor:pointer;" onclick="toLocation('booking');">外卖点单</td>
+        <%}%>
+        <td style="cursor:pointer;" onclick="toLocation('/#tab1');">关于我们</td>
+    </tr>
+</table>    
+<div class="footer_div1" style="padding-top:20px;margin-top:20px;">百颖（上海）餐饮服务有限公司版权所有</div>
+<div class="footer_div1">Copyright  2015 www.4000191177.com - All Rights Reserved.</div>
+<div class="footer_div1">客服热线：4000191177</div>
+<div class="footer_div1">沪ICP备15050616号</div>
+<div class="footer_div1" style="padding-bottom:20px;margin-bottom:20px;font-size: 12px;">技术支持@上海荟邮网络科技有限公司</div>
+</div>
+</body>
+</html>

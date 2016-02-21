@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>微信JSSDK</title>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="/js/jquery.min.js"></script>
+</head>
+<body>
+	<script>
+		wx.config({
+		      debug: false,
+		      appId: 'wxe2a20ae8d978330b',
+		      timestamp: <%=signature.timestamp%>,
+		      nonceStr: '<%=signature.nonceStr%>',
+		      signature: '<%=signature.signature%>',
+		      jsApiList: [
+		        'checkJsApi',
+		        'onMenuShareTimeline',
+		        'onMenuShareAppMessage',
+		        'onMenuShareQQ',
+		        'onMenuShareWeibo',
+		        'onMenuShareQZone',
+		        'hideMenuItems',
+		        'showMenuItems',
+		        'hideAllNonBaseMenuItem',
+		        'showAllNonBaseMenuItem',
+		        'translateVoice',
+		        'startRecord',
+		        'stopRecord',
+		        'onVoiceRecordEnd',
+		        'playVoice',
+		        'onVoicePlayEnd',
+		        'pauseVoice',
+		        'stopVoice',
+		        'uploadVoice',
+		        'downloadVoice',
+		        'chooseImage',
+		        'previewImage',
+		        'uploadImage',
+		        'downloadImage',
+		        'getNetworkType',
+		        'openLocation',
+		        'getLocation',
+		        'hideOptionMenu',
+		        'showOptionMenu',
+		        'closeWindow',
+		        'scanQRCode',
+		        'chooseWXPay',
+		        'openProductSpecificView',
+		        'addCard',
+		        'chooseCard',
+		        'openCard'
+		     ]
+		});
+		wx.ready(function () {
+			/*
+			var latitude = "";
+			var longitude = "";
+			wx.getLocation({
+			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+			    success: function (res) {
+			        latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+			        longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+			        var speed = res.speed; // 速度，以米/每秒计
+			        var accuracy = res.accuracy; // 位置精度
+			    }
+			});
+
+			$("#btn1").bind('click',function(){
+				wx.openLocation({
+				    latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+				    longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+				    name: '', // 位置名
+				    address: '', // 地址详情说明
+				    scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
+				    infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+				});
+			});*/
+
+			
+			var content1 = "";
+			var images = {
+			    localId: [],
+			    serverId: []
+			};
+			wx.chooseImage({
+			    count: 9, // 默认9
+			    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+			    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+			    success: function (res) {
+			        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+			        images.localId = res.localIds;
+			        for(var i in localIds){
+			        	content1 += "<img src='"+localIds[i]+"'>";
+			        }
+			        //alert(content1);
+			        document.getElementById('show1').innerHTML = content1;
+			    }
+			});
+
+			$("#btn1").bind('click',function(){
+				var i = 0, length = images.localId.length;
+			    images.serverId = [];
+			    function upload() {
+			      wx.uploadImage({
+			        localId: images.localId[i],
+			        success: function (res) {
+			          i++;
+			          //alert('已上传：' + i + '/' + length);
+			          images.serverId.push(res.serverId);
+			          //alert(res.serverId);
+			          $.ajax({ type:"POST" , url: "uploadimg",data:{media_id:res.serverId},  success: function(data){
+       					 
+    				  }});
+			          if (i < length) {
+			            upload();
+			          }
+			        },
+			        fail: function (res) {
+			          alert(JSON.stringify(res));
+			        }
+			      });
+			    }
+			    upload();
+			});
+			
+		});
+
+		wx.error(function (res) {
+		  alert(res.errMsg);
+		});
+
+		
+	</script>
+	<div id="show1"></div>
+	<input type="button" value="上传" id="btn1">
+	<%=body_info%>
+</body>
+</html>

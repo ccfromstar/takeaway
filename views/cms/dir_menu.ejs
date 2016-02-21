@@ -1,0 +1,319 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td class="tbleft_gury"><% include left-nav %></td>
+      <td>
+      		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增菜单</button>
+			<table class="table table-hover" id="table_list">
+    		<thead>
+      			<tr>
+        			<th>显示排序</th>
+        			<th>品名</th>
+        			<th>说明1</th>
+        			<th>说明2</th>
+        			<th>说明3</th>
+        			<th>售价</th>
+        			<th>提前预定价</th>
+        			<th>提前可售数量</th>
+        			<th>即时可售数量</th>
+        			<th>图片</th>
+        			<th>操作</th>
+      			</tr>
+    		</thead>
+    		<tbody>
+    		<%for(var i in record){%>
+      			<tr>
+        			<td><%-record[i].sortid%></td>
+        			<td><%=record[i].name%></td>
+        			<td style="max-width:100px;"><%=record[i].maincourse%></td>
+        			<td style="max-width:100px;"><%=record[i].jardiniere%></td>
+        			<td style="max-width:100px;"><%=record[i].staplefood%></td>
+        			<td>¥<%=record[i].price%></td>
+        			<td>¥<%=record[i].aheadprice%></td>
+        			<td><%=record[i].aheadnum%></td>
+        			<td><%=record[i].immediatelynum%></td>
+        			<td>
+        				<a href="/pic/<%=record[i].imgname%>" data-lightbox="image-1" data-title="<%=record[i].name%>">
+							<img title="点击放大" src="/pic/<%=record[i].imgname%>" style="height:50px;cursor:pointer;" />
+						</a>
+        			</td>
+        			<td>
+        				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=record[i].id%>)">编辑</button>
+        				<button type="button" class="btn btn-default btn-xs" onclick="delinfo(<%=record[i].id%>)">删除</button>
+        			</td>
+      			</tr>
+    		<%}%>
+    		</tbody>
+    		</table>
+    		<!--分页符-->
+			<div style='width:100%;text-align:center'>
+  				<button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+  				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+  				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+			</div>  
+			<br/><br/>  	
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:900px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td>品名</td>
+                    <td><input type="text" class="input-sm form-control" id="name" ></input></td>
+                    <td>售价</td>
+                    <td><input type="text" class="input-sm form-control" id="price" style="width:100px;" onkeyup="value=value.replace(/[^\d]/g,'')" ></input> 元</td>
+                    <td>提前预订价</td>
+                    <td><input type="text" class="input-sm form-control" id="aheadprice" style="width:100px;" onkeyup="value=value.replace(/[^\d]/g,'')" ></input> 元</td>
+                </tr>
+                <tr>
+                    <td>提前可售数量</td>
+                    <td><input type="text" class="input-sm form-control" id="aheadnum" style="width:100px;" onkeyup="value=value.replace(/[^\d]/g,'')" ></input> 份</td>
+                    <td>即时可售数量</td>
+                    <td><input type="text" class="input-sm form-control" id="immediatelynum" style="width:100px;" onkeyup="value=value.replace(/[^\d]/g,'')" ></input> 份</td>
+                    <td>显示排序</td>
+                    <td>第 <input type="text" class="input-sm form-control" id="sortid" style="width:50px;" onkeyup="value=value.replace(/[^\d]/g,'')"></input> 位</td>
+                </tr>
+                <tr>
+                    <td>说明1</td>
+                    <td colspan="5">
+                      <input type="text" class="input-sm form-control" id="maincourse" onkeyup="computermaincourseNum()"></input>
+                      已输入 <label id="lyishu_maincourse" >0</label>  个字符，还可输入 <label id="lsheng_maincourse" >75</label> 个字符
+                    </td>
+                </tr>
+                <tr>
+                    <td>说明2</td>
+                    <td colspan="5">
+                      <input type="text" class="input-sm form-control" id="jardiniere" onkeyup="computerjardiniereNum()"></input>
+                      已输入 <label id="lyishu_jardiniere" >0</label>  个字符，还可输入 <label id="lsheng_jardiniere" >75</label> 个字符
+                    </td>
+                </tr>
+                <tr>
+                    <td>说明3</td>
+                    <td colspan="5">
+                      <input type="text" class="input-sm form-control" id="staplefood" onkeyup="computerstaplefoodNum()"></input>
+                      已输入 <label id="lyishu_staplefood" >0</label>  个字符，还可输入 <label id="lsheng_staplefood" >75</label> 个字符
+                    </td>
+                </tr>
+                <tr>
+                    <td>图片(建议大小:340*285)</td>
+                    <td id="picimg"></td>
+                    <td colspan="4">
+                    	<iframe frameborder=0 src="/cms/upload" style="width:550px;height:60px"></iframe>     
+                    </td>
+                </tr>
+             </table>
+             <input type="hidden" id="docid" ></input>
+             <input type="hidden" id="imgname" ></input>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+	var _page = "menu";
+
+	function toPage(i){
+    window.location = "/cms/menu?p="+i;
+  }
+
+  function setcomputeNum(){
+    computermaincourseNum();computerjardiniereNum();computerstaplefoodNum();
+  }
+
+  function computermaincourseNum(){
+    var _f = $("#maincourse").val();
+    var _len = _f.length;
+    var _leavelen = 75 - _len;
+    if(_len > 75){
+      $("#maincourse").val(_f.substring(0,75));
+      return false;
+    }
+    $("#lyishu_maincourse").html(_len);
+    $("#lsheng_maincourse").html(_leavelen);
+  }
+
+  function computerjardiniereNum(){
+    var _f = $("#jardiniere").val();
+    var _len = _f.length;
+    var _leavelen = 75 - _len;
+    if(_len > 75){
+      $("#jardiniere").val(_f.substring(0,75));
+      return false;
+    }
+    $("#lyishu_jardiniere").html(_len);
+    $("#lsheng_jardiniere").html(_leavelen);
+  }
+
+  function computerstaplefoodNum(){
+    var _f = $("#staplefood").val();
+    var _len = _f.length;
+    var _leavelen = 75 - _len;
+    if(_len > 75){
+      $("#staplefood").val(_f.substring(0,75));
+      return false;
+    }
+    $("#lyishu_staplefood").html(_len);
+    $("#lsheng_staplefood").html(_leavelen);
+  }
+
+	function setImg(name){
+		var _html = "<a href='/pic/"+name+"' data-lightbox='image-1' data-title='"+name+"' >";
+		_html += "<img src='/pic/"+name+"' style='height:60px;cursor:pointer;' title='点击放大' /></a>";
+		$("#picimg").html(_html);
+		$("#imgname").val(name);
+	}
+
+	function showError(){
+		$.alert({title: '提示信息',content: '请选择要上传的图片'});
+	}
+
+	function newDoc(){
+		$("#name").val("");
+		$("#price").val("");
+		$("#aheadprice").val("");
+		$("#aheadnum").val("");
+		$("#immediatelynum").val("");
+		$("#sortid").val("");
+		$("#maincourse").val("");
+		$("#jardiniere").val("");
+		$("#staplefood").val("");
+		$("#docid").val("0");
+    $("#picimg").html("");
+    $("#imgname").val("");
+    setcomputeNum();
+
+		$('#addModal').modal('show');
+	}
+
+ 
+
+	function editDoc(id){
+        //根据id读取字段
+        $.ajax({ type:"POST" , url: "/"+_page+"/getinfo", data:{id:id}, success: function(data){
+               $("#name").val(data[0].name); 
+               $("#price").val(data[0].price); 
+               $("#aheadprice").val(data[0].aheadprice);
+               $("#aheadnum").val(data[0].aheadnum);
+               $("#immediatelynum").val(data[0].immediatelynum);
+               $("#sortid").val(data[0].sortid);
+               $("#maincourse").val(data[0].maincourse);
+               $("#jardiniere").val(data[0].jardiniere);
+               $("#staplefood").val(data[0].staplefood);
+               setImg(data[0].imgname);
+               setcomputeNum();
+               $("#docid").val(id);
+        }});
+        $('#addModal').modal('show');
+    }
+
+	function submitDoc(){
+		if($("#name").val()==""){
+			$.alert({title: '提示信息',content: '品名必填！'});return false;
+		}
+		if($("#price").val()==""){
+			$.alert({title: '提示信息',content: '售价必填！'});return false;
+		}
+		if($("#aheadprice").val()==""){
+			$.alert({title: '提示信息',content: '提前预订价必填！'});return false;
+		}
+		if($("#aheadnum").val()==""){
+			$.alert({title: '提示信息',content: '提前可售数量必填！'});return false;
+		}
+		if($("#immediatelynum").val()==""){
+			$.alert({title: '提示信息',content: '即时可售数量必填！'});return false;
+		}
+		if($("#sortid").val()==""){
+			$.alert({title: '提示信息',content: '显示排序必填！'});return false;
+		}
+		if($("#maincourse").val()==""){
+			$.alert({title: '提示信息',content: '主菜说明必填！'});return false;
+		}
+		if($("#jardiniere").val()==""){
+			$.alert({title: '提示信息',content: '配菜说明必填！'});return false;
+		}
+		if($("#staplefood").val()==""){
+			$.alert({title: '提示信息',content: '主食说明必填！'});return false;
+		}
+		if($("#imgname").val()==""){
+			$.alert({title: '提示信息',content: '请上传图片！'});return false;
+		}
+		if($("#docid").val()=="0"){
+			//insert
+			$.ajax({ type:"POST" , url: "/"+_page+"/insert", data:{
+                name:$("#name").val(),
+                price:$("#price").val(),
+                aheadprice:$("#aheadprice").val(),
+                aheadnum:$("#aheadnum").val(),
+                immediatelynum:$("#immediatelynum").val(),
+                sortid:$("#sortid").val(),
+                maincourse:$("#maincourse").val(),
+                jardiniere:$("#jardiniere").val(),
+                staplefood:$("#staplefood").val(),
+                imgname:$("#imgname").val(),
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}else{
+			//update
+			$.ajax({ type:"POST" , url: "/"+_page+"/update", data:{
+                name:$("#name").val(),
+                price:$("#price").val(),
+                aheadprice:$("#aheadprice").val(),
+                aheadnum:$("#aheadnum").val(),
+                immediatelynum:$("#immediatelynum").val(),
+                sortid:$("#sortid").val(),
+                maincourse:$("#maincourse").val(),
+                jardiniere:$("#jardiniere").val(),
+                staplefood:$("#staplefood").val(),
+                imgname:$("#imgname").val(),
+                docid:$("#docid").val(),
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}
+    }
+
+    function delinfo(id){
+    	$.confirm({
+    		title: '请确认',
+    		content: '是否确认删除？',
+    		confirm: function(){
+        		$.ajax({ type:"POST" , url: "/"+_page+"/delinfo", data:{id:id}, success: function(data){
+        			if(data==200){
+              			window.location.reload();     
+        			}
+      			}});	
+    		}
+		});
+    }
+
+<%if(info){%>
+    $.alert({title: '提示信息',content: '<%=info%>'});
+<%}%>
+</script>
+<script src="/plugin/lightbox2-master/dist/js/lightbox.min.js"></script>
+<% include footer %>

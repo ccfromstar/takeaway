@@ -1,0 +1,105 @@
+<!--业务逻辑-->
+<!--页面逻辑-->
+<% include header %>
+<div style="width:100%">
+	<div class="pagetop"></div>
+	<table style="margin:auto;">
+		<tr>
+			<td style="vertical-align:top;text-align:left;width:250px;">
+				<hr class="line1">
+				<div class="acc"><img src="/img/admin2.png" />账户</div>
+				<hr class="line1">
+				<div class="acc_unselceted" onclick="toLocation('option2');">我的订单</div>
+				<div class="acc_selected">个人信息</div>
+			</td>
+			<td style="width:600px;">
+	<table style="width:450px;" class="reg_tab">
+		<tr>
+			<td colspan="2" style="font-size:18px;font-weight:bold">更新个人信息</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>姓名</p>
+				<input type="text" class="input form-control" id="name" value="<%=obj[0].name%>" onblur="checkName(this.value)"></input>
+				<p class="errorinfo" id="error1"></p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>登陆密码</p>
+				<input type="text" class="input form-control" id="pwd" value="<%=obj[0].password%>" onblur="checkPwd(this.value)"></input>
+				<p class="errorinfo" id="error2"></p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>手机号码</p>
+				<input type="text" class="input form-control" id="login_name" disabled value="<%=obj[0].username%>"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>输入验证码</p>
+				<input type="text" class="input form-control" id="code"></input>
+			</td>
+			<td style="width:40px;">
+				<div id="btn_sendlogin" style="cursor:pointer;margin-top:44px;text-align:center;color:#FFFFFF;font-size:12px;width:120px;background:#40BAD7;height:35px;padding-top:10px;margin-left:20px;border-radius:5px;">发送验证码</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div style="cursor:pointer;margin-top:35px;text-align:center;color:#FFFFFF;font-size:12px;width:450px;background:#40BAD7;height:35px;padding-top:10px;border-radius:5px;" onclick="submitChange()">确认修改</div>
+			</td>
+		</tr>
+	</table>
+			</td>
+		</tr>
+	</table>
+	<div style="height:100px;"></div>
+</div>
+<script>
+	function checkName(str){
+		var re = /^[\u4e00-\u9fa5 ]{2,10}$/; 
+		if (!re.test(str)) { 
+		 	$("#error1").html("请填写真实姓名！");
+		}else{
+			$("#error1").html("");
+		}
+
+	}
+
+	function checkPwd(str){
+		var re =  /^[\w]{6,12}$/;
+		if (!re.test(str)) { 
+			$("#error2").html("密码格式不对,必须由6-12位数字加字母组成！");
+		}else{
+			$("#error2").html("");
+		}
+	}
+
+	function submitChange(){
+		if($("#name").val()==""){
+	        alert("姓名必填！");return false;
+	    }
+	    if($("#pwd").val()==""){
+	        alert("登陆密码必填！");return false;
+	    }
+	    if($("#code").val()==""){
+	        alert("验证码必填！");return false;
+	    }
+
+	    if(Number($("#code").val())!=Number(global_code)){
+	    	alert("验证码错误！");return false;
+	    }
+	    if($("#error1").html()!="" | $("#error2").html()!=""){
+	    	alert("有错误信息不能提交！");return false;
+	    }
+	    $.ajax({ type:"POST" , url: "/role/updateUser",data:{name:$("#name").val(),pwd:$("#pwd").val(),login_name:$("#login_name").val()},  success: function(data){
+       		if(data == "200"){
+       			alert("修改成功！");
+       			window.location = "/option1";
+       		}
+    	}});
+	}
+</script>
+<% include footer %>

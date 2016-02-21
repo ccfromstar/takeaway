@@ -1,0 +1,135 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td style="width:50%;">
+      	<iframe frameborder=0 src="/cms/customer_left" style="width:100%;height:600px;"></iframe>	
+      </td>
+      <td style="width:50%;padding-left:5px;padding-right:10px;">
+      		<div class="menutop">客户详情</div>
+      		<table class="table table-bordered" style="margin-top:5px;">
+                <tr>
+                    <td class="tleftname">姓名</td>
+                    <td id="name"></td>
+                    <td class="tleftname">联系方式</td>
+                    <td id="username"></td>
+                </tr>   
+                <tr>
+                    <td class="tleftname">订餐次数</td>
+                    <td id="number"></td>
+                    <td class="tleftname">客户类型</td>
+                    <td id="type"></td>
+                </tr> 
+                <tr>
+                    <td class="tleftname">订单总金额</td>
+                    <td id="numtotal"></td>
+                    <td class="tleftname"></td>
+                    <td></td>
+                </tr> 
+                <tr>
+                    <td colspan="4" style="text-align:center;">历史订单</td>
+                </tr>
+                <tr>
+                    <td colspan="4" id="bookinglist">&nbsp;</td>
+                </tr>
+             </table>
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+    </td>
+    </tr>
+  </table>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:700px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table style="width:100%;margin-left:10px;margin-bottom:5px;">
+              <tr>
+                <td style="width:70px;">订单日期</td><td id="bk1"></td><td style="width:60px;">订单号</td><td style="width:60px;" id="bk2"></td>
+                <td style="width:12px;"></td>
+              </tr>
+            </table>
+            <div id="bookingdetail"></div>
+            <div style="margin-left:10px">姓名：<span id="bk6"></span></div>
+            <div style="margin-left:10px">手机号：<span id="bk7"></span></div>
+            <div style="margin-left:10px">送达时间：<span id="bk8"></span></div>
+            <div style="margin-left:10px">配送地点：<span id="bk3"></span></div>
+            <div style="margin-left:10px">支付状态：<span id="bk4"></span></div>
+            <div style="margin-left:10px">开票信息：<span id="bk5"></span></div>
+            <div style="margin-left:10px">备注信息：<span id="bk9"></span></div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+<script type="text/javascript">
+	function setInfo(name,username,number,type,numtotal){
+		$("#name").html(name);
+		$("#username").html(username);
+		$("#number").html(number);
+		$("#type").html(type);
+		$("#numtotal").html(numtotal);
+    $.ajax({ type:"POST" , url: "/customer/getbooking",data:{id:username},  success: function(data){
+        var _html = "<table class='table table-hover' id='table_list'>";
+        _html += "<thead><tr><th>日期</th><th>订单号</th><th>送达日期</th><th>总价</th><th>数量</th><th>实付金额</th><th>订单状况</th></tr></thead> <tbody>"
+        for(var i in data){
+            _html += "<tr style='cursor:pointer;' onclick='getbookingprice("+data[i].id+",\""+(data[i].bookingtime+"").substring(0,10)+"\",\""+data[i].bookingno+"\","+data[i].numtotal+","+data[i].pricetotalold+","+data[i].pricetotal+",\""+data[i].addressname+data[i].addressdetail+"\",\""+data[i].paytype+"\",\""+data[i].invoicetitle+"\",\""+data[i].linkname+"\",\""+data[i].linktel+"\",\""+data[i].sendtime+"\",\""+data[i].remark+"\")'>";
+            _html += "<td>"+(data[i].bookingtime+"").substring(0,10)+"</td>";
+            _html += "<td>"+data[i].bookingno+"</td>";
+            _html += "<td>"+(data[i].sendtime+"").substring(0,10)+"</td>";
+            _html += "<td>"+data[i].pricetotalold+"</td>";
+            _html += "<td>"+data[i].numtotal+"</td>";
+            _html += "<td>"+data[i].pricetotal+"</td>";
+            _html += "<td>"+data[i].status+"</td>";
+            _html += "</tr>";
+        }
+        _html += "</tbody></table>";
+        $("#bookinglist").html(_html);
+    }});
+	}
+
+  function getbookingprice(id,bk1,bk2,num,price,price1,bk3,bk4,bk5,bk6,bk7,bk8,bk9){
+    $.ajax({ type:"POST" , url: "/customer/getbookingdetail",data:{id:id},  success: function(data){
+        var _html = "<table class='table table-hover' id='table_list'>";
+        var j = 0;
+        _html += "<thead><tr><th>序号</th><th>品名</th><th>售价</th><th>优惠价</th><th>数量</th><th>小计</th><th>优惠备注</th></tr></thead> <tbody>"
+        for(var i in data){
+            j += 1;
+            var ap = "";
+            ap = (data[i].remark=="")?"-":data[i].aheadprice;
+            _html += "<tr>";
+            _html += "<td>"+j+"</td>";
+            _html += "<td>"+data[i].name+"</td>";
+            _html += "<td>"+data[i].price+"</td>";
+            _html += "<td>"+ap+"</td>";
+            _html += "<td>"+data[i].num+"</td>";
+            _html += "<td>"+data[i].pricetotal+"</td>";
+            _html += "<td>"+data[i].remark+"</td>";
+            _html += "</tr>";
+        }
+        _html += "<tr><td colspan='4'>合计</td><td>"+num+"</td><td>"+price+"</td><td>实付金额："+price1+"</td></tr>";
+        _html += "</tbody></table>";
+        $("#bookingdetail").html(_html);
+        $("#bk1").html(bk1);
+        $("#bk2").html(bk2);
+        $("#bk3").html(bk3);
+        $("#bk4").html(bk4);
+        $("#bk5").html(bk5);
+        $("#bk6").html(bk6);
+        $("#bk7").html(bk7);
+        $("#bk8").html(bk8);
+        if(bk9 && bk9 != null && bk9 != "null"){
+          $("#bk9").html(bk9);
+        }
+        $('#addModal').modal('show');
+    }});
+  }
+</script>
+<% include footer %>

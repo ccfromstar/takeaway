@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>外卖侠</title>
+<link href="/css/frontlayout.css" rel="stylesheet" type="text/css" />
+<script src="/js/jquery.min.js"></script>
+<link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="/plugin/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/cookiesoperator.js"></script>
+<script type="text/javascript" src="/plugin/craftpip/dist/jquery-confirm.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/plugin/craftpip/css/jquery-confirm.css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
+<script type="text/javascript" src="/js/fun_front.js"></script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?b0a3a4f6a4b3bd0d441f4d0b111fe8d2";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</head>
+<body>
+<div class="headermenu"></div>
+<div class="logotop"><img style="cursor:pointer;" src="/img/logo.png" onclick="toLocation('/');"></div>
+<%if(!cuser){%>
+<div class="login" onclick="showlogin(0)">登录</div>
+<div class="reg" onclick="toLocation('reg');">注册</div>
+<%}else{%>
+<div class="user_info">
+<table style="margin-top:-15px;">
+	<tr>
+		<td><img src="/img/admin.png" /></td>
+		<td>
+		<div class="topright" onclick="toLocation('option2');">个人中心 </div></td>
+		<td><div class="topright_no" style="margin-left:5px;"> 欢迎您，<%=cuser%></div></td>
+		<td><div class="topright" style="margin-left:5px;" onclick="document.exit_form.submit();">| 退出</div></td>
+	</tr>
+</table>
+</div>
+<form name="exit_form" method="post" action="/role/louout"></form>
+<%}%>
+<div class="aboutus" onclick="toLocation('/#tab1');">ABOUT US</div>

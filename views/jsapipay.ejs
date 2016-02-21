@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微信支付</title>
+    <script src="/js/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head<body>
+<script> 
+        function StoTime(){
+            var d = new Date();
+            return d.getTime();
+        }
+        function jsApiCall()
+        {
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest',
+                {
+                   "appId":"wxe2a20ae8d978330b",     //公众号名称，由商户传入     
+                   "timeStamp":"1414411784",         //时间戳，自1970年以来的秒数     
+                   "nonceStr":"ibuaiVcKdpRxkhJA", //随机串     
+                   "package":"prepay_id=<%=prepay_id%>",     
+                   "signType":"MD5",         //微信签名方式：     
+                   "paySign":"<%=_paySignjs%>" //微信签名
+                },
+                function(res){
+                    WeixinJSBridge.log(res.err_msg);
+                    //alert("支付成功!");
+                    window.location='/weixin/option';
+                    //alert(res.err_code+res.err_desc+res.err_msg);
+                    //alert(res.err_msg);
+                    if( res.err_msg =="get_brand_wcpay_request:ok"){
+                        alert("支付成功!");
+                    }else{
+                        alert("支付失败!");
+                    }
+                    window.location='/weixin/option';
+                }
+            );
+        }
+
+        function callpay()
+        {
+            if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                }else if (document.attachEvent){
+                    document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                }
+            }else{
+                jsApiCall();
+            }
+        }
+
+        callpay();
+</script>
+正在为您跳转到支付界面...
+<!--<button style="width:210px; height:30px; background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;margin-top:200px" type="button" onclick="callpay()" >付款</button>-->
+</body>
+</html>

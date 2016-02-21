@@ -1,0 +1,51 @@
+<div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" >  
+            <div class="modal-content">  
+                
+                <div class="modal-body" id="content_info" style="background-color:#212025">  
+                <table style="width:400px;margin:auto;">
+                  <tr>
+                    <td><hr></td><td style="width:50px;font-size:16px;text-align:center;">登陆</td><td><hr></td>
+                  </tr>
+                </table>
+                <table style="width:400px;margin:auto;" class="login_tab">
+                  <tr>
+                    <td colspan="2">
+                        <p>手机号码</p>
+                        <input type="text" class="input form-control" id="login_name"></input>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="changetab">
+                        <p><span class="loginactive" onclick="changeMethod(1)" id="logintype1">登陆密码</span><span class="Vertical">|</span><span id="logintype2" onclick="changeMethod(2)">忘记密码</span></p>
+                        <div id="method1">
+                            <input type="password" class="input form-control" id="pwd"></input>
+                        </div>
+                        <div id="method2" style="display:none">
+                            <div class="tab_left"><input type="text" id="gcode" class="input form-control"></input></div>
+                            <div class="tab_right">
+                              <div id="btn_sendlogin">点击获取</div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div style="margin-top:10px;">
+                          <input id="txtRememberKey" name="txtRememberKey" type="checkbox" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px\9;">&nbsp;&nbsp;记住我</input>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                        <div id="login1" style="cursor:pointer;margin-top:15px;text-align:center;color:#FFFFFF;font-size:12px;width:400px;background:#40BAD7;height:35px;padding-top:10px" >登 陆</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="text-align:center;padding-top:15px;cursor:pointer;" onclick="window.location='reg';">
+                        立即注册
+                    </td>
+                  </tr>
+                </table>
+                </div>  
+                
+            </div>  
+        </div>          
+</div>

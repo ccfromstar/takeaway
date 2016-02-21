@@ -1,0 +1,49 @@
+<!--业务逻辑-->
+<!--页面逻辑-->
+<% include header %>
+<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="updaterepertory()" >更新库存</button>
+<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="update_status()" >更新订单状态</button>
+<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="closebooking()" >关闭订餐</button>
+<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="openbooking()" >开启订餐</button>
+<table class="table table-bordered" style="width:200px;margin-left:10px;margin-top:10px;">
+    <tr>
+        <td>当前订餐状态</td><td id="stat"><%=canbooking%></td>
+    </tr>
+</table>
+<script type="text/javascript">
+function updaterepertory(){
+    $.ajax({ type:"POST" , url: "/menu/createrepertory", success: function(data){
+      if(data==200){
+        $.alert({title: '提示信息',content: '库存更新成功！'}); 
+      }     
+    }});
+}
+
+function update_status(){
+    $.ajax({ type:"POST" , url: "/menu/update_status", success: function(data){
+      if(data==200){
+        $.alert({title: '提示信息',content: '订单状态更新成功！'}); 
+      }     
+    }});
+}
+
+function closebooking(){
+    $.ajax({ type:"POST" , url: "/menu/closebooking", success: function(data){
+      if(data==200){
+        $.alert({title: '提示信息',content: '订餐功能关闭成功！'}); 
+        $("#stat").html("关闭");
+      }     
+    }});
+}    
+
+function openbooking(){
+    $.ajax({ type:"POST" , url: "/menu/openbooking", success: function(data){
+      if(data==200){
+        $.alert({title: '提示信息',content: '订餐功能开启成功！'}); 
+        $("#stat").html("开启");
+      }     
+    }});
+}  
+</script>
+<!--<p dir="rtl">文字到右边了</p>-->
+<% include footer %>

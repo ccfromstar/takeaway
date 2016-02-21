@@ -1,0 +1,26 @@
+<html>
+<head>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<link href="/css/layout.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<form method="post" enctype="multipart/form-data" action="uploaddo">
+	<table>
+		<tr>
+			<td><input type="file" multiple="multiple" name="img_url" ></td>
+			<td><button type="button" class="btn btn-default btn-xs" onclick="_newForm()">上传图片</button></td>
+		</tr>
+	</table>
+</form>
+<script>
+    function _newForm(){
+    	if(document.all.img_url.value == ""){
+    		window.parent.showError();return false;
+    	}
+    	document.forms[0].submit();
+    }
+</script>
+</body>
+</html>

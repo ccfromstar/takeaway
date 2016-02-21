@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <!-- 强烈建议为 html 根元素指定 lang 属性，从而为文档设置正确的语言。这将有助于语音合成工具确定其所应该采用的发音，有助于翻译工具确定其翻译时所应遵守的规则等等。-->
+  <head>
+    <title>外卖侠后台管理系统1.0</title>
+    <!-- IE 支持通过特定的 <meta> 标签来确定绘制当前页面所应该采用的 IE 版本。除非有强烈的特殊需求，否则最好是设置为 edge mode，从而通知 IE 采用其所支持的最新的模式。-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <!-- 通过明确声明字符编码，能够确保浏览器快速并容易的判断页面内容的渲染方式。这样做的好处是，可以避免在 HTML 中使用字符实体标记（character entity），从而全部与文档编码一致（一般采用 UTF-8 编码）。-->
+    <meta charset="UTF-8">
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <script src="/js/jquery.min.js"></script>
+    <link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="/plugin/bootstrap/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      *{margin:0;padding:0;font-size:12px;font-family:宋体;color: #797979;}
+    </style>
+  </head>
+
+  <body style="background-color: #72C0B0;">
+  <form class="form-horizontal" method="post" action="/cms/logindo">
+  <table style="margin:auto;background-image:url('/img/bglogin.jpg');width:1038px;height:532px;">
+    <tr>
+      <td style="width:530px;"></td>
+      <td style="vertical-align:top;">
+        <input type="text"  style="margin-top:186px;height:33px;border:none;width:332px;" id="username" name="username">
+        <br/><input type="password" style="margin-top:32px;height:33px;border:none;width:332px;" id="password" name="password">
+        <div style="margin-top:36px;cursor:pointer;width:120px;height:37px;" onclick="document.forms[0].submit();"></div>
+      </td>
+    </tr>
+  </table>
+  </form>
+  </body>
+</html>

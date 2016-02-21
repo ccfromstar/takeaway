@@ -1,0 +1,86 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td style="width:50%;">
+      	<iframe frameborder=0 src="/cms/booking_left" style="width:100%;height:600px;"></iframe>	
+      </td>
+      <td style="width:50%;padding-left:5px;padding-right:10px;">
+      		<div class="menutop">订单详情</div>
+      		<table class="table table-bordered" style="margin-top:5px;">
+                <tr>
+                    <td class="tleftname">订单号</td>
+                    <td id="bk1"></td>
+                    <td class="tleftname">订单状态</td>
+                    <td id="bk2"></td>
+                </tr>   
+                <tr>
+                    <td class="tleftname">客户</td>
+                    <td id="bk3"></td>
+                    <td class="tleftname">手机号</td>
+                    <td id="bk4"></td>
+                </tr> 
+                <tr>
+                    <td class="tleftname">配送地点</td>
+                    <td id="bk5"></td>
+                    <td class="tleftname">送达时间</td>
+                    <td id="bk6"></td>
+                </tr> 
+                 <tr>
+                    <td class="tleftname">配送员</td>
+                    <td id="bk9"></td>
+                    <td class="tleftname">配送员电话</td>
+                    <td id="bk10"></td>
+                </tr> 
+                <tr>
+                    <td colspan="4" id="bookingdetail">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="tleftname">支付状态</td>
+                    <td id="bk7"></td>
+                    <td class="tleftname">开票信息</td>
+                    <td id="bk8"></td>
+                </tr> 
+             </table>
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+    </td>
+    </tr>
+  </table>
+<script type="text/javascript">
+	function setInfo(id,bk1,bk2,bk3,bk4,bk5,bk6,bk7,bk8,num,price,price1,bk9,bk10){
+	  $("#bk1").html(bk1);
+	  $("#bk2").html(bk2);
+	  $("#bk3").html(bk3);
+	  $("#bk4").html(bk4);
+	  $("#bk5").html(bk5);
+	  $("#bk6").html(bk6);
+	  $("#bk7").html(bk7);
+	  $("#bk8").html(bk8);
+      $("#bk9").html(bk9);
+      $("#bk10").html(bk10);
+	  $.ajax({ type:"POST" , url: "/customer/getbookingdetail",data:{id:id},  success: function(data){
+        var _html = "<table class='table table-hover' id='table_list'>";
+        var j = 0;
+        _html += "<thead><tr><th>序号</th><th>品名</th><th>售价</th><th>优惠价</th><th>数量</th><th>小计</th><th>优惠备注</th></tr></thead> <tbody>"
+        for(var i in data){
+            j += 1;
+            _html += "<tr>";
+            _html += "<td>"+j+"</td>";
+            _html += "<td>"+data[i].name+"</td>";
+            _html += "<td>"+data[i].price+"</td>";
+            _html += "<td>"+data[i].aheadprice+"</td>";
+            _html += "<td>"+data[i].num+"</td>";
+            _html += "<td>"+data[i].pricetotal+"</td>";
+            _html += "<td>"+data[i].remark+"</td>";
+            _html += "</tr>";
+        }
+        _html += "<tr><td colspan='4'>合计</td><td>"+num+"</td><td>"+price+"</td><td>实付金额："+price1+"</td></tr>";
+        _html += "</tbody></table>";
+        $("#bookingdetail").html(_html);
+      }});
+	}
+</script>
+<% include footer %>

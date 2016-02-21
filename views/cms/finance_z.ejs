@@ -1,0 +1,129 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td class="tbleft_gury"><% include finance-left-nav %></td>
+      <td>
+      	<div class="menufourth">
+      		报表日期
+      		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+          <input type="text" name="bookingdate_end" id="bookingdate_end" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate_end%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+      		<button type="button" class="btn btn-default btn-xs" onclick="changeDay()" >检索</button>
+      		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出日报表</button>
+      	</div>
+      	<div id="_viewl">
+      	<table class="table table-hover" id="table_list_width" >
+    		<thead>
+      			<tr>
+        			<th>序号</th>
+        			<th>来源</th>
+        			<th>订单号</th>
+        			<th>客户</th>
+        			<th>联系方式</th>
+        			<th>数量</th>
+              <th>明细</th>
+        			<th>售价</th>
+        			<th>实收金额</th>
+        			<th>优惠类型</th>
+        			<th>付款状态</th>
+        			<th>订单类型</th>
+        			<th>订单状态</th>
+        			<th>配送地址</th>
+        			<th>抬头</th>
+        			<th>操作</th>
+      			</tr>
+    		</thead>
+    		<tbody>
+    		<%for(var i in record){%>
+      			<tr>
+        			<td><%-record[i].id%></td>
+        			<td><%-record[i].source%></td>
+        			<td><%-record[i].bookingno%></td>
+        			<td><%-record[i].linkname%></td>
+        			<td><%-record[i].linktel%></td>
+        			<td><%-record[i].numtotal%></td>
+              <td><%-record[i].detail%></td>
+        			<td><%-record[i].pricetotalold%></td>
+        			<td><%-record[i].pricetotal%></td>
+        			<td><%-(record[i].pricetotal!=record[i].pricetotalold)?'首单优惠':''%></td>
+        			<td><%-record[i].paytype%></td>
+        			<td><%-record[i].type%></td>
+        			<td><%-record[i].status%></td>
+        			<td><%-record[i].addressname+record[i].addressdetail%></td>
+        			<td><%-record[i].invoicetitle%></td>
+        			<td>
+        			<%if(record[i].makeout == "未确认" && record[i].paytype =="货到付款"){%>
+        			<button type="button" class="btn btn-default btn-xs" onclick="setinfo(<%=record[i].id%>,'<%=record[i].bookingno%>','<%=record[i].linkname%>','<%=record[i].paytype%>','<%=record[i].pricetotal%>')" >确认收款</button>
+        			<%}%>
+        			</td>
+      			</tr>
+    		<%}%>
+    		</tbody>
+    		</table>
+    		</div>
+    		<!--分页符-->
+			<div style='width:100%;text-align:center;margin-top:10px;'>
+  				<button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+  				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+  				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+			</div>  
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+<script>
+	var w = window.screen.width;
+	w = w - 330;
+	$("#_viewl").css("width",w);
+
+	function toPage(i){
+		var _d = $("#bookingdate").val();
+    var _d_end = $("#bookingdate_end").val();
+    window.location = "/cms/finance_z?p="+i+"&key="+_d.replace(/-/g,"")+"&bd="+_d+"&key_end="+_d_end.replace(/-/g,"")+"&bd_end="+_d_end;
+  	}
+
+  	function changeDay(){
+  	var _d = $("#bookingdate").val();
+    var _d_end = $("#bookingdate_end").val();  
+  	window.location = "/cms/finance_z?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&key_end="+_d_end.replace(/-/g,"")+"&bd_end="+_d_end;
+  	}
+
+  	function setinfo(id,k1,k2,k3,k4){
+    	$.confirm({
+    		title: '确认收款',
+    		content: '订单号：'+k1+'<br/>客户名称：'+k2+'<br/>付款方式：'+k3+'<br/>应付金额：'+k4+'<br/>是否确认收款？',
+    		confirm: function(){
+        		$.ajax({ type:"POST" , url: "/finance_z/setinfo", data:{id:id}, success: function(data){
+        			if(data==200){
+              			window.location = window.location.href;     
+        			}
+      			}});	
+    		}
+		});
+    }
+
+    function toExcel(){
+    	var _d = $("#bookingdate").val();
+      var _d_end = $("#bookingdate_end").val();
+    	$.ajax({ type:"POST" , url: "/finance_d/toExcelz", data:{id:_d.replace(/-/g,""),id_end:_d_end}, success: function(data){
+    		window.open("/excelop/temp/"+data);
+      }});
+    }
+
+    function GetDateStr(date,AddDayCount) { 
+      var myDate = new Date(date); 
+      myDate.setDate(myDate.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+      var y = myDate.getFullYear(); 
+      var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+      var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+      return y+"-"+m+"-"+d; 
+    }
+
+    <%if(info){%>
+    	$.alert({title: '提示信息',content: '<%=info%>'});
+	  <%}%>
+</script>
+<% include footer %>

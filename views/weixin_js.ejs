@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>陈叔叔博客</title>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	</head>
+
+	<body>
+		<script>
+			var chk = -1;
+			var share = 0;
+			window.addEventListener("load", function() {
+				var hasVote = window.localStorage.getItem("hasVote2");
+				if (hasVote == "1") {
+					document.getElementById("result").innerHTML = "您已投票成功！";
+					document.getElementById("result").style.height = "65px";
+				}
+			}, true);
+
+			function _submit() {
+				var chkObjs = document.getElementsByName("question");
+				for (var i = 0; i < chkObjs.length; i++) {
+					if (chkObjs[i].checked) {
+						chk = i;
+						break;
+					}
+				}
+				if (chk == -1) {
+					alert("您还有题没有答完！");
+					return false;
+				}
+				if (share == 0) {
+					alert("请先分享到朋友圈再进行投票！");
+					return false;
+				}
+				//document.getElementById("result").innerHTML = "您已投票成功，您可以点击右上角分享到朋友圈！";
+				//document.getElementById("result").style.height = "65px";
+				window.localStorage.setItem('hasVote2', '1');
+				alert("恭喜您投票成功！陈叔叔根据您的投票为您推荐了一个合适的产品！");
+				window.location = 'http://wap.huiyoulun.com/detail/1539';
+			}
+			wx.config({
+				debug: false,
+				appId: 'wxe2a20ae8d978330b',
+				timestamp: <%=signature.timestamp%>,
+				nonceStr: '<%=signature.nonceStr%>',
+				signature: '<%=signature.signature%>',
+				jsApiList: [
+					'checkJsApi',
+					'onMenuShareTimeline',
+					'onMenuShareAppMessage',
+					'onMenuShareQQ',
+					'onMenuShareWeibo',
+					'onMenuShareQZone',
+					'hideMenuItems',
+					'showMenuItems',
+					'hideAllNonBaseMenuItem',
+					'showAllNonBaseMenuItem',
+					'translateVoice',
+					'startRecord',
+					'stopRecord',
+					'onVoiceRecordEnd',
+					'playVoice',
+					'onVoicePlayEnd',
+					'pauseVoice',
+					'stopVoice',
+					'uploadVoice',
+					'downloadVoice',
+					'chooseImage',
+					'previewImage',
+					'uploadImage',
+					'downloadImage',
+					'getNetworkType',
+					'openLocation',
+					'getLocation',
+					'hideOptionMenu',
+					'showOptionMenu',
+					'closeWindow',
+					'scanQRCode',
+					'chooseWXPay',
+					'openProductSpecificView',
+					'addCard',
+					'chooseCard',
+					'openCard'
+				]
+			});
+			wx.ready(function() {
+				wx.onMenuShareAppMessage({
+					title: '关于邮轮产品的投票',
+					desc: '一年一度的邮轮旅游季又来了，陈叔叔需要您的宝贵意见！',
+					link: 'http://www.4000191177.com/weixin_js',
+					imgUrl: 'http://www.4000191177.com/img/f20140823172412133878.jpg',
+					trigger: function(res) {
+						// 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+						//alert('用户点击发送给朋友');
+					},
+					success: function(res) {
+						//alert('已分享');
+					},
+					cancel: function(res) {
+						//alert('已取消');
+					},
+					fail: function(res) {
+						//alert(JSON.stringify(res));
+					}
+				});
+				wx.onMenuShareTimeline({
+					title: '关于邮轮产品的投票',
+					desc: '一年一度的邮轮旅游季又来了，陈叔叔需要您的宝贵意见！',
+					link: 'http://www.4000191177.com/weixin_js',
+					imgUrl: 'http://www.4000191177.com/img/f20140823172412133878.jpg',
+					trigger: function(res) {
+						// 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+						//alert('用户点击发送给朋友');
+					},
+					success: function(res) {
+						//alert('已分享');
+						//alert("恭喜您分享成功！陈叔叔根据您的投票为您推荐了一个合适的产品！");
+						//window.location = 'http://wap.huiyoulun.com/detail/1539';
+						share = 1;
+					},
+					cancel: function(res) {
+						//alert('已取消');
+					},
+					fail: function(res) {
+						//alert(JSON.stringify(res));
+					}
+				});
+			});
+			wx.error(function(res) {
+				alert(res.errMsg);
+			});
+		</script>
+		<style>
+			h1 {
+				font-size: 26px;
+				font-weight: bold;
+				margin-top: 30px;
+				margin-bottom: 10px;
+			}
+			
+			h2 {
+				font-size: 16px;
+				font-weight: normal;
+				color: #8C8C8C;
+				margin-top: 5px;
+				margin-bottom: 20px;
+			}
+			
+			h3 {
+				margin-top: 10px;
+				color: #000000;
+			}
+			
+			article {
+				color: #8C8C8C;
+				line-height: 1.5;
+			}
+			
+			hr {
+				background-color: #EEEEEE;
+				border: 0;
+				height: 1px;
+			}
+			
+			.parent {
+				margin: 0 10px;
+			}
+			
+			.parent div {
+				border: 1px solid #EEEEEE;
+				width: 100%;
+				height: 185px;
+				margin-top: 10px;
+				border-radius: 4px;
+				padding: 10px;
+				box-sizing: border-box;
+			}
+			
+			.parent section {
+				width: 100%;
+				text-align: center;
+			}
+			
+			label {
+				width: 80%;
+				display: inline-block;
+			}
+		</style>
+		<div class="parent">
+			<h1>关于邮轮产品的投票</h1>
+			<hr />
+			<h2>2016-02-05 陈叔叔</h2>
+			<article>
+				一年一度的邮轮旅游季又来了，陈叔叔需要您的宝贵意见！
+				<div id="result">
+					<h3>您坐过邮轮吗（单选）</h3>
+
+					<input type="radio" name="question" id="radioA" />
+					<label for="radioA">坐过</label>
+					<br/>
+					<hr />
+					<input type="radio" name="question" id="radioB" />
+					<label for="radioB">没坐过</label>
+					<hr />
+					<section onclick="_submit();">投票</section>
+
+				</div>
+			</article>
+		</div>
+	</body>
+
+</html>

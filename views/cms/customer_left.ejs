@@ -1,0 +1,58 @@
+<!--页面逻辑-->
+<% include header_nostyle %>
+        <div class="menutop">客户列表</div>
+        <div class="menusecond">用户总数：<%=total%></div>
+        <div class="menusecond">已享受首单优惠人数：<%=fa_total%></div>
+        <div class="menuthird">
+          搜索手机号：<input type="text" class="input-sm form-control" id="searchKey" style="width:120px;height:22px;"></input>
+          <button type="button" class="btn btn-default btn-xs" onclick="search()">检索</button>
+          <button type="button" class="btn btn-default btn-xs" onclick="showall()" >查看所有</button>
+        </div>
+        <table class="table table-hover" id="table_list">
+        <thead>
+            <tr>
+              <th>序号</th>
+              <th>客户名称</th>
+              <th>联系方式</th>
+              <th>客户类型</th>
+              <th>订餐次数</th>
+              <th>可享优惠</th>
+            </tr>
+        </thead>
+        <tbody>
+        <%for(var i in record){%>
+            <tr style="cursor:pointer;" onclick="window.parent.setInfo('<%=record[i].name%>','<%=record[i].username%>','<%=record[i].number%>','<%=record[i].type%>','<%=record[i].numtotal%>');">
+              <td><%=record[i].id%></td>
+              <td><%=record[i].name%></td>
+              <td><%=record[i].username%></td>
+              <td><%=record[i].type%></td>
+              <td><%=record[i].number%></td>
+              <td><%=record[i].favorable%></td>
+            </tr>
+        <%}%>
+        </tbody>
+      </table>
+        <!--分页符-->
+      <div style='width:100%;text-align:center'>
+          <button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+          当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+          <button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+      </div>  
+      <br/><br/>    
+<script type="text/javascript">
+
+  function toPage(i){
+    var key = $("#searchKey").val();
+    window.location = "/cms/customer_left?p="+i+"&tel="+key;
+  }
+
+  function search(){
+    var key = $("#searchKey").val();
+    window.location = "/cms/customer_left?p=1&tel="+key;
+  }
+
+  function showall(){
+    window.location = "/cms/customer_left";
+  }
+</script>
+<% include footer %>

@@ -1,0 +1,734 @@
+<!--业务逻辑-->
+<%var menu_len = 0;
+var idlist;
+for(var i in menu_s){
+    menu_len = menu_len + 1;
+    idlist = !idlist?menu_s[i].id:idlist+","+menu_s[i].id;
+}
+%>
+<style>
+	.form-control{display: inline !important;}
+</style>
+<!--页面逻辑-->
+<% include header %>
+<div style="width:100%">
+	<div name="tab1" id="tab1"><div>&nbsp;</div>
+	<div class="pagetop"></div>
+	<form method="post" name="booking" action="/400/createDocFront">
+	<div id="step1">
+	<table style="width:450px;margin:auto;">
+		<tr>
+			<td><img src="/img/logoreg.png" /></td>
+			<td>
+				<p style="font-size:22px;color:#40BAD7;font-weight:bold;">欢迎您，<%=cuser%></p>
+				<p style="padding-top:5px;font-size:18px;">请确认送餐地址后继续订餐</div></p>
+			</td>
+		</tr>
+	</table>
+	<div style="height:50px;"></div>
+	<table style="width:450px;margin:auto;" class="reg_tab">
+		<tr>
+			<td>
+				<p>联系人 <span class="error_span" id="error1"></span></p>
+				<input type="text" class="input form-control" name="linkname" id="linkname" style="width:95%" value="<%=user_s[0].name%>" onblur="checkName(this.value)" ></input>
+			</td>
+			<td>
+				<p>联系电话 <span class="error_span" id="error3"></span></p>
+				<input type="text" class="input form-control" name="linktel" id="linktel" value="<%=user_s[0].username%>" onblur="checkMobile(this.value)"></input>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>送餐地址</p>
+				<select id="address_s" class="input-sm selectpicker" onchange="setAddressInfo(this.value);">
+                <option value="-">请选择</option>
+                <%for(var i in address_s){%>
+                	<option value="<%=address_s[i].id+","+address_s[i].name+","+address_s[i].b_starttime+","+address_s[i].b_endtime+","+address_s[i].i_starttime+","+address_s[i].i_endtime+","+address_s[i].sender+","+address_s[i].tel%>"><%=address_s[i].name%></option>
+                <%}%>
+            	</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>详细地址</p>
+				<input type="text" class="input-sm form-control" name="addressdetail" id="addressdetail" onblur="checkAddress(this.value)" ></input>
+				<p class="errorinfo" id="error4"></p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p>送达时间 <span style="color:#FF0000;display:none">（*1.新用户可享首单立减10元 &nbsp;&nbsp;2.提前一天预定，可享每份立减5元）</span></p>
+				<div id="td_sendtime" style="display:none"></div>
+				<select id="usertime" style="width:200px">
+					<option value="11:00-11:30">11:00-11:30</option>
+					<option value="11:30-12:00">11:30-12:00</option>
+					<option value="12:00-12:30">12:00-12:30</option>
+					<option value="12:30-13:00">12:30-13:00</option>
+				</select>
+				<div style="padding-top:10px">（次日送达，周五，周日订餐，下周一送达）</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div style="cursor:pointer;margin-top:35px;text-align:center;color:#FFFFFF;font-size:12px;width:450px;background:#40BAD7;height:35px;padding-top:10px" onclick="gostep1()">确认开始订餐</div>
+			</td>
+		</tr>
+	</table>
+	</div>
+	<div id="step2" style="display:none">
+		<table style="margin:auto;">
+		<tr>
+			<td style="vertical-align:top;text-align:left;width:650px;">
+				<%for(var i in menu_s){%>
+        			<div style="margin-top:10px;width:640px;background-color:#F2F2F2">
+        				<table>
+        					<tr>
+        						<td><img src="/pic/<%=menu_s[i].imgname%>" style="width:270px;height:190px;" /></td>
+        						<td style="vertical-align:top;">
+        				<table style= "width:350px;margin-top:20px;margin-left:10px;">
+        					<tr>
+        						<td style="font-size:18px;font-weight:bold"><%=menu_s[i].name%></td>
+        						<td style="text-align:left;padding-left:20px;">可售:<span class="can1" id="cantoday<%=i%>"><%=menu_s[i].numtoday%></span><span class="can2" id="cantomorrow<%=i%>"><%=menu_s[i].numtomorrow%></span></td>
+        					</tr>
+        					<tr>
+        						<td colspan="2">&nbsp;</td>
+        					</tr>
+        					<tr>
+        						<td colspan="2"><%=menu_s[i].maincourse%></td>
+        					</tr>
+        					<tr>
+        						<td colspan="2" style="padding-top:5px;"><%=menu_s[i].jardiniere%></td>
+        					</tr>
+        					<tr>
+        						<td colspan="2" style="padding-top:5px;"><%=menu_s[i].staplefood%></td>
+        					</tr>
+        					<tr>
+        						<td colspan="2">&nbsp;</td>
+        					</tr>
+        					<tr>
+        						<td style="font-size:14px;width:280px;" class="price1">订餐价 ¥<%=menu_s[i].price%></td>
+        						<td rowspan="2">
+        							<div id="dingc_<%=i%>" style="margin-left:20px;cursor:pointer;margin-top:3px;text-align:center;color:#FFFFFF;font-size:12px;width:50px;background:#40BAD7;height:40px;padding-top:12px" onclick="show_car(<%=i%>,<%=menu_s[i].price%>,<%=menu_s[i].aheadprice%>)">订餐</div>
+        						</td>
+        					</tr>
+        					<tr>
+        						<td style="font-size:14px;" class="price2">优惠价 ¥<%=menu_s[i].aheadprice%></td>
+        					</tr>
+        				</table>	
+        						</td>
+        					</tr>
+        				</table>
+        			</div>
+        		<%}%>
+			</td>
+			<td style="width:250px;vertical-align:top;">
+				<table style="width:250px;margin:auto;">
+					<tr>
+						<td><img src="/img/logoreg.png" style="width:110px;" /></td>
+						<td>
+							<p style="font-size:16px;color:#40BAD7;font-weight:bold;">欢迎您，<%=cuser%></p>
+							<p style="padding-top:2px;font-size:12px;">请选择您要的美食！</div></p>
+						</td>
+					</tr>
+				</table>
+				<div class="car">购物车<span id="car_num" style="margin-left:165px;font-size: 16px;color: #1fbad6;font-weight: bold;">0</span></div>
+				<%for(var i in menu_s){%>
+					<div id="car<%=i%>" class="car_list" style="display:none">
+						<table style="width:220px;">
+							<tr>
+								<td class="book_left"><%=menu_s[i].name%></td>
+								<td class="book_right"><span class="book_right_x" onclick="del_car(<%=i%>)">X</span></td>
+							</tr>
+							<tr>
+								<td>
+									<button type="button" class="btn btn-default btn-xs" onclick="computeTotal(0,<%=i%>,<%=menu_s[i].price%>,<%=menu_s[i].aheadprice%>)">-</button>
+									<input id="car_number<%=i%>"  type="text" class="input-sm form-control" style="width:40px;ime-mode:disabled;" value = "1" onblur="computeTotal1(this.value,<%=i%>,<%=menu_s[i].price%>,<%=menu_s[i].aheadprice%>)" onpaste="return false;"  onkeypress="keyPress()"></input>
+									<button type="button" class="btn btn-default btn-xs" onclick="computeTotal(1,<%=i%>,<%=menu_s[i].price%>,<%=menu_s[i].aheadprice%>)">+</button>
+								</td>
+								<td style="text-align: right;color:#DB551B;font-size:16px;">
+									¥<span id="car_pricetotal<%=i%>" style="color:#DB551B;font-size:16px;"></span>
+								</td>
+							</tr>
+						</table>
+					</div>
+				<%}%>
+				<div style="margin-top:0px;width:250px;background:#4D4C51;height:45px;padding-left:10px;padding-top:12px;margin-left:15px">
+					<table style="width:92%;">
+						<tr>
+							<td style="color:#FFFFFF;font-size:16px;">合计</td>
+							<td style="text-align:right;color:#DB551B;font-size:16px;">¥<span id="car_pricetotal" style="color:#DB551B;font-size:16px;">0</span></td>
+						</tr>
+					</table>
+				</div>
+				<div style="cursor:pointer;margin-top:0px;text-align:center;color:#FFFFFF;font-size:12px;width:250px;background:#40BAD7;height:35px;padding-top:10px;margin-left:15px" onclick="gostep2()">进入结算</div>
+			</td>
+		</tr>
+		</table>
+	</div>
+	<div id="step3" style="display:none">
+		<table style="margin:auto;width:900px;margin-bottom:20px;">
+			<tr>
+				<td class="step_lr"></td>
+				<td class="step_unsel">浏览菜单点餐 ></td>
+				<td class="step_sel">确认订餐内容 ></td>
+				<td class="step_unsel">选择支付提交</td>
+				<td class="step_lr"></td>
+			</tr>
+		</table>
+		<table class="table table-hover" style="width:900px;margin:auto;" id="table_list">
+        		<tr>
+        			<th>序号</th>
+        			<th>品名</th>
+        			<th>售价</th>
+        			<th>优惠价</th>
+        			<th>当日库存</th>
+        			<th>次日库存</th>
+        			<th>数量</th>
+        			<th>小计</th>
+        			<th>优惠备注</th>
+        			<th>取消</th>
+        		</tr>
+        		<%
+        			var j = 0;
+        			for(var i in menu_s){
+        				j += 1;
+        		%>
+        			<tr id="sure<%=i%>" style="display:none">
+        				<td><%=j%></td>
+        				<td id="p_<%=i%>_1"><%=menu_s[i].name%></td>
+        				<td class="price1">¥<span id="p_<%=i%>_2" class="price1"><%=menu_s[i].price%></span></td>
+        				<td class="price2">¥<span id="p_<%=i%>_3" class="price2"><%=menu_s[i].aheadprice%></span></td>
+        				<td id="numkc1_<%=i%>"><%=menu_s[i].numtoday%></td>
+        				<td id="numkc2_<%=i%>"><%=menu_s[i].numtomorrow%></td>
+        				<td style="width:110px;">
+        					<button type="button" class="btn btn-default btn-xs" onclick="computeTotal(0,<%=i%>,<%=menu_s[i].price%>,<%=menu_s[i].aheadprice%>)">-</button>
+        					<input id="number<%=i%>" type="text" class="input-sm form-control" style="width:40px;ime-mode:disabled;" value = "0" onblur="computeTotal1(this.value,<%=i%>,<%=menu_s[i].price%>,<%=menu_s[i].aheadprice%>)" onpaste="return false;"  onkeypress="keyPress()"></input>
+        					<button type="button" class="btn btn-default btn-xs" onclick="computeTotal(1,<%=i%>,<%=menu_s[i].price%>,<%=menu_s[i].aheadprice%>)">+</button>
+        				</td>
+        				<td style="width:100px;">¥<span id="pricetotal<%=i%>">0</span></td>
+        				<td id="p_<%=i%>_4"></td>
+        				<td><span class="book_right_x" onclick="del_car(<%=i%>)">X</span></td>
+        			</tr>
+        		<%}%>
+        </table>
+        <br/><br/>
+        <table style="width:900px;margin:auto;">
+        		<tr>
+        			<td></td>
+        			<td style="width:50px;font-size:14px;">数量：</td>
+        			<td style="width:30px;color:#DB551B;text-align:right;font-size:14px;"><span id="numtotal" style="color:#DB551B;font-size:14px;">0</span></td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td style="width:50px;font-size:14px;">合计：</td>
+        			<td style="width:30px;color:#DB551B;text-align:right;font-size:14px;">¥<span id="pricetotal" style="color:#DB551B;font-size:14px;">0</span></td>
+        		</tr>
+        		<tr>
+        			<%if(favorable != "首单优惠"){%>
+        				<td><span id="yh_info"></span><span style="display:none" id="yh_num"></span></td>
+        			<%}else{%>
+        				<td style="text-align:right;"><span id="yh_info">首单优惠 -¥</span><span id="yh_num" style="margin-right:20px;">5</span></td>
+        			<%}%>
+        			<td style="width:50px;font-size:14px;">结算：</td>
+        			<td style="width:30px;color:#DB551B;text-align:right;font-size:14px;">¥<span id="retailpricetotal" style="color:#DB551B;font-size:14px;">0</span></td>
+        		</tr>
+        </table>
+		<table style="margin:auto;width:900px;">
+			<tr>
+				<td>
+					<div style="cursor:pointer;margin-top:20px;text-align:center;color:#FFFFFF;font-size:12px;width:120px;background:#40BAD7;height:35px;padding-top:10px;margin-left:15px" onclick="backstep3()">< 返回菜单点餐</div>
+				</td>
+				<td>
+					<div style="cursor:pointer;margin-top:20px;text-align:center;color:#FFFFFF;font-size:12px;width:110px;background:#40BAD7;height:35px;padding-top:10px;margin-left:635px" onclick="gostep3()">下一步 ></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="step4" style="display:none">
+		<table style="margin:auto;width:900px;margin-bottom:20px;">
+			<tr>
+				<td class="step_lr"></td>
+				<td class="step_unsel">浏览菜单点餐 ></td>
+				<td class="step_unsel">确认订餐内容 ></td>
+				<td class="step_sel">选择支付提交</td>
+				<td class="step_lr"></td>
+			</tr>
+		</table>
+		<table style="width:900px;margin:auto;" id="four_table">
+        		<tr>
+        			<td colspan="2" class="step4tb">送餐信息</td>
+        		</tr>
+        		<tr>
+        			<td style="width:100px;">联系人</td>
+        			<td id="four_1"></td>
+        		</tr>
+        		<tr>
+        			<td>联系电话</td>
+        			<td id="four_2"></td>
+        		</tr>
+        		<tr>
+        			<td>送餐地址</td>
+        			<td id="four_3"></td>
+        		</tr>
+        		<tr>
+        			<td>送餐时间</td>
+        			<td id="four_4" style="color:#ff0000"></td>
+        		</tr>
+        		<tr>
+        			<td colspan="2" class="step4tb">其他信息</td>
+        		</tr>
+        		<tr>
+        			<td style="vertical-align:top;">是否要发票</td>
+        			<td>
+        				<input type="radio" id="male" name="isInvoice" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px9;"  onclick="$('#invoicetitle').attr('type','text');$('#invoicetitle').val('个人');$('#isInvoice').val('1');" value="1" /> <label for="male">是</label>
+        				<input type="radio" id="female" name="isInvoice" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px9;margin-left:10px;" checked onclick="$('#invoicetitle').attr('type','hidden');$('#invoicetitle').val('');$('#isInvoice').val('0');" value="0" /> <label for="female">否</label>
+        				<br/><input type="hidden" class="input-sm form-control" id="invoicetitle" name="invoicetitle" style="width:200px;margin-top:3px;"></input>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td colspan="2" class="step4tb">付款信息</td>
+        		</tr>
+        		<tr>
+        			<td>应付金额</td>
+        			<td id="four_5" style="color:#ff0000"></td>
+        		</tr>
+        		<tr>
+        			<td style="vertical-align:top;">付款方式</td>
+        			<td>
+        				<input type="radio" name="paytype" onclick="document.all.paytype1.value = '货到付款';" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px9;" > 货到付款</input>
+        				<div style="margin-top:3px;"><input type="radio" name="paytype" onclick="document.all.paytype1.value = '支付宝';" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px9;" checked><img class="pay_class" src="/img/zfb.png" alt=""></input></div>
+        				<div style="margin-top:3px;"><input type="radio" name="paytype" onclick="document.all.paytype1.value = '微信';" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px9;"><img class="pay_class_wx" src="/img/wx.png" alt=""></input></div>
+
+        			</td>
+        		</tr>
+        </table>
+		<table style="margin:auto;width:900px;">
+			<tr>
+				<td>
+					<div style="cursor:pointer;margin-top:20px;text-align:center;color:#FFFFFF;font-size:12px;width:120px;background:#40BAD7;height:35px;padding-top:10px;margin-left:15px" onclick="backstep3()">< 返回菜单点餐</div>
+				</td>
+				<td>
+					<div style="cursor:pointer;margin-top:20px;text-align:center;color:#FFFFFF;font-size:12px;width:120px;background:#40BAD7;height:35px;padding-top:10px;margin-left:635px" onclick="gostep4()">确认提交订单</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<input type="hidden" name="addressname" />
+	<input type="hidden" name="paytype1" value="支付宝" />
+	<input type="hidden" id="sender" name="sender" />
+    <input type="hidden" id="tel" name="tel" />
+    <input type="hidden" name="menu_len" id="menu_len" value="<%=menu_len%>" />
+    <input type="hidden" id="isToday" name="isToday" value ="1" />
+    <input type="hidden" name="sendtime1" id="sendtime1" />
+    <input type="hidden" id="isInvoice" value="0" />
+    <input type="hidden" name="retailpricetotal" />
+    <input type="hidden" name="numtotal1" />
+    <input type="hidden" name="isSysuser" id="isSysuser" value="1" />
+    <input type="hidden" name="pricetotalold" />
+    <input type="hidden" name="detail_1" />
+    <input type="hidden" name="detail_2" />
+    <input type="hidden" name="detail_3" />
+    <input type="hidden" name="detail_4" />
+    <input type="hidden" name="detail_5" />
+    <input type="hidden" name="detail_6" />
+    <input type="hidden" name="detail_7" value="<%=idlist%>" />
+	</form>
+	<div style="height:100px;"></div>
+</div>
+<script type="text/javascript">
+
+	function checkName(str){
+		var re = /^[\u4e00-\u9fa5 ]{2,10}$/; 
+		if (!re.test(str)) { 
+		 	$("#error1").html("请填写真实姓名！");
+		}else{
+			$("#error1").html("");
+		}
+
+	}
+
+	function checkAddress(str){
+		var re = /^\S{6,30}$/; 
+		if (!re.test(str)) { 
+		 	$("#error4").html("地址格式错误，6-30个字！");
+		}else{
+			$("#error4").html("");
+		}
+
+	}
+
+	function checkMobile(str){
+		 var re = /^1\d{10}$/; 
+		 if (!re.test(str)) { 
+		 	$("#error3").html("手机号格式错误！");
+		 }else{
+			$("#error3").html("");
+		}
+	}
+
+	<%if(canbooking == 0){%>
+		alert("预订功能已关闭，当前不可预订！");
+		window.location = "/";
+	<%}%>
+
+	var a1,a2,a3,a4,a5,a6;
+	var l = Number($("#menu_len").val());
+	var key = "";
+	<%if(la && la.address_id){%>
+		<%
+		for(var i in address_s){
+		%>
+		if("<%=la.address_id%>" == "<%=address_s[i].id%>"){
+			key = "<%=address_s[i].id+","+address_s[i].name+","+address_s[i].b_starttime+","+address_s[i].b_endtime+","+address_s[i].i_starttime+","+address_s[i].i_endtime+","+address_s[i].sender+","+address_s[i].tel%>";
+		}
+        <%}%>
+        setAddressInfo(key);
+        $("#address_s").val(key);
+        $("#addressdetail").val("<%=la.addressdetail%>");
+	<%}%>
+
+	var url = window.location.href;
+	var parms1 = url.split("?p=");
+	key = "";
+	if(parms1.length == 2){
+		<%
+		for(var i in address_s){
+		%>
+		if(parms1[1] == "<%=address_s[i].id%>"){
+			key = "<%=address_s[i].id+","+address_s[i].name+","+address_s[i].b_starttime+","+address_s[i].b_endtime+","+address_s[i].i_starttime+","+address_s[i].i_endtime+","+address_s[i].sender+","+address_s[i].tel%>";
+		}
+        <%}%>
+        setAddressInfo(key);
+        $("#address_s").val(key);
+	}
+
+	function computeTotal(j,i,p1,p2){
+		var isToday = Number($("#isToday").val());
+		var num = Number($("#car_number"+i).val());
+		var numtotal = Number($("#car_num").html());
+		var pricetotal = Number($("#car_pricetotal").html());
+		var p = (isToday == 1)?p1:p2;
+		
+		if(j==0){
+			num = num - 1;
+			if(num < 0){$("#car_number"+i).val(0);$("#number"+i).val(0);return false;}
+			$("#car_num").html(numtotal-1);$("#numtotal").html(numtotal-1);
+			$("#car_pricetotal").html(pricetotal-p);$("#pricetotal").html(pricetotal-p);
+		}else{
+			//check max
+            var umkc1 = Number($("#numkc1_"+i).html());
+            var umkc2 = Number($("#numkc2_"+i).html());
+            if(isToday == 1){
+                if(num == umkc1){
+                    alert("超过最大库存！");return false;
+                }
+            }else{
+                if(num == umkc2){
+                    alert("超过最大库存！");return false;
+                }
+            }
+			num = num + 1;
+			$("#car_num").html(numtotal+1);$("#numtotal").html(numtotal+1);
+			$("#car_pricetotal").html(pricetotal+p);$("#pricetotal").html(pricetotal+p);
+		}
+		//step2
+		$("#car_pricetotal"+i).html(num*p);
+		$("#car_number"+i).val(num);
+		//step3
+		$("#pricetotal"+i).html(num*p);
+		$("#number"+i).val(num);
+		var _yh = ($("#yh_num").html()=="")?0:Number($("#yh_num").html());
+		$("#retailpricetotal").html(Number($("#pricetotal").html())-_yh);
+		$("input[name='retailpricetotal']").val(Number($("#pricetotal").html())-_yh);
+	}
+
+	function computeTotal1(num,i,p1,p2){
+		if(isNaN(num) | num == "") {
+			num = 0;
+            alert("必须填写数字！");$("#car_number"+i).val(num);$("#number"+i).val(num);
+      	}
+		var isToday = Number($("#isToday").val());
+		var numtotal = Number($("#car_num").html());
+		var pricetotal = Number($("#car_pricetotal").html());
+		var p = (isToday == 1)?p1:p2;
+
+		if(num < 0){$("#car_number"+i).val(0);$("#number"+i).val(0);num = 0;}
+
+			//check max
+            var umkc1 = Number($("#numkc1_"+i).html());
+            var umkc2 = Number($("#numkc2_"+i).html());
+
+            if(isToday == 1){
+                if(num > umkc1){
+                    alert("超过最大库存！");$("#car_number"+i).val(0);$("#number"+i).val(0);num = 0;
+                }
+            }else{
+                if(num > umkc2){
+                    alert("超过最大库存！");$("#car_number"+i).val(0);$("#number"+i).val(0);num = 0;
+                }
+            }
+		
+		//step2
+		$("#car_pricetotal"+i).html(num*p);
+		$("#car_number"+i).val(num);
+		//step3
+		$("#pricetotal"+i).html(num*p);
+		$("#number"+i).val(num);
+
+			var n1 = 0;
+            var n2 = 0;
+            for(var i = 0;i<l;i++){
+                n1 += Number($("#number"+i).val());
+                n2 += Number($("#pricetotal"+i).html());
+            }
+
+            $("#car_num").html(n1);$("#numtotal").html(n1);
+
+            $("#car_pricetotal").html(n2);$("#pricetotal").html(n2);
+
+		var _yh = ($("#yh_num").html()=="")?0:Number($("#yh_num").html());
+		$("#retailpricetotal").html(Number($("#pricetotal").html())-_yh);
+		$("input[name='retailpricetotal']").val(Number($("#pricetotal").html())-_yh);
+	}
+
+
+
+	function show_car(i,p1,p2){
+		var isToday = Number($("#isToday").val());
+		var pricetotal = Number($("#car_pricetotal").html());
+		var numtotal = Number($("#car_num").html());
+		var p = (isToday == 1)?p1:p2;
+		if($("#car"+i).css("display")=="none"){
+			//step2
+			$("#car_number"+i).val("1");
+			$("#car"+i).removeAttr("style");
+			$("#car_num").html(numtotal+1);
+			$("#car_pricetotal").html(pricetotal+p);
+			$("#car_pricetotal"+i).html(p);
+			$("#car_number"+i).val(1);
+			//step3
+			$("#number"+i).val("1");
+			$("#pricetotal"+i).html(p);
+			$("#sure"+i).removeAttr("style");
+			$("#numtotal").html(numtotal+1);
+			$("input[name='numtotal1']").val($("#numtotal").html());
+			$("#pricetotal").html(pricetotal+p);
+			$("input[name='pricetotalold']").val($("#pricetotal").html());
+			var _yh = ($("#yh_num").html()=="")?0:Number($("#yh_num").html());
+			$("#retailpricetotal").html(Number($("#pricetotal").html())-_yh);
+			$("input[name='retailpricetotal']").val(Number($("#pricetotal").html())-_yh);
+		}else{
+			alert('当前菜品已经添加！');
+		}
+		
+	}
+
+	function del_car(i){
+		var pricetotal = Number($("#car_pricetotal").html());
+		var numtotal = Number($("#car_num").html());
+		var numi = Number($("#car_number"+i).val());
+		//step2
+		$("#car_num").html(numtotal-numi);
+		var pricei = Number($("#car_pricetotal"+i).html());
+		$("#car_pricetotal").html(pricetotal-pricei);
+		$("#car_number"+i).val("0");
+		$("#car"+i).css("display","none");
+		//step3
+		$("#sure"+i).css("display","none");
+		$("#numtotal").html(numtotal-numi);
+		$("input[name='numtotal1']").val($("#numtotal").html());
+		$("#pricetotal").html(pricetotal-pricei);
+		$("input[name='pricetotalold']").val($("#pricetotal").html());
+		$("#number"+i).val("0");
+		var retaili = Number($("#retailpricetotal").html());
+		$("#retailpricetotal").html(retaili-pricei);
+		$("input[name='retailpricetotal']").val(retaili-pricei);
+	}
+
+	function setAddressInfo(val){
+		var parm = val.split(",");
+		//var _html = "<table><tr><td><div id='inv11' onclick='setToday(1,\""+GetDateStr(0)+" "+parm[4]+"-"+parm[5]+"\");' style='cursor:pointer;margin-top:10px;text-align:center;color:#FFFFFF;font-size:12px;width:220px;background:#40BAD7;height:35px;padding-top:10px;'>"+GetDateStr(0)+" "+parm[4]+"-"+parm[5]+"</div></td><td id='inv12' style='padding-top:10px;padding-left:20px;color:#40BAD7'>当日送达</td></tr></table>";
+		var _html = "<table><tr><td><div id='inv21' onclick='setToday(0,\""+GetDateStr(1)+" "+parm[2]+"-"+parm[3]+"\");' style='border:1px solid #797979;cursor:pointer;margin-top:5px;text-align:center;font-size:12px;width:220px;background:#FFFFFF;height:35px;padding-top:10px;'>"+parm[2]+"-"+parm[3]+"</div></td><td id='inv22' style='padding-top:5px;padding-left:20px'>次日送达</td></tr></table>";
+        //setToday(0,GetDateStr(1)+" "+parm[2]+"-"+parm[3]);
+        setToday(0,GetDateStr(1));
+        $("input[name='addressname']").val(parm[1]);
+		$("#td_sendtime").html(_html);
+        $("#sender").val(parm[6]);
+        $("#tel").val(parm[7]);
+	}
+
+	function GetDateStr(AddDayCount) { 
+		var myDate = new Date(); 
+		myDate.setDate(myDate.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+		var y = myDate.getFullYear(); 
+		var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+		var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+		return y+"-"+m+"-"+d; 
+	}
+
+	function setToday(i,j){
+		$("#isToday").val(i);
+        $("#sendtime1").val(j);
+        if(i==1){
+        	//当天
+            for(var i=0;i<l;i++){
+                $("#p_"+i+"_4").html("");    
+            }
+            $("#inv11").css("border","none").css("background","#40BAD7").css("color","#FFFFFF");
+            $("#inv12").css("color","#40BAD7");
+            $("#inv21").css("border","1px solid #797979").css("background","#FFFFFF").css("color","#797979");
+            $("#inv22").css("color","#797979");
+            $(".price1").css("color","#FF0000");$(".price2").css("color","#797979");
+            $(".can1").removeAttr("style");$(".can2").css("display","none");
+            //step4
+        	$("#four_4").html(j + " 当日送达");
+        }else{
+        	//隔天
+            for(var i=0;i<l;i++){
+                $("#p_"+i+"_4").html("提前预定");    
+            }
+            $("#inv21").css("border","none").css("background","#40BAD7").css("color","#FFFFFF");
+            $("#inv22").css("color","#40BAD7");
+            $("#inv11").css("border","1px solid #797979").css("background","#FFFFFF").css("color","#797979");
+            $("#inv12").css("color","#797979");
+            $(".price2").css("color","#FF0000");$(".price1").css("color","#797979");
+            $(".can2").removeAttr("style");$(".can1").css("display","none");
+            $("#four_4").html("次日送达");
+        }
+	}
+
+	function keyPress() {    
+    	var keyCode = event.keyCode;    
+     	if ((keyCode >= 48 && keyCode <= 57)){    
+        	event.returnValue = true;    
+     	} else {    
+            event.returnValue = false;    
+    	}    
+ 	}   
+
+	function toTop(){
+		var url = window.location.href;
+    	var tmp = url.split("#");
+    	var nurl = tmp[0]+"#tab1";
+    	window.location = nurl;
+	}
+
+	function gostep1(){
+		if($("#linktel").val()==""){
+			alert('联系电话必填！');return false;
+        }
+        if($("#linkname").val()==""){
+        	alert('联系人必填！');return false;
+        }
+        if($("#address_s").val()=="-"){
+        	alert('送餐地址必选！');return false;
+        }
+        if($("#addressdetail").val()==""){
+        	alert('详细地址必填！');return false;
+        }
+
+        if($("#error1").html()!="" | $("#error4").html()!="" | $("#error3").html()!="" ){
+	    	alert("有错误信息不能提交！");return false;
+	    }
+
+        $("#step1").css("display","none");
+        $("#step2").removeAttr("style");
+
+        //设置送达时间
+        var _time1 = $("#sendtime1").val();
+        _time1 += " ";
+        _time1 += $("#usertime").val();
+        $("#sendtime1").val(_time1);
+
+       	//step4
+       	$("#four_1").html($("#linkname").val());
+       	$("#four_2").html($("#linktel").val());
+       	$("#four_3").html($("input[name='addressname']").val()+$("#addressdetail").val());
+
+       	var isToday = Number($("#isToday").val());
+       	if(isToday==1){	
+       		for(var k=0;k<l;k++){
+            	var cantoday = Number($("#cantoday"+k).html());
+            	if(cantoday == 0){
+            		$("#dingc_"+k).html("售罄").css("background","#797979").attr("onclick","return false;");
+            	}
+            }
+       	}else{
+       		for(var k=0;k<l;k++){
+            	var cantomorrow = Number($("#cantomorrow"+k).html());
+            	if(cantomorrow == 0){
+            		$("#dingc_"+k).html("售罄").css("background","#797979").attr("onclick","return false;");
+            	}
+            }
+       	}
+
+       	toTop();
+	}
+
+	function gostep2(){
+		if(Number($("#numtotal").html()) < 1 ){
+            alert("对不起，至少一份起送！");return false;
+        }
+        $("#step2").css("display","none");
+        $("#step3").removeAttr("style");
+        toTop();
+	}
+
+	function backstep3(){
+		$("#step2").removeAttr("style");
+		$("#step3").css("display","none");
+		$("#step4").css("display","none");
+		toTop();
+	}
+
+	function gostep3(){
+		if(Number($("#numtotal").html()) < 1 ){
+            alert("对不起，至少一份起送！");return false;
+        }
+        $("#step3").css("display","none");
+        $("#step4").removeAttr("style");
+        //step4
+        $("#four_5").html("¥"+$("#retailpricetotal").html());
+        toTop();
+	}
+
+	function gostep4(){
+		if($("#isInvoice").val()=="1" && $("#invoicetitle").val()==""){
+            alert("发票抬头必填！");return false;
+        }
+        if(document.all.paytype1.value == "微信"){
+        	//alert("微信支付未接通！");return false;
+        }
+        if(document.all.paytype1.value == "支付宝"){
+        	//alert("支付宝支付未接通！");return false;
+        }
+        $("input[name='numtotal1']").val($("#numtotal").html());
+        $("input[name='pricetotalold']").val($("#pricetotal").html());
+        //计算价格明细
+        for(var i=0;i<l;i++){
+            if(!a1){
+                a1 = $("#p_"+i+"_1").html();
+                a2 = $("#p_"+i+"_2").html();
+                a3 = $("#p_"+i+"_3").html();
+                a4 = $("#number"+i).val();
+                a5 = $("#pricetotal"+i).html(); 
+                a6 = $("#p_"+i+"_4").html();
+            }else{
+                a1 = a1 + "," + $("#p_"+i+"_1").html();
+                a2 = a2 + "," + $("#p_"+i+"_2").html();
+                a3 = a3 + "," + $("#p_"+i+"_3").html();
+                a4 = a4 + "," + $("#number"+i).val();
+                a5 = a5 + "," + $("#pricetotal"+i).html(); 
+                a6 = a6 + "," + $("#p_"+i+"_4").html();
+            }
+        }
+        $("input[name='detail_1']").val(a1);
+        $("input[name='detail_2']").val(a2);
+        $("input[name='detail_3']").val(a3);
+        $("input[name='detail_4']").val(a4);
+        $("input[name='detail_5']").val(a5);
+        $("input[name='detail_6']").val(a6);
+        document.booking.submit();
+	}
+</script>
+<% include footer %>
