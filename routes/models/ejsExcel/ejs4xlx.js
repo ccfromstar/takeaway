@@ -17,14 +17,30 @@ var extname = path.extname;
 var join = path.join;
 
 var isType = function(type) {
-  return function(obj) {
-  return Object.prototype.toString.call(obj) === "[object " + type + "]";
-    };
+	return function(obj) {
+		return Object.prototype.toString.call(obj) === "[object " + type + "]";
+	};
 };
 var isObject = isType("Object");
 var isString = isType("String");
 var isArray = Array.isArray || isType("Array");
 var isFunction = isType("Function");
+var UID = Date.now()
+var uniqueID = function() {
+	return (UID++).toString(36);
+}
+var charToNum = function(str) {
+  var i, j, len, m, ref, temp, val;
+  str = new String(str);
+  val = 0;
+  len = str.length;
+  for (j = m = 0, ref = len; 0 <= ref ? m < ref : m > ref; j = 0 <= ref ? ++m : --m) {
+    i = len - 1 - j;
+    temp = str.charCodeAt(i) - 65 + 1;
+    val += temp * Math.pow(26, j);
+  }
+  return val;
+};
 
 /**
  * Filters.
@@ -126,6 +142,17 @@ var parse = exports.parse = function(str, options){
   var isRowBegin = false;
   var isRowEnd = false;
   var consumeEOL = false;
+  
+  var forRBegin = false;
+  var forREnd = false;
+  var forRNumArr = [];
+  var forCBegin = false;
+  var forCEnd = false;
+  var forCNumArr = [];
+  var ifRBegin = false;
+  var ifREnd = false;
+  var ifCBegin = false;
+  var ifCEnd = false;
   var pixEq = "";
   for (var i = 0, len = str.length; i < len; ++i) {
     if (str.slice(i, open.length + i) == open) {
@@ -169,6 +196,7 @@ var parse = exports.parse = function(str, options){
         }
         js = '';
       } else if(0 == js.indexOf('forRow')) {
+    	  var uid = uniqueID();
     	  var name = js.slice(6);
     	  isForRowBegin = true;
     	  isForRowEnd = false;
@@ -187,7 +215,7 @@ var parse = exports.parse = function(str, options){
     		  var tmpArr = itemName.split(",");
     		  itemName = tmpArr[0].trim();
     		  if(tmpArr[1].trim() !== "") {
-    			  iName = "var "+tmpArr[1].trim()+"=I_m;";
+    			  iName = "var "+tmpArr[1].trim()+"=I_m"+uid+";";
     		  }
     	  }
     	  var arrName = nameArr[1].trim();
@@ -198,15 +226,95 @@ var parse = exports.parse = function(str, options){
     	  strTmp = strTmp.replace(/<row r="/gm,function(s){
     		  repNum++;
     		  if(mthArr.length === repNum) {
-    			  return "');var I_rLen = "+arrName+";if(Array.isArray("+arrName+")){I_rLen=("+arrName+").length;};for(var I_m=0;I_m<I_rLen;I_m++){$await(Wind.Async.sleep(0));"+iName+"var "+itemName+"="+arrName+"[I_m];if(typeof("+arrName+")===\"number\"){"+itemName+"=I_m;}"+pixJs+";buf.push('"+mthLt;
+    			  return "');var I_rLen"+uid+"="+arrName+";if(Array.isArray("+arrName+")){I_rLen"+uid+"=("+arrName+").length;};for(var I_m"+uid+"=0;I_m"+uid+"<I_rLen"+uid+";I_m"+uid+"++){"+iName+"var "+itemName+"="+arrName+"[I_m"+uid+"];if(typeof("+arrName+")===\"number\"){"+itemName+"=I_m"+uid+";}"+pixJs+";buf.push('"+mthLt;
     		  }
     		  return s;
     	  });
     	  buf = [strTmp];
     	  js = '';
       }
-      //sail 2014-04-09 --begin
-      else if(0 == js.indexOf('forRBegin')) {
+      //sail 2015-06-24 --begin
+      else if(0 == js.indexOf('ifRBegin')) {
+    	  ifRBegin = true;
+    	  ifREnd = false;
+    	  forRNumArr.push(rowRn);
+    	  var jsStr = js.slice(8);
+    	  var strTmp = buf.join('');
+    	  var mthArr = strTmp.match(/<row r="/gm);
+    	  var mthLt = mthArr[mthArr.length-1];
+    	  var repNum = 0;
+    	  strTmp = strTmp.replace(/<row r="/gm,function(s){
+    		  repNum++;
+    		  if(mthArr.length === repNum) {
+    			  return "');if("+jsStr+"){buf.push('"+mthLt;
+    		  }
+    		  return s;
+    	  });
+    	  buf = [strTmp];
+    	  js = '';
+      } else if(0 == js.indexOf('ifREnd')) {
+    	  ifRBegin = false;
+    	  ifREnd = true;
+    	  if(forRNumArr.length === 0) throw new Error("ifREnd must begin with ifRBegin");
+    	  var rjsNum = rowRn-forRNumArr.pop();
+    	  var rjsStr = js.slice(6);
+    	  var strTmp = buf.join('');
+    	  var mthArr = strTmp.match(/<\/row>/gm);
+    	  var mthLt = mthArr[mthArr.length-1];
+    	  var repNum = 0;
+    	  strTmp = strTmp.replace(/<\/row>/gm,function(s){
+    		  repNum++;
+    		  if(mthArr.length === repNum) {
+    			  return "</row>');_r+="+rjsNum+";}_r-="+rjsNum+";buf.push('";
+    		  }
+    		  return s;
+    	  });
+    	  buf = [strTmp];
+    	  js = '';
+      }
+      else if(0 == js.indexOf('ifCBegin')) {
+    	  ifCBegin = true;
+    	  ifCEnd = false;
+    	  forCNumArr.push(cellRn);
+    	  var jsStr = js.slice(8);
+    	  var strTmp = buf.join('');
+    	  var mthArr = strTmp.match(/<c r="/gm);
+    	  var mthLt = mthArr[mthArr.length-1];
+    	  var repNum = 0;
+    	  strTmp = strTmp.replace(/<c r="/gm,function(s){
+    		  repNum++;
+    		  if(mthArr.length === repNum) {
+    			  return "');if("+jsStr+"){buf.push('"+mthLt;
+    		  }
+    		  return s;
+    	  });
+    	  buf = [strTmp];
+    	  js = '';
+      } else if(0 == js.indexOf('ifCEnd')) {
+    	  ifCBegin = false;
+    	  ifCEnd = true;
+    	  if(forCNumArr.length === 0) throw new Error("ifCEnd must be begin with ifCBegin");
+    	  var rjsNum = charToNum(cellRn)-charToNum(forCNumArr.pop());
+    	  var rjsStr = js.slice(6);
+    	  var strTmp = buf.join('');
+    	  var mthArr = strTmp.match(/<\/c>/gm);
+    	  var mthLt = mthArr[mthArr.length-1];
+    	  var repNum = 0;
+    	  strTmp = strTmp.replace(/<\/c>/gm,function(s){
+    		  repNum++;
+    		  if(mthArr.length === repNum) {
+    			  return "</c>');_c+="+rjsNum+";}_c-="+rjsNum+";buf.push('";
+    		  }
+    		  return s;
+    	  });
+    	  buf = [strTmp];
+    	  js = '';
+      }
+      else if(0 == js.indexOf('forCBegin')) {
+    	  forCBegin = true;
+    	  forCEnd = false;
+    	  forCNumArr.push(cellRn);
+    	  var uid = uniqueID();
     	  var name = js.slice(9);
     	  var nameArr = [];
     	  nameArr[0] = name.substring(0,name.indexOf(" in "));
@@ -223,7 +331,67 @@ var parse = exports.parse = function(str, options){
     		  var tmpArr = itemName.split(",");
     		  itemName = tmpArr[0].trim();
     		  if(tmpArr[1].trim() !== "") {
-    			  iName = "var "+tmpArr[1].trim()+"=I_m;";
+    			  iName = "var "+tmpArr[1].trim()+"=I_c"+uid+";";
+    		  }
+    	  }
+    	  var arrName = nameArr[1].trim();
+    	  var strTmp = buf.join('');
+    	  var mthArr = strTmp.match(/<c r="/gm);
+    	  var mthLt = mthArr[mthArr.length-1];
+    	  var repNum = 0;
+    	  strTmp = strTmp.replace(/<c r="/gm,function(s){
+    		  repNum++;
+    		  if(mthArr.length === repNum) {
+    			  return "');var I_cLen"+uid+"="+arrName+";if(Array.isArray("+arrName+")){I_cLen"+uid+"=("+arrName+").length;};for(var I_c"+uid+"=0;I_c"+uid+"<I_cLen"+uid+";I_c"+uid+"++){"+iName+"var "+itemName+"="+arrName+"[I_c"+uid+"];if(typeof("+arrName+")===\"number\"){"+itemName+"=I_c"+uid+";}"+pixJs+";buf.push('"+mthLt;
+    		  }
+    		  return s;
+    	  });
+    	  buf = [strTmp];
+    	  js = '';
+    	  
+      } else if(0 == js.indexOf('forCEnd')) {
+    	  forCBegin = false;
+    	  forCEnd = true;
+    	  if(forCNumArr.length === 0) throw new Error("forCEnd must be begin with forCBegin");
+    	  var rjsNum = charToNum(cellRn)-charToNum(forCNumArr.pop());
+    	  var strTmp = buf.join('');
+    	  var mthArr = strTmp.match(/<\/c>/gm);
+    	  var mthLt = mthArr[mthArr.length-1];
+    	  var repNum = 0;
+    	  strTmp = strTmp.replace(/<\/c>/gm,function(s){
+    		  repNum++;
+    		  if(mthArr.length === repNum) {
+    			  return "</c>');_c+="+rjsNum+";}_c-="+rjsNum+";buf.push('";
+    		  }
+    		  return s;
+    	  });
+    	  buf = [strTmp];
+    	  js = '';
+      }
+      //sail 2015-06-24 --end
+      //sail 2014-04-09 --begin
+      else if(0 == js.indexOf('forRBegin')) {
+    	  forRBegin = true;
+    	  forREnd = false;
+    	  forRNumArr.push(rowRn);
+    	  var uid = uniqueID();
+    	  var name = js.slice(9);
+    	  var nameArr = [];
+    	  nameArr[0] = name.substring(0,name.indexOf(" in "));
+    	  //var nameArr = name.split(" in ");
+    	  nameArr[1] = name.substring(name.indexOf(" in ")+4);
+    	  var pixJs = "";
+    	  if(nameArr[1].indexOf("|||") !== -1) {
+    		  pixJs = nameArr[1].substring(nameArr[1].indexOf("|||")+3);
+    		  nameArr[1] = nameArr[1].substring(0,nameArr[1].indexOf("|||"));
+    	  }
+    	  var itemName = nameArr[0].trim();
+    	  var iName = "";
+    	  if(itemName.indexOf(",") !== -1) {
+    		  var tmpArr = itemName.split(",");
+    		  itemName = tmpArr[0].trim();
+    		  if(tmpArr[1].trim() !== "") {
+    			  iName = "var "+tmpArr[1].trim()+"=I_m"+uid+";";
     		  }
     	  }
     	  var arrName = nameArr[1].trim();
@@ -234,7 +402,7 @@ var parse = exports.parse = function(str, options){
     	  strTmp = strTmp.replace(/<row r="/gm,function(s){
     		  repNum++;
     		  if(mthArr.length === repNum) {
-    			  return "');var I_rLen = "+arrName+";if(Array.isArray("+arrName+")){I_rLen=("+arrName+").length;};for(var I_m=0;I_m<I_rLen;I_m++){$await(Wind.Async.sleep(0));"+iName+"var "+itemName+"="+arrName+"[I_m];if(typeof("+arrName+")===\"number\"){"+itemName+"=I_m;}"+pixJs+";buf.push('"+mthLt;
+    			  return "');var I_rLen"+uid+"="+arrName+";if(Array.isArray("+arrName+")){I_rLen"+uid+"=("+arrName+").length;};for(var I_m"+uid+"=0;I_m"+uid+"<I_rLen"+uid+";I_m"+uid+"++){"+iName+"var "+itemName+"="+arrName+"[I_m"+uid+"];if(typeof("+arrName+")===\"number\"){"+itemName+"=I_m"+uid+";}"+pixJs+";buf.push('"+mthLt;
     		  }
     		  return s;
     	  });
@@ -242,15 +410,18 @@ var parse = exports.parse = function(str, options){
     	  js = '';
       }
       else if(0 == js.indexOf('forREnd')) {
-    	  var rjsStr = js.slice(7);
+    	  forRBegin = false;
+    	  forREnd = true;
+    	  if(forRNumArr.length === 0) throw new Error("forREnd must begin with forRBegin");
+    	  var rjsNum = rowRn-forRNumArr.pop();
     	  var strTmp = buf.join('');
-    	  var mthArr = strTmp.match(/<row r="/gm);
+    	  var mthArr = strTmp.match(/<\/row>/gm);
     	  var mthLt = mthArr[mthArr.length-1];
     	  var repNum = 0;
-    	  strTmp = strTmp.replace(/<row r="/gm,function(s){
+    	  strTmp = strTmp.replace(/<\/row>/gm,function(s){
     		  repNum++;
     		  if(mthArr.length === repNum) {
-    			  return "');_r+=Number(eval('"+rjsStr+"'));}_r-=Number(eval('"+rjsStr+"'));buf.push('"+mthLt;
+    			  return "</row>');_r+="+rjsNum+";}_r-="+rjsNum+";buf.push('";
     		  }
     		  return s;
     	  });
@@ -259,6 +430,7 @@ var parse = exports.parse = function(str, options){
       }
       //sail 2014-04-09 --end
       else if(0 === js.indexOf('forCell')) {
+    	  var uid = uniqueID();
     	  var name = js.slice(7);
     	  isForCellBegin = true;
     	  isForCellEnd = false;
@@ -277,7 +449,7 @@ var parse = exports.parse = function(str, options){
     		  var tmpArr = itemName.split(",");
     		  itemName = tmpArr[0].trim();
     		  if(tmpArr[1].trim() !== "") {
-    			  iName = "var "+tmpArr[1].trim()+"=I_c;";
+    			  iName = "var "+tmpArr[1].trim()+"=I_c"+uid+";";
     		  }
     	  }
     	  var arrName = nameArr[1].trim();
@@ -288,7 +460,7 @@ var parse = exports.parse = function(str, options){
     	  strTmp = strTmp.replace(/<c r="/gm,function(s){
     		  repNum++;
     		  if(mthArr.length === repNum) {
-    			  return "');var I_cLen = "+arrName+";if(Array.isArray("+arrName+")){I_cLen=("+arrName+").length;};for(var I_c=0;I_c<I_cLen;I_c++){$await(Wind.Async.sleep(0));"+iName+"var "+itemName+"="+arrName+"[I_c];if(typeof("+arrName+")===\"number\"){"+itemName+"=I_c;}"+pixJs+";buf.push('"+mthLt;
+    			  return "');var I_cLen"+uid+" = "+arrName+";if(Array.isArray("+arrName+")){I_cLen"+uid+"=("+arrName+").length;};for(var I_c"+uid+"=0;I_c"+uid+"<I_cLen"+uid+";I_c"+uid+"++){"+iName+"var "+itemName+"="+arrName+"[I_c"+uid+"];if(typeof("+arrName+")===\"number\"){"+itemName+"=I_c"+uid+";}"+pixJs+";buf.push('"+mthLt;
     		  }
     		  return s;
     	  });
@@ -303,7 +475,7 @@ var parse = exports.parse = function(str, options){
     		  for(var sei=0; sei<cellRn.length; sei++) {
     			  cellNum += cellRn.charCodeAt(sei)-65+(cellRn.length-1-sei)*26;
     		  }
-    		  js = "$await("+js+",\""+options.fileName.replace(/\"/gm,"\\\"")+"\","+rowRn+","+cellNum+"))";
+    		  js = js+",\""+options.fileName.replace(/\"/gm,"\\\"")+"\",("+rowRn+"+_r),("+cellNum+"+_c))";
     	  }
       }
 
@@ -327,6 +499,7 @@ var parse = exports.parse = function(str, options){
     else if(str.substr(i,8) === "<row r=\"") {
     	isRowBegin = true;
   		isRowEnd = false;
+  		forCNumArr = []
   		i += 7;
     	buf.push("<row r=\"");
     }
@@ -334,15 +507,15 @@ var parse = exports.parse = function(str, options){
     	isRowEnd = true;
     	isRowBegin = false;
     	var strTmp = buf.join('')+"\"";
-  	    var mthArr = strTmp.match(/<row\s+r="\d+"/gm);
+  	    var mthArr = strTmp.match(/<row r="\d+"/gm);
   	    var mthLt = mthArr[mthArr.length-1];
   	    //行号
-  	    rowRn = mthLt.replace(/<row\s+r="/gm,"").replace(/"/gm,"");
+  	    rowRn = mthLt.replace(/<row r="/gm,"").replace(/"/gm,"");
   	    var repNum = 0;
-  	    strTmp = strTmp.replace(/<row\s+r="\d+"/gm,function(s){
+  	    strTmp = strTmp.replace(/<row r="\d+"/gm,function(s){
   	  		repNum++;
   	  		if(mthArr.length === repNum) {
-  	  			return "<row r=\"');_c=0;buf.push("+rowRn+"+_r);buf.push('\"";
+  	  			return "<row r=\"');_c=0;_row="+rowRn+"+_r;buf.push(_row);buf.push('\"";
   	  		}
   	  		return s;
   	    });
@@ -358,14 +531,14 @@ var parse = exports.parse = function(str, options){
     	isCEnd = true;
     	isCbegin = false;
     	var strTmp = buf.join('')+"\"";
-    	var mthArr = strTmp.match(/<c\s+r="\D+\d+"/gm);
+    	var mthArr = strTmp.match(/<c r="[A-Z]+[0-9]+"/gm);
     	var mthLt = mthArr[mthArr.length-1];
-  		cellRn = mthLt.replace(/<c\sr="/gm,"").replace(/\d+"/gm,"");
+  		cellRn = mthLt.replace(/<c r="/gm,"").replace(/\d+"/gm,"");
   		var repNum = 0;
-  		strTmp = strTmp.replace(/<c\s+r="\D+\d+"/gm,function(s){
+  		strTmp = strTmp.replace(/<c r="[A-Z]+[0-9]+"/gm,function(s){
   	  	  repNum++;
   	  	  if(mthArr.length === repNum) {
-  	  		  return "<c r=\"');buf.push(_charPlus_('"+cellRn+"',_c));buf.push("+rowRn+"+_r);buf.push('\"";
+  	  		  return "<c r=\"');_col=_charPlus_('"+cellRn+"',_c);_rc=_col+_row;buf.push(_rc);buf.push('\"";
   	  	  }
   	  	  return s;
   	    });

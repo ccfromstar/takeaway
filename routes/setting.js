@@ -1,7 +1,10 @@
 module.exports = {
-        host: '127.0.0.1',
+	
+        host: '117.121.25.131',
+        //host: '127.0.0.1',
         user: 'root',
-        password: 'password',
+        password: 'password123',
+        //password: '',
         database:'takaway',
         port: 3306
 	

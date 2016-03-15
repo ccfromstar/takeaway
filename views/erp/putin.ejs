@@ -77,6 +77,7 @@
 			</td>
 			<td>
 				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+				<input type="text" id="k_date_end" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 			</td>
 			<td>
 				<button class="btn btn-xs" onclick="getDate()">筛选</button>
@@ -116,7 +117,8 @@
 				url: "/erp/getPutIn",
 				data: {
 					k_category: $("#k_category").val(),
-					k_date: $("#k_date").val()
+					k_date: $("#k_date").val(),
+					k_date_end: $("#k_date_end").val()
 				},
 				success: function(data) {
 						var html = "";
@@ -224,7 +226,8 @@
     function toExcel(){
     	$.ajax({ type:"POST" , url: "/erp/toExcelputin", data:{
     		k_category: $("#k_category").val(),
-			k_date: $("#k_date").val()
+			k_date: $("#k_date").val(),
+			k_date_end: $("#k_date_end").val()
     	}, success: function(data){
     		window.open("/excelop/temp/"+data);
       	}});

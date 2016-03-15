@@ -69,20 +69,21 @@ function toExcelorderlist(req, res){
 function toExcelputin(req, res){
     var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
+	var k_date_end = req.param('k_date_end');
 	k_category = k_category == '所有'?'':k_category;
     //获得Excel模板的buffer对象
     var exlBuf = fs.readFileSync("./public/excelop/template/putin.xlsx");
     var excelname = setFileName();
     //数据源
     //var sql1 = "select * from c_putin where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
-    var sql1 = "select * from c_putin where category = '"+k_category+"' and date = '"+k_date+"' order by id desc";
+    var sql1 = "select * from c_putin where category = '"+k_category+"' and date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	if(k_category == ''){
-		sql1 = "select * from c_putin where date = '"+k_date+"' order by id desc";
+		sql1 = "select * from c_putin where date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	}
 	mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         //用数据源(对象)data渲染Excel模板
-        var obj_str = '[ [{"date": "'+k_date+'"}],';
+        var obj_str = '[ [{"date": "'+k_date+"~"+k_date_end+'"}],';
         obj_str += JSON.stringify(obj) + "]";
         //console.log(obj_str);
         ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2){
@@ -149,20 +150,21 @@ function toExcelstock(req, res){
 function toExcelputout(req, res){
     var k_category = req.param('k_category');
     var k_date = req.param('k_date');
+    var k_date_end = req.param('k_date_end');
 	k_category = k_category == '所有'?'':k_category;
     //获得Excel模板的buffer对象
     var exlBuf = fs.readFileSync("./public/excelop/template/putout.xlsx");
     var excelname = setFileName();
     //数据源
     //var sql1 = "select * from putout where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
-	var sql1 = "select * from putout where category = '"+k_category+"' and date = '"+k_date+"' order by id desc";
+	var sql1 = "select * from putout where category = '"+k_category+"' and date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	if(k_category == ''){
-		sql1 = "select * from putout where date = '"+k_date+"' order by id desc";
+		sql1 = "select * from putout where date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	}
 	mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         //用数据源(对象)data渲染Excel模板
-        var obj_str = '[ [{"date": "'+k_date+'"}],';
+        var obj_str = '[ [{"date": "'+k_date+"~"+k_date_end+'"}],';
         obj_str += JSON.stringify(obj) + "]";
         ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2){
             fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
@@ -274,10 +276,11 @@ function delOrd(req, res) {
 function getPutIn(req, res) {
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
+	var k_date_end = req.param('k_date_end');
 	k_category = k_category == '所有'?'':k_category;
-	var sql1 = "select * from c_putin where category = '"+k_category+"' and date = '"+k_date+"' order by id desc";
+	var sql1 = "select * from c_putin where category = '"+k_category+"' and date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	if(k_category == ''){
-		sql1 = "select * from c_putin where date = '"+k_date+"' order by id desc";
+		sql1 = "select * from c_putin where date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1 ,function(error,rows){
@@ -436,10 +439,11 @@ function getPutout(req, res) {
 	//var sql1 = "select * from putout where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
+	var k_date_end = req.param('k_date_end');
 	k_category = k_category == '所有'?'':k_category;
-	var sql1 = "select * from c_putout where category = '"+k_category+"' and date = '"+k_date+"' order by id desc";
+	var sql1 = "select * from c_putout where category = '"+k_category+"' and date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	if(k_category == ''){
-		sql1 = "select * from c_putout where date = '"+k_date+"' order by id desc";
+		sql1 = "select * from c_putout where date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1 ,function(error,rows){

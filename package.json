@@ -20,5 +20,8 @@
     "morgan": "~1.0.0",
     "log4js": "*",
     "ejs": "*"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5"
   }
 }
