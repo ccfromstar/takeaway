@@ -54,4 +54,5 @@ FROM putout a
 LEFT JOIN c_material b
 ON a.name = b.name;
 
-alter table booking_price add CONSTRAINT FK_PRICE_BOOKING FOREIGN KEY (bookingid) REFERENCES booking (id) ON DELETE CASCADE ON UPDATE NO ACTION
+alter table booking_price add CONSTRAINT FK_PRICE_BOOKING FOREIGN KEY (bookingid) REFERENCES booking (id) ON DELETE CASCADE ON UPDATE NO ACTION;
+alter table material add constraint unique_name UNIQUE(name);
