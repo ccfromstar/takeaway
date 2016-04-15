@@ -20,6 +20,30 @@ var jsapi_ticket = "";
 var strat_time = new Date();
 var fs = require('fs');
 
+var mysql_model = require('mysql');
+var mysqlphp = mysql_model.createPool({
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'password123',
+    database:'takeaway',
+    port: 3306
+});
+
+
+exports.servicedo = function(req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    var _sql = req.params.sql;
+    if (_sql == "getTotal") {
+        var sql = "select count(id) as count from user where id > 150";
+        mysqlphp.query(sql, function(err, result) {
+            if (err) return console.error(err.stack);
+            console.log(result);
+            res.json(result);
+
+        });
+    }
+}
+
 exports.wechat = function (req, res) {
     var echostr, nonce, signature, timestamp;
     signature = req.query.signature;
