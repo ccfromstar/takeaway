@@ -116,4 +116,6 @@ module.exports = function (app, routes) {
     app.get('/erp/bymonth',routes.erp_bymonth);
 
     app.post('/service/:sql',routes.servicedo);
+
+    app.get('/service/runSQL',routes.runSQL);
 }

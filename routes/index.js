@@ -44,6 +44,29 @@ exports.servicedo = function(req, res) {
     }
 }
 
+exports.runSQL = function(req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+        var sql_statement = req.query.sql;
+        sql_statement = sql_statement.toLocaleLowerCase(); 
+        var label = req.query.label;
+        if(label != "ddj"){
+            res.json({'error':'no access'});return false;
+        }
+        if(!sql_statement){
+            res.json({'error':'need sql sql_statement'});return false;
+        }
+        if(sql_statement.indexOf('insert') != -1 || sql_statement.indexOf('update') != -1 || sql_statement.indexOf('delete') != -1 ){
+            res.json({'error':'you can only run select SQL'});return false;
+        }
+        mysqlphp.query(sql_statement, function(err, result) {
+            if (err){
+                res.json(err.stack);
+                return false;
+            }
+            res.json(result);
+        });
+}
+
 exports.wechat = function (req, res) {
     var echostr, nonce, signature, timestamp;
     signature = req.query.signature;
