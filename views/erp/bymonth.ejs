@@ -52,6 +52,7 @@
 				<th>单价</th>
 				<th>差价</th>
 				<th>是否要发票</th>
+				<th>材料类别</th>
 			</tr>
 			<tbody id="content">
 			</tbody>
@@ -70,6 +71,7 @@
 				<th>数量</th>
 				<th>单价</th>
 				<th>总价</th>
+				<th>材料类别</th>
 			</tr>
 			<tbody id="contentuse">
 			</tbody>
@@ -110,6 +112,7 @@
 									html += "<td>"+data[i].unitPrice+"元</td>";
 									html += "<td>"+data[i].difference+"元</td>";
 									html += "<td>"+data[i].hasInvoice+"</td>";
+									html += "<td>"+data[i].cname+"</td>";
 									html += "</tr>";
 									totalout += data[i].total;
 									totaldif += data[i].difference;
@@ -146,6 +149,7 @@
 									html += "<td>"+data[i].num+"</td>";
 									html += "<td>"+data[i].unitPrice+"元</td>";
 									html += "<td>"+data[i].total+"元</td>";
+									html += "<td>"+data[i].cname+"</td>";
 									html += "</tr>";
 									totaluse += data[i].total;
 						}

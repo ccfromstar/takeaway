@@ -186,9 +186,9 @@ function toExcelputoutM(req, res){
     var exlBuf = fs.readFileSync("./public/excelop/template/putoutm.xlsx");
     var excelname = setFileName();
     //数据源
-    var sql1 = "select * from putout where category = '"+k_category+"' and name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
+    var sql1 = "select * from c_putout where category = '"+k_category+"' and name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
 	if(k_category == ''){
-		sql1 = "select * from putout where name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
+		sql1 = "select * from c_putout where name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
 	}
 	mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
@@ -474,9 +474,9 @@ function getPutoutbyMonth(req, res) {
 	k_category = k_category == '所有'?'':k_category;
 	k_name = k_name == '所有'?'':k_name;
 	k_hasInvoice = k_hasInvoice == '所有'?'':k_hasInvoice;
-	var sql1 = "select * from putout where category = '"+k_category+"' and name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
+	var sql1 = "select * from c_putout where category = '"+k_category+"' and name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
 	if(k_category == ''){
-		sql1 = "select * from putout where name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
+		sql1 = "select * from c_putout where name like '%"+k_name+"%' and date like '"+k_date+"%' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1 ,function(error,rows){
