@@ -157,9 +157,9 @@ function toExcelputout(req, res){
     var excelname = setFileName();
     //数据源
     //var sql1 = "select * from putout where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
-	var sql1 = "select * from putout where category = '"+k_category+"' and date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
+	var sql1 = "select * from c_putout where category = '"+k_category+"' and date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	if(k_category == ''){
-		sql1 = "select * from putout where date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
+		sql1 = "select * from c_putout where date >= '"+k_date+"' and date <= '"+k_date_end+"' order by id desc";
 	}
 	mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 

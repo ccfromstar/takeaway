@@ -69,6 +69,7 @@
 		<table class="table table-hover">
 			<tr>
 				<th>材料名称</th>
+				<th>材料类别</th>
 				<th>类别</th>
 				<th>数量</th>
 				<th>单价</th>
@@ -242,6 +243,7 @@
 						for(var i in data){
 									html += "<tr>";
 									html += "<td>"+data[i].name+"</td>";
+									html += "<td>"+data[i].cname+"</td>";
 									html += "<td>"+data[i].category+"</td>";
 									html += "<td>"+data[i].num+"</td>";
 									html += "<td>"+data[i].unitPrice+"元</td>";
