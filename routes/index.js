@@ -970,9 +970,9 @@ exports.erp_stock = function (req, res) {
 	k_category = k_category == '所有'?'':k_category;
     k_no = k_no?k_no:"";
 	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-	var sql1 = "select * from c_stock where no like '%"+k_no+"%' and category = '"+k_category+"' and num > 0 order by no desc";
+	var sql1 = "select * from c_stock where no like '%"+k_no+"%' and category = '"+k_category+"'  order by no desc";
 	if(k_category == ''){
-		sql1 = "select * from c_stock where no like '%"+k_no+"%' and num > 0 order by no desc";
+		sql1 = "select * from c_stock where no like '%"+k_no+"%'  order by no desc";
 	}
 	var sql2 = "select * from category order by id desc";
     var sql3 = "select * from material_category";

@@ -132,9 +132,9 @@ function toExcelstock(req, res){
     var excelname = setFileName();
     //数据源
     //var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-    var sql1 = "select * from c_stock where category = '"+k_category+"' and num > 0 order by no desc";
+    var sql1 = "select * from c_stock where category = '"+k_category+"'  order by no desc";
 	if(k_category == ''){
-		sql1 = "select * from c_stock where num > 0 order by no desc";
+		sql1 = "select * from c_stock order by no desc";
 	}
 	mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
