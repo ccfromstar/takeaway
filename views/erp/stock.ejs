@@ -1,66 +1,100 @@
 <% include header %>
-	<table class="form">
-		<tr>
-			<td>
-				<input type="text" id="k_category" list="list2" value="<%=k_cate%>" />
-				<datalist id="list2">
-					<option value="所有">所有</option>
+<h1>1.库存查询(可选门店、分类和材料分类)</h1>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="k_store" list="list3" value="<%=k_store%>" />
+			<datalist id="list3">
+					<%for(var i in obj5){%>
+						<option value="<%=obj5[i].name%>">
+							<%=obj5[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+		</td>
+		<td>
+			<input type="text" id="k_category" list="list2" value="<%=k_cate%>" />
+			<datalist id="list2">
 					<%for(var i in obj3){%>
 						<option value="<%=obj3[i].name%>">
 					<%}%>
 				</datalist>
-			</td>
-			<td>
-				<input type="text" id="cate_id" placeholder="所属分类" value="<%=k_no%>" list="mlist" />
-				<datalist id="mlist">
+		</td>
+		<td>
+			<input type="text" id="cate_id" placeholder="所属分类" value="<%=k_no%>" list="mlist" />
+			<datalist id="mlist">
 					<%for(var i in obj4){%>
 						<option value="<%=obj4[i].no%>">
 							<%=obj4[i].name%>
 						</option>
 						<%}%>
 				</datalist>
+		</td>
+		<td>
+			<button class="btn btn-xs" onclick="getDate()">筛选</button>
+			<button class="btn btn-xs" onclick="window.location='/erp/stock?p=所有&s=所有';">查看全部</button>
+			<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
+		</td>
+	</tr>
+</table>
+<div class="div_auto">
+	<table class="table table-hover table-bordered">
+		<tr>
+			<th>门店</th>
+			<th>分类</th>
+			<th>材料名称</th>
+			<th>单价</th>
+			<th>单位</th>
+			<th>库存数</th>
+		</tr>
+		<%for(var i in obj2){%>
+		<tr>
+			<td>
+				<%=obj2[i].store%>
 			</td>
 			<td>
-				<button class="btn btn-xs" onclick="getDate()">筛选</button>
-				<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
+				<%=obj2[i].category%>
 			</td>
-		</tr>
-	</table>
-	<div class="div_auto">
-		<table class="table table-hover table-bordered">
-			<tr>
-				<th>材料名称</th>
-				<th>类别</th>
-				<th>单价</th>
-				<th>单位</th>
-				<th>库存数</th>
-			</tr>
-			<%for(var i in obj2){%>
-				<tr>
-					<td><%=obj2[i].no%>.<%=obj2[i].name%></td>
-					<td><%=obj2[i].category%></td>
-					<td><%=obj2[i].unitPrice%></td>
-					<td><%=obj2[i].unit%></td>
-					<%if(obj2[i].num < 10){%>
-						<td style="background:#FF2F2F;color:#fff"><%=obj2[i].num%></td>
-					<%}else{%>
-						<td><%=obj2[i].num%></td>
-					<%}%>
-				</tr>	
+			<td>
+				<%=obj2[i].no%>.
+				<%=obj2[i].name%>
+			</td>
+			<td>
+				<%=obj2[i].unitPrice%>
+			</td>
+			<td>
+				<%=obj2[i].unit%>
+			</td>
+			<%if(obj2[i].num < 10){%>
+			<td style="background:#FF2F2F;color:#fff">
+				<%=obj2[i].num%>
+			</td>
+			<%}else{%>
+			<td>
+				<%=obj2[i].num%>
+			</td>
 			<%}%>
-		</table>
-	</div>
-	<script>
-		function getDate(){
-			window.location = "/erp/stock?p="+$('#k_category').val()+"&q="+$('#cate_id').val();
-		}
-		/*导出采购单Excel表*/
-	    function toExcel(){
-	    	$.ajax({ type:"POST" , url: "/erp/toExcelstock", data:{
-	    		k_category: $("#k_category").val()
-	    	}, success: function(data){
-	    		window.open("/excelop/temp/"+data);
-	      	}});
-	    }
-	</script>
+		</tr>
+		<%}%>
+	</table>
+</div>
+<script>
+	function getDate() {
+		window.location = "/erp/stock?p=" + $('#k_category').val() + "&q=" + $('#cate_id').val() + "&s=" + $('#k_store').val();
+	}
+	/*导出采购单Excel表*/
+	function toExcel() {
+		$.ajax({
+			type: "POST",
+			url: "/erp/toExcelstock",
+			data: {
+				k_store: $('#k_store').val(),
+				k_category: $("#k_category").val()
+			},
+			success: function(data) {
+				window.open("/excelop/temp/" + data);
+			}
+		});
+	}
+</script>
 <% include footer %>

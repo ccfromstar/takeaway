@@ -6,6 +6,15 @@
 				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM'})"></input>
 			</td>
 			<td>
+				门店：<input id="k_store" type="text" list="list3" value="所有" />
+				<datalist id="list3">
+					<option value="所有">所有</option>
+					<%for(var i in obj4){%>
+						<option value="<%=obj4[i].name%>">
+					<%}%>
+				</datalist>
+			</td>
+			<td>
 				类别：<input id="k_category" type="text" list="list1" value="所有" />
 				<datalist id="list1">
 					<option value="所有">所有</option>
@@ -24,26 +33,20 @@
 				</datalist>
 			</td>
 			<td>
-				是否有发票：<input type="text" id="k_hasInvoice" value="所有" list="list3" />
-				<datalist id="list3">
-					<option value="所有">所有</option>
-					<option value="是">是</option>
-					<option value="否">否</option>
-				</datalist>
-			</td>
-			<td>
 				<button class="btn btn-xs" onclick="filter()">筛选</button>
+				<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
 			</td>
 		</tr>
 	</table>
 	<h2>
-		当月总支出：<span id="totalout"></span>元，总差价<span id="totaldif"></span>元 
+		当月总入库消费金额：<span id="totalout"></span>元，总差价<span id="totaldif"></span>元 
 		<button class="btn btn-xs" onclick="toExcelin()">导出入库Excel</button>
 	</h2>
 	<div class="div_auto_stock">
 		<table class="table table-hover table-bordered">
 			<tr>
 				<th>日期</th>
+				<th>门店</th>
 				<th>材料名称</th>
 				<th>类别</th>
 				<th>数量</th>
@@ -51,7 +54,6 @@
 				<th>总价</th>
 				<th>单价</th>
 				<th>差价</th>
-				<th>是否要发票</th>
 				<th>材料类别</th>
 			</tr>
 			<tbody id="content">
@@ -59,13 +61,14 @@
 		</table>
 	</div>
 	<h2>
-		当月总消耗：<span id="totaluse"></span>元
+		当月总出库消耗的材料费用：<span id="totaluse"></span>元
 		<button class="btn btn-xs" onclick="toExcelout()">导出出库Excel</button>
 	</h2>
 	<div class="div_auto_stock">
 		<table class="table table-hover">
 			<tr>
 				<th>日期</th>
+				<th>门店</th>
 				<th>材料名称</th>
 				<th>类别</th>
 				<th>数量</th>
@@ -92,9 +95,9 @@
 				type: "POST",
 				url: "/erp/getPutInbyMonth",
 				data: {
+					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
-					k_hasInvoice: $("#k_hasInvoice").val(),
 					k_name: s[1]
 				},
 				success: function(data) {
@@ -104,6 +107,7 @@
 						for(var i in data){
 									html += "<tr>";
 									html += "<td>"+data[i].date+"</td>";
+									html += "<td>"+data[i].store+"</td>";
 									html += "<td>"+data[i].name+"</td>";
 									html += "<td>"+data[i].category+"</td>";
 									html += "<td>"+data[i].num+"</td>";
@@ -111,7 +115,6 @@
 									html += "<td>"+data[i].total+"元</td>";
 									html += "<td>"+data[i].unitPrice+"元</td>";
 									html += "<td>"+data[i].difference+"元</td>";
-									html += "<td>"+data[i].hasInvoice+"</td>";
 									html += "<td>"+data[i].cname+"</td>";
 									html += "</tr>";
 									totalout += data[i].total;
@@ -134,6 +137,7 @@
 				type: "POST",
 				url: "/erp/getPutoutbyMonth",
 				data: {
+					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
 					k_name: s[1]
@@ -144,6 +148,7 @@
 						for(var i in data){
 									html += "<tr>";
 									html += "<td>"+data[i].date+"</td>";
+									html += "<td>"+data[i].store+"</td>";
 									html += "<td>"+data[i].name+"</td>";
 									html += "<td>"+data[i].category+"</td>";
 									html += "<td>"+data[i].num+"</td>";
@@ -172,7 +177,6 @@
 	    	$.ajax({ type:"POST" , url: "/erp/toExcelputinM", data:{
 	    		k_category: $("#k_category").val(),
 				k_date: $("#k_date").val(),
-				k_hasInvoice: $("#k_hasInvoice").val(),
 				k_name: s[1]
 	    	}, success: function(data){
 	    		window.open("/excelop/temp/"+data);

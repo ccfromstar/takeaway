@@ -107,7 +107,9 @@ module.exports = function (app, routes) {
     //erp
     app.get('/erp',routes.erp_index);
     app.get('/erp/material',routes.erp_material);
+    app.get('/erp/c_material',routes.erp_cmaterial);
     app.get('/erp/category',routes.erp_category);
+    app.get('/erp/store',routes.erp_store);
     app.post('/erp/:sql',routes.erpdo);
     app.get('/erp/putin',routes.erp_putin);
     app.get('/erp/stock',routes.erp_stock);

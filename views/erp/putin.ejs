@@ -1,180 +1,170 @@
 <% include header %>
-	<!--入库-->
-	<h1>1.选择分类和日期</h1>
-	<h3>(如需新增分类，在系统管理-分类管理里增加)</h3>
-	<table class="form">
+<!--入库-->
+<h1>1.未入库采购清单列表</h1>
+<div class="div_auto_stock">
+	<table class="table table-hover table-bordered">
 		<tr>
-			<td>
-				<select id="category" >
-					<option value="-">分类</option>
-					<%for(var i in obj3){%>
-						<option value="<%=obj3[i].name%>"><%=obj3[i].name%>
-					<%}%>
-				</select>
-				<!--
-				<input id="category" type="text" list="list1" />
-				<datalist id="list1">
-					<%for(var i in obj3){%>
-						<option value="<%=obj3[i].name%>">
-					<%}%>
-				</datalist>-->
-			</td>
-			<td>
-				<input type="text" id="date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-			</td>
+			<th>门店</th>
+			<th>分类</th>
+			<th>材料名称</th>
+			<th>材料类别</th>
+			<th>数量</th>
+			<th>单位</th>
+			<th>操作</th>
 		</tr>
+		<tbody id="contentStock">
+		</tbody>
 	</table>
-	<h1>2.采购材料</h1>
-	<table class="form">
-		<tr>
-			<td>
-				<select class="select" id="name" >
-					<option value="-">材料名称</option>
-					<%for(var i in obj2){%>
-						<option value="<%=obj2[i].no+"."+obj2[i].name%>"><%=obj2[i].no+"."+obj2[i].name%>
+</div>
+
+<h1>2.入库记录查询(可选日期段、门店和分类)</h1>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+			<input type="text" id="k_date_end" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+		</td>
+		<td>
+			<input type="text" id="k_store" list="list3" value="所有" />
+			<datalist id="list3">
+					<%for(var i in obj4){%>
+						<option value="<%=obj4[i].name%>">
+							<%=obj4[i].name%>
+						</option>
 					<%}%>
-				</select>
-				<!--
-				<input type="text" id="name" placeholder="材料名称" list="mlist" />
-				<div class="dropdown">
-					<datalist id="mlist">
-					<%for(var i in obj2){%>
-						<option value="<%=obj2[i].no+"."+obj2[i].name%>">
-					<%}%>
-					</datalist>
-				</div>
-				-->
-			</td>
-			<td>
-				<input type="text" id="total" placeholder="总价" />
-			</td>
-			<td>
-				<input type="text" id="num" placeholder="数量" />
-			</td>
-			<td>
-				<input type="text" id="hasInvoice" placeholder="是否有发票" list="list3" />
-				<datalist id="list3">
-					<option value="是">是</option>
-					<option value="否">否</option>
 				</datalist>
-			</td>
 			<td>
-				<button class="btn btn-xs" onclick="add()">添加</button>
-			</td>
-		</tr>
-	</table>
-	<h1>3.入库列表(可选日期)</h1>
-	<table class="form">
-		<tr>
-			<td>
-				<input type="text" id="k_category" list="list2" value="所有" />
-				<datalist id="list2">
-					<option value="所有">所有</option>
+				<td>
+					<input type="text" id="k_category" list="list2" value="所有" />
+					<datalist id="list2">
 					<%for(var i in obj3){%>
 						<option value="<%=obj3[i].name%>">
 					<%}%>
 				</datalist>
-			</td>
-			<td>
-				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-				<input type="text" id="k_date_end" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-			</td>
-			<td>
-				<button class="btn btn-xs" onclick="getDate()">筛选</button>
-				<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
-			</td>
+				</td>
+				<td>
+					<button class="btn btn-xs" onclick="getDate()">筛选</button>
+					<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
+					<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
+				</td>
+	</tr>
+</table>
+<h2>材料采购总共消费金额：<span id="totalout"></span>元</h2>
+<div class="div_auto_short">
+	<table class="table table-hover table-bordered">
+		<tr>
+			<th>门店</th>
+			<th>类别</th>
+			<th>材料名称</th>
+			<th>材料类别</th>
+			<th>数量</th>
+			<th>单位</th>
+			<th>总价</th>
+			<th>单价</th>
+			<th>差价</th>
 		</tr>
+		<tbody id="content">
+		</tbody>
 	</table>
-	<h2>当天总支出：<span id="totalout"></span>元</h2>
-	<div class="div_auto_short">
-		<table class="table table-hover table-bordered">
-			<tr>
-				<th>材料名称</th>
-				<th>材料类别</th>
-				<th>类别</th>
-				<th>数量</th>
-				<th>单位</th>
-				<th>总价</th>
-				<th>单价</th>
-				<th>差价</th>
-				<th>是否要发票</th>
-				<th>操作</th>
-			</tr>
-			<tbody id="content">
-			</tbody>
-		</table>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:300px">
+		<div class="modal-content">
+			<div class="modal-body">
+				<table class="table table-bordered table_modeal">
+					<tr>
+						<td>总价</td>
+						<td><input type="text" id="total" /></td>
+					</tr>
+				</table>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+				<button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
 	</div>
+	<!-- /.modal -->
 	<script>
-	var myDate = new Date();
-    var y = myDate.getFullYear(); 
-    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
-    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
-    var _date = y + "-" + m + "-" + d;
-    $('.Wdate').val(_date);
-    /*获取入库列表*/
-    function getDate(){
-    		$.ajax({
+		var g_id = 0;
+		var myDate = new Date();
+		var y = myDate.getFullYear();
+		var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+		var d = (((myDate.getDate()) + "").length == 1) ? "0" + (myDate.getDate()) : (myDate.getDate());
+		var _date = y + "-" + m + "-" + d;
+		$('.Wdate').val(_date);
+		/*获取入库列表*/
+		function getDate() {
+			$.ajax({
 				type: "POST",
 				url: "/erp/getPutIn",
 				data: {
+					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
 					k_date_end: $("#k_date_end").val()
 				},
 				success: function(data) {
-						var html = "";
-						var totalout = 0;
-						for(var i in data){
-									html += "<tr>";
-									html += "<td>"+data[i].name+"</td>";
-									html += "<td>"+data[i].cname+"</td>";
-									html += "<td>"+data[i].category+"</td>";
-									html += "<td>"+data[i].num+"</td>";
-									html += "<td>"+data[i].unit+"</td>";
-									html += "<td>"+data[i].total+"元</td>";
-									html += "<td>"+data[i].unitPrice+"元</td>";
-									html += "<td>"+data[i].difference+"元</td>";
-									html += "<td>"+data[i].hasInvoice+"</td>";
-									html += "<td><button class='btn btn-xs' onclick='del("+data[i].id+",\""+data[i].name+"\",\""+data[i].category+"\","+data[i].unitPrice+","+data[i].num+")'>删除</button></td>";
-									html += "</tr>";
-									totalout += data[i].total;
-						}
-						$("#content").html(html);
-						//计算当天总支出
-						$('#totalout').html(totalout.toFixed(2));
+					var html = "";
+					var totalout = 0;
+					for(var i in data) {
+						html += "<tr>";
+						html += "<td>" + data[i].store + "</td>";
+						html += "<td>" + data[i].category + "</td>";
+						html += "<td>" + data[i].name + "</td>";
+						html += "<td>" + data[i].cname + "</td>";
+						html += "<td>" + data[i].num + "</td>";
+						html += "<td>" + data[i].unit + "</td>";
+						html += "<td>" + data[i].total + "元</td>";
+						html += "<td>" + data[i].unitPrice + "元</td>";
+						html += "<td>" + data[i].difference + "元</td>";
+						html += "</tr>";
+						totalout += data[i].total;
+					}
+					$("#content").html(html);
+					//计算当天总支出
+					$('#totalout').html(totalout.toFixed(2));
 				}
 			});
-    }
-    /*新增材料*/
-    function add() {
-    	if($('#category').val()=="-"){
-    		alert('分类必选！');return false;
-    	}
-    	if($('#date').val()==""){
-    		alert('日期必选！');return false;
-    	}
-    	if($('#name').val()=="-"){
-    		alert('材料必选！');return false;
-    	}
-    	if($('#total').val()==""){
-    		alert('总价必填！');return false;
-    	}
-    	if($('#num').val()==""){
-    		alert('数量必填！');return false;
-    	}
-    	if($('#hasInvoice').val()==""){
-    		alert('是否有发票必选！');return false;
-    	}
-    	var tmp = $("#name").val();
-    	var s = tmp.split('.');
-    	var _name = "";
-    	for(var i=1;i<s.length;i++){
-    		if(_name == ""){
-    			_name = s[i];
-    		}else{
-    			_name = _name + "." + s[i];
-    		}
-    	}
+		}
+		/*新增材料*/
+		function add() {
+			if($('#category').val() == "-") {
+				alert('分类必选！');
+				return false;
+			}
+			if($('#date').val() == "") {
+				alert('日期必选！');
+				return false;
+			}
+			if($('#name').val() == "-") {
+				alert('材料必选！');
+				return false;
+			}
+			if($('#total').val() == "") {
+				alert('总价必填！');
+				return false;
+			}
+			if($('#num').val() == "") {
+				alert('数量必填！');
+				return false;
+			}
+			var tmp = $("#name").val();
+			var s = tmp.split('.');
+			var _name = "";
+			for(var i = 1; i < s.length; i++) {
+				if(_name == "") {
+					_name = s[i];
+				} else {
+					_name = _name + "." + s[i];
+				}
+			}
 			$.ajax({
 				type: "POST",
 				url: "/erp/insertPutin",
@@ -183,26 +173,24 @@
 					date: $("#date").val(),
 					name: _name,
 					num: $("#num").val(),
-					total: $("#total").val(),
-					hasInvoice:$("#hasInvoice").val()
+					total: $("#total").val()
 				},
 				success: function(data) {
-					if (data == 200) {
+					if(data == 200) {
 						//alert('新增成功！');
 						getDate();
 						$('#name').val('');
 						$('#num').val('');
 						$('#total').val('');
-						$('#hasInvoice').val('');
 					}
 				}
 			});
 		}
-    /*删除*/
-    function del(id,name,category,unitPrice,num){
+		/*删除*/
+		function del(id, name, category, unitPrice, num) {
 			var _con = confirm("是否确认删除?");
- 			if(_con){
- 				$.ajax({
+			if(_con) {
+				$.ajax({
 					type: "POST",
 					url: "/erp/delPutin",
 					data: {
@@ -213,26 +201,87 @@
 						num: num
 					},
 					success: function(data) {
-						if (data == 200) {
+						if(data == 200) {
 							//alert('删除成功！');
 							getDate();
-						}else{
+						} else {
 							alert('库存数小于当前数量，不能删除！');
 						}
 					}
-				});	
- 			}
+				});
+			}
 		}
-    getDate();
-    /*导出采购单Excel表*/
-    function toExcel(){
-    	$.ajax({ type:"POST" , url: "/erp/toExcelputin", data:{
-    		k_category: $("#k_category").val(),
-			k_date: $("#k_date").val(),
-			k_date_end: $("#k_date_end").val()
-    	}, success: function(data){
-    		window.open("/excelop/temp/"+data);
-      	}});
-    }
+		getDate();
+		/*导出采购单Excel表*/
+		function toExcel() {
+			$.ajax({
+				type: "POST",
+				url: "/erp/toExcelputin",
+				data: {
+					k_store: $("#k_store").val(),
+					k_category: $("#k_category").val(),
+					k_date: $("#k_date").val(),
+					k_date_end: $("#k_date_end").val()
+				},
+				success: function(data) {
+					window.open("/excelop/temp/" + data);
+				}
+			});
+		}
+
+		/*获取未入库采购清单列表*/
+		function getStockDate() {
+			$.ajax({
+				type: "POST",
+				url: "/erp/getUninOrd",
+				success: function(data) {
+					var html = "";
+					for(var i in data) {
+						html += "<tr>";
+						html += "<td>" + data[i].store + "</td>";
+						html += "<td>" + data[i].category + "</td>";
+						html += "<td>" + data[i].no + "." + data[i].name + "</td>";
+						html += "<td>" + data[i].cname + "</td>";
+						html += "<td>" + data[i].num + "</td>";
+						html += "<td>" + data[i].unit + "</td>";
+						html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + ")'>入库</button></td>";
+						html += "</tr>";
+					}
+					$("#contentStock").html(html);
+				}
+			});
+		}
+		/*入库操作*/
+		function intoput(id) {
+			g_id = id
+			$('#addModal').modal('show');
+		}
+		/*确认入库*/
+		function submitDoc() {
+			var val = $('#total').val();
+			if(isNaN(val) || val == "") {
+				alert('总价请填写数字！');
+				return false;
+			}
+			//执行入库操作
+			$.ajax({
+				type: "POST",
+				url: "/erp/insertPutin",
+				data: {
+					total: $('#total').val(),
+					id: g_id
+				},
+				success: function(data) {
+					if(data == 200) {
+						//alert('新增成功！');
+						getDate();
+						getStockDate();
+						$('#addModal').modal('hide');
+					}
+				}
+			});
+		}
+
+		getStockDate();
 	</script>
-<% include footer %>
+	<% include footer %>

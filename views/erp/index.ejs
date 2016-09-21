@@ -1,18 +1,30 @@
 <% include header %>
 	<!--采购单-->
-	<h1>1.选择分类和日期</h1>
+	<h1>1.选择日期、门店和分类</h1>
 	<table class="form">
 		<tr>
 			<td>
-				<input id="category" type="text" list="list1" onblur="setDate(this.value)" />
-				<datalist id="list1">
-					<option value="外卖">外卖</option>
-					<option value="早餐">早餐</option>
-					<option value="盒饭">盒饭</option>
+				<input type="text" id="date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+			</td>
+			<td>
+				<input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value)" />
+				<datalist id="list2">
+					<%for(var i in obj){%>
+						<option value="<%=obj[i].name%>">
+							<%=obj[i].name%>
+						</option>
+					<%}%>
 				</datalist>
 			</td>
 			<td>
-				<input type="text" id="date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+				<input id="category" type="text" placeholder="分类" list="list1" onblur="setDate(0,this.value)" />
+				<datalist id="list1">
+					<%for(var i in obj3){%>
+						<option value="<%=obj3[i].name%>">
+							<%=obj3[i].name%>
+						</option>
+					<%}%>
+				</datalist>
 			</td>
 		</tr>
 	</table>
@@ -35,23 +47,34 @@
 			</td>
 		</tr>
 	</table>
-	<h1>3.采购单列表(可选日期)</h1>
+	<h1>3.采购清单查询(可选日期、门店和分类)</h1>
 	<table class="form">
 		<tr>
-			<td>
-				<input type="text" id="k_category" list="list2" value="所有" />
-				<datalist id="list2">
-					<option value="所有">所有</option>
-					<option value="外卖">外卖</option>
-					<option value="早餐">早餐</option>
-					<option value="盒饭">盒饭</option>
-				</datalist>
-			</td>
 			<td>
 				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 			</td>
 			<td>
+				<input type="text" id="k_store" list="list3" value="所有" />
+				<datalist id="list3">
+					<%for(var i in obj){%>
+						<option value="<%=obj[i].name%>">
+							<%=obj[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+				
+				<input type="text" id="k_category" list="list4" value="所有" />
+				<datalist id="list4">
+					<%for(var i in obj3){%>
+						<option value="<%=obj3[i].name%>">
+							<%=obj3[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+			</td>
+			<td>
 				<button class="btn btn-xs" onclick="getDate()">筛选</button>
+				<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
 				<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
 			</td>
 		</tr>
@@ -59,11 +82,13 @@
 	<div class="div_auto_short">
 		<table class="table table-hover table-bordered">
 			<tr>
+				<th>门店</th>
+				<th>分类</th>
 				<th>材料名称</th>
-				<th>采购用途</th>
-				<th>类别</th>
+				<th>材料类别</th>
 				<th>数量</th>
 				<th>单位</th>
+				<th>入库情况</th>
 				<th>操作</th>
 			</tr>
 			<tbody id="content">
@@ -83,6 +108,7 @@
 				type: "POST",
 				url: "/erp/getOrd",
 				data: {
+					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val()
 				},
@@ -90,11 +116,13 @@
 						var html = "";
 						for(var i in data){
 									html += "<tr>";
-									html += "<td>"+data[i].no+"."+data[i].name+"</td>";
+									html += "<td>"+data[i].store+"</td>";
 									html += "<td>"+data[i].category+"</td>";
+									html += "<td>"+data[i].no+"."+data[i].name+"</td>";
 									html += "<td>"+data[i].cname+"</td>";
 									html += "<td>"+data[i].num+"</td>";
 									html += "<td>"+data[i].unit+"</td>";
+									html += "<td>"+data[i].inStock+"</td>";
 									html += "<td><button class='btn btn-xs' onclick='del("+data[i].id+")'>删除</button></td>";
 									html += "</tr>";
 						}
@@ -110,6 +138,7 @@
 				type: "POST",
 				url: "/erp/insertOrd",
 				data: {
+					store: $("#store").val(),
 					category: $("#category").val(),
 					date: $("#date").val(),
 					name: s[1],
@@ -148,6 +177,7 @@
     /*导出采购单Excel表*/
     function toExcel(){
     	$.ajax({ type:"POST" , url: "/erp/toExcelorderlist", data:{
+    		k_store: $("#k_store").val(),
     		k_category: $("#k_category").val(),
 			k_date: $("#k_date").val()
     	}, success: function(data){
@@ -155,8 +185,12 @@
       	}});
     }
     /*切换分类*/
-   function setDate(val){
-   		$('#k_category').val(val);
+   function setDate(i,val){
+   		if(i == 0){
+   			$('#k_category').val(val);
+   		}else if(i == 1){
+   			$('#k_store').val(val);
+   		}
    		getDate();
    }
 	</script>

@@ -1,11 +1,21 @@
 <% include header %>
 	<!--出库-->
-	<h1>1.选择日期和分类</h1>
+	<h1>1.选择出库的日期、门店、分类和材料</h1>
 	<table class="form">
 		<tr>
 			<td>
 				<input type="text" id="date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 			</td>
+			<td>
+				<input type="text" id="k_store" list="list3" value="所有" />
+				<datalist id="list3">
+						<%for(var i in obj5){%>
+							<option value="<%=obj5[i].name%>">
+								<%=obj5[i].name%>
+							</option>
+						<%}%>
+				</datalist>
+			<td>
 			<td>
 				<input id="category" type="text" list="list1" value="所有" />
 				<datalist id="list1">
@@ -33,6 +43,8 @@
 	<div class="div_auto_stock">
 		<table class="table table-hover table-bordered">
 			<tr>
+				<th>门店</th>
+				<th>分类</th>
 				<th>材料名称</th>
 				<th>单价</th>
 				<th>单位</th>
@@ -43,9 +55,23 @@
 			</tbody>
 		</table>
 	</div>
-	<h1>3.出库列表(可选日期)</h1>
+	<h1>3.出库记录查询(可选日期段、门店和分类)</h1>
 	<table class="form">
 		<tr>
+			<td>
+				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+				<input type="text" id="k_date_end" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+			</td>
+			<td>
+				<input type="text" id="sk_store" list="list3a" value="所有" />
+				<datalist id="list3a">
+					<%for(var i in obj5){%>
+						<option value="<%=obj5[i].name%>">
+							<%=obj5[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+			<td>
 			<td>
 				<input type="text" id="k_category" list="list2" value="所有" />
 				<datalist id="list2">
@@ -56,11 +82,8 @@
 				</datalist>
 			</td>
 			<td>
-				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-				<input type="text" id="k_date_end" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-			</td>
-			<td>
 				<button class="btn btn-xs" onclick="getDate()">筛选</button>
+				<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
 				<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
 			</td>
 		</tr>
@@ -68,6 +91,7 @@
 	<div class="div_auto_stock">
 		<table class="table table-hover">
 			<tr>
+				<th>门店</th>
 				<th>材料名称</th>
 				<th>材料类别</th>
 				<th>类别</th>
@@ -75,7 +99,6 @@
 				<th>单价</th>
 				<th>单位</th>
 				<th>总价</th>
-				<th>操作</th>
 			</tr>
 			<tbody id="content">
 			</tbody>
@@ -93,6 +116,7 @@
                     <td><input type="number" class="input-sm form-control" id="g_num" ></input></td>
                     
                 </tr>
+                <!--
                 <tr>
                     <td>出库用途</td>
                     <td>
@@ -102,7 +126,7 @@
 							<%}%>
 						</select>
                     </td>
-                </tr>
+                </tr>-->
              </table>
             
          </div>
@@ -122,7 +146,7 @@
 	    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
 	    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
 	    var _date = y + "-" + m + "-" + d;
-	    var g_num,g_name,g_unitPrice,g_category,g_id;
+	    var g_num,g_name,g_unitPrice,g_category,g_id,g_store;
 	    $('.Wdate').val(_date);
 		/*获取库存列表*/
     	function getStockDate(){
@@ -132,6 +156,7 @@
 				type: "POST",
 				url: "/erp/getStock",
 				data: {
+					k_store: $("#k_store").val(),
 					k_category: $("#category").val(),
 					k_name: s[1]
 				},
@@ -139,11 +164,13 @@
 						var html = "";
 						for(var i in data){
 									html += "<tr>";
+									html += "<td>"+data[i].store+"</td>";
+									html += "<td>"+data[i].category+"</td>";
 									html += "<td>"+data[i].name+"</td>";
 									html += "<td>"+data[i].unitPrice+"元</td>";
 									html += "<td>"+data[i].unit+"</td>";
 									html += "<td>"+data[i].num+"</td>";
-									html += "<td><button class='btn btn-xs' onclick='output("+data[i].id+","+data[i].num+",\""+data[i].name+"\","+data[i].unitPrice+",\""+data[i].category+"\")'>出库</button></td>";
+									html += "<td><button class='btn btn-xs' onclick='output("+data[i].id+","+data[i].num+",\""+data[i].name+"\","+data[i].unitPrice+",\""+data[i].category+"\",\""+data[i].store+"\")'>出库</button></td>";
 									html += "</tr>";
 						}
 						$("#contentStock").html(html);
@@ -151,12 +178,13 @@
 			});
     	}	
     	/*出库操作*/
-    	function output(id,num,name,unitPrice,category){
+    	function output(id,num,name,unitPrice,category,store){
     		$('#stocknum').html(num);
-    		$('#g_category').val(category);
+    		//$('#g_category').val(category);
     		$('#addModal').modal('show');
     		g_num = num;
     		g_name = name;
+    		g_store = store;
     		g_unitPrice = unitPrice;
     		g_category = category; 
     		g_id = id;
@@ -211,7 +239,8 @@
 							type: "POST",
 							url: "/erp/insertPutout",
 							data: {
-								category: $("#g_category").val(),
+								category: g_category,
+								store:g_store,
 								date: $("#date").val(),
 								name: g_name,
 								num: val,
@@ -234,6 +263,7 @@
 				type: "POST",
 				url: "/erp/getPutout",
 				data: {
+					k_store: $("#sk_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
 					k_date_end: $("#k_date_end").val()
@@ -242,6 +272,7 @@
 						var html = "";
 						for(var i in data){
 									html += "<tr>";
+									html += "<td>"+data[i].store+"</td>";
 									html += "<td>"+data[i].name+"</td>";
 									html += "<td>"+data[i].cname+"</td>";
 									html += "<td>"+data[i].category+"</td>";
@@ -249,7 +280,6 @@
 									html += "<td>"+data[i].unitPrice+"元</td>";
 									html += "<td>"+data[i].unit+"</td>";
 									html += "<td>"+data[i].total+"元</td>";
-									html += "<td><button class='btn btn-xs' onclick='del("+data[i].id+",\""+data[i].name+"\",\""+data[i].category+"\","+data[i].unitPrice+","+data[i].num+")'>删除</button></td>";
 									html += "</tr>";
 						}
 						$("#content").html(html);
@@ -285,6 +315,7 @@
     	/*导出出库Excel表*/
 	    function toExcel(){
 	    	$.ajax({ type:"POST" , url: "/erp/toExcelputout", data:{
+	    		k_store: $("#sk_store").val(),
 	    		k_category: $("#k_category").val(),
 				k_date: $("#k_date").val(),
 				k_date_end: $("#k_date_end").val()
