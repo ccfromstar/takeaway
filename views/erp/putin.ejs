@@ -77,6 +77,10 @@
 						<td>总价</td>
 						<td><input type="text" id="total" /></td>
 					</tr>
+					<tr>
+						<td>数量</td>
+						<td><input type="text" id="num" /></td>
+					</tr>
 				</table>
 
 			</div>
@@ -244,7 +248,7 @@
 						html += "<td>" + data[i].cname + "</td>";
 						html += "<td>" + data[i].num + "</td>";
 						html += "<td>" + data[i].unit + "</td>";
-						html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + ")'>入库</button></td>";
+						html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + ","+data[i].num+")'>入库</button></td>";
 						html += "</tr>";
 					}
 					$("#contentStock").html(html);
@@ -252,8 +256,9 @@
 			});
 		}
 		/*入库操作*/
-		function intoput(id) {
-			g_id = id
+		function intoput(id,num) {
+			g_id = id;
+			$("#num").val(num);
 			$('#addModal').modal('show');
 		}
 		/*确认入库*/
@@ -268,6 +273,7 @@
 				type: "POST",
 				url: "/erp/insertPutin",
 				data: {
+					num: $('#num').val(),
 					total: $('#total').val(),
 					id: g_id
 				},

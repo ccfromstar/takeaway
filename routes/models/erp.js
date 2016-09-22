@@ -411,11 +411,12 @@ function getPutInbyDay(req, res) {
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
+	var k_date_end = req.param('k_date_end');
 	var k_name = req.param('k_name');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
-	var sql1 = "select * from c_putin where store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and date = '" + k_date + "' order by id desc";
+	var sql1 = "select * from c_putin where store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and  date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
@@ -450,6 +451,7 @@ function getPutInbyMonth(req, res) {
 
 function insertPutin(req, res) {
 	var total = Number(req.param('total'));
+	var num = Number(req.param('num'));
 	var id = Number(req.param('id'));
 	//先根据id得到采购清单数据
 	var sql0 = "select * from orderlist where id = " + id;
@@ -459,7 +461,7 @@ function insertPutin(req, res) {
 			return false;
 		}
 		//计算单价 = 总价/数量
-		var num = Number(r0[0].num);
+		//var num = Number(r0[0].num);
 		var unitPrice = total / num;
 		unitPrice = Math.round(unitPrice * 100) / 100;
 		//差价 = 总价 - 数量*单价
@@ -628,11 +630,12 @@ function getPutoutbyDay(req, res) {
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
+	var k_date_end = req.param('k_date_end');
 	var k_name = req.param('k_name');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
-	var sql1 = "select * from putout where store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and date = '" + k_date + "' order by id desc";
+	var sql1 = "select * from putout where store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {

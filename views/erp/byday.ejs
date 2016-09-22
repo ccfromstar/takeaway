@@ -4,6 +4,7 @@
 		<tr>
 			<td>
 				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+				<input type="text" id="k_date_end" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 			</td>
 			<td>
 				门店：<input id="k_store" type="text" list="list3" value="所有" />
@@ -37,10 +38,11 @@
 			</td>
 		</tr>
 	</table>
-	<h2>当天总入库消费金额：<span id="totalout"></span>元，总差价<span id="totaldif"></span>元</h2>
+	<h2>总入库消费金额：<span id="totalout"></span>元，总差价<span id="totaldif"></span>元</h2>
 	<div class="div_auto_stock">
 		<table class="table table-hover table-bordered">
 			<tr>
+				<th>日期</th>
 				<th>门店</th>
 				<th>材料名称</th>
 				<th>类别</th>
@@ -54,10 +56,11 @@
 			</tbody>
 		</table>
 	</div>
-	<h2>当天总出库消耗的材料费用：<span id="totaluse"></span>元</h2>
+	<h2>总出库消耗的材料费用：<span id="totaluse"></span>元</h2>
 	<div class="div_auto_stock">
-		<table class="table table-hover">
+		<table class="table table-hover table-bordered">
 			<tr>
+				<th>日期</th>
 				<th>门店</th>
 				<th>材料名称</th>
 				<th>类别</th>
@@ -87,6 +90,7 @@
 					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
+					k_date_end: $("#k_date_end").val(),
 					k_name: s[1]
 				},
 				success: function(data) {
@@ -95,6 +99,7 @@
 						var totaldif = 0;
 						for(var i in data){
 									html += "<tr>";
+									html += "<td>"+data[i].date+"</td>";
 									html += "<td>"+data[i].store+"</td>";
 									html += "<td>"+data[i].name+"</td>";
 									html += "<td>"+data[i].category+"</td>";
@@ -126,6 +131,7 @@
 					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
+					k_date_end: $("#k_date_end").val(),
 					k_name: s[1]
 				},
 				success: function(data) {
@@ -133,6 +139,7 @@
 						var totaluse = 0;
 						for(var i in data){
 									html += "<tr>";
+									html += "<td>"+data[i].date+"</td>";
 									html += "<td>"+data[i].store+"</td>";
 									html += "<td>"+data[i].name+"</td>";
 									html += "<td>"+data[i].category+"</td>";
