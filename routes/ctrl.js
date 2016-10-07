@@ -105,7 +105,8 @@ module.exports = function (app, routes) {
     app.get('/jsapipay',routes.jsapipay);
     
     //erp
-    app.get('/erp',routes.erp_index);
+    app.get('/erp',routes.erp_home);
+    app.get('/erp/index',routes.erp_index);
     app.get('/erp/material',routes.erp_material);
     app.get('/erp/c_material',routes.erp_cmaterial);
     app.get('/erp/category',routes.erp_category);
@@ -113,6 +114,7 @@ module.exports = function (app, routes) {
     app.post('/erp/:sql',routes.erpdo);
     app.get('/erp/putin',routes.erp_putin);
     app.get('/erp/stock',routes.erp_stock);
+    app.get('/erp/role',routes.erp_role);
     app.get('/erp/putout',routes.erp_putout);
     app.get('/erp/byday',routes.erp_byday);
     app.get('/erp/bymonth',routes.erp_bymonth);

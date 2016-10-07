@@ -2,6 +2,16 @@
 	<table class="form">
 		<tr>
 			<td>
+				<input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value)" />
+				<datalist id="list2">
+					<%for(var i in obj2){%>
+						<option value="<%=obj2[i].name%>">
+							<%=obj2[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+			</td>
+			<td>
 				<input type="text" id="name" placeholder="分类名称" />
 			</td>
 			<td>
@@ -12,11 +22,15 @@
 	<div class="div_auto">
 		<table class="table table-hover table-bordered">
 			<tr>
+				<th>门店名称</th>
 				<th>分类名称</th>
 				<th>操作</th>
 			</tr>
 			<%for(var i in obj){%>
 				<tr>
+					<td>
+						<%=obj[i].sname%>
+					</td>
 					<td>
 						<%=obj[i].name%>
 					</td>
@@ -33,7 +47,8 @@
 				type: "POST",
 				url: "/erp/insertC",
 				data: {
-					name: $("#name").val()
+					name: $("#name").val(),
+					sname: $("#store").val()
 				},
 				success: function(data) {
 					if (data == 200) {

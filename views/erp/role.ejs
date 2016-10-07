@@ -1,0 +1,113 @@
+<% include header %>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="username" placeholder="用户名" />
+		</td>
+		<td>
+			<input type="text" id="password" placeholder="密码" />
+		</td>
+		<td>
+			<input type="text" id="name" placeholder="姓名" />
+		</td>
+		<td>
+			<input id="role_id" type="text" placeholder="权限" list="list1" />
+			<datalist id="list1">
+					<%for(var i in obj2){
+						if(obj2[i].id != 6){%>
+						<option value="<%=obj2[i].id%>">
+							<%=obj2[i].name%>
+						</option>
+					<%}}%>
+				</datalist>
+		</td>
+		<td>
+			<input id="store" type="text" placeholder="门店" list="list2" />
+			<datalist id="list2">
+					<%for(var i in obj3){%>
+						<option value="<%=obj3[i].name%>">
+							<%=obj3[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+		</td>
+		<td>
+			<button class="btn btn-xs" onclick="add()">新增</button>
+		</td>
+	</tr>
+</table>
+<div class="div_auto">
+	<table class="table table-hover table-bordered">
+		<tr>
+			<th>用户名</th>
+			<th>密码</th>
+			<th>姓名</th>
+			<th>权限</th>
+			<th>所属门店</th>
+			<th>操作</th>
+		</tr>
+		<%for(var i in obj){%>
+		<tr>
+			<td>
+				<%=obj[i].username%>
+			</td>
+			<td>
+				<%=obj[i].password%>
+			</td>
+			<td>
+				<%=obj[i].name%>
+			</td>
+			<td>
+				<%=obj[i].cname%>
+			</td>
+			<td>
+				<%=obj[i].store%>
+			</td>
+			<td>
+				<button class="btn btn-xs" onclick="del(<%=obj[i].id%>)">删除</button>
+			</td>
+		</tr>
+		<%}%>
+	</table>
+</div>
+<script>
+	function add() {
+		$.ajax({
+			type: "POST",
+			url: "/erp/insertRole",
+			data: {
+				username: $("#username").val(),
+				password: $("#password").val(),
+				name: $("#name").val(),
+				role_id: $("#role_id").val(),
+				store: $("#store").val()
+			},
+			success: function(data) {
+				if(data == 200) {
+					//alert('新增成功！');
+					window.location.reload();
+				}
+			}
+		});
+	}
+
+	function del(id) {
+		var _con = confirm("是否确认删除?");
+		if(_con) {
+			$.ajax({
+				type: "POST",
+				url: "/erp/delRole",
+				data: {
+					id: id
+				},
+				success: function(data) {
+					if(data == 200) {
+						//alert('删除成功！');
+						window.location.reload();
+					}
+				}
+			});
+		}
+	}
+</script>
+<% include footer %>

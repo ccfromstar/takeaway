@@ -25,7 +25,7 @@
 			<input type="text" id="k_date_end" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
 		<td>
-			<input type="text" id="k_store" list="list3" value="所有" />
+			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
 			<datalist id="list3">
 					<%for(var i in obj4){%>
 						<option value="<%=obj4[i].name%>">
@@ -248,15 +248,38 @@
 						html += "<td>" + data[i].cname + "</td>";
 						html += "<td>" + data[i].num + "</td>";
 						html += "<td>" + data[i].unit + "</td>";
-						html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + ","+data[i].num+")'>入库</button></td>";
+						html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>入库</button></td>";
 						html += "</tr>";
 					}
 					$("#contentStock").html(html);
 				}
 			});
 		}
+		function getStockDatebyKey(key) {
+			$.ajax({
+				type: "POST",
+				url: "/erp/getUninOrd",
+				success: function(data) {
+					var html = "";
+					for(var i in data) {
+						if(data[i].store == key){
+							html += "<tr>";
+							html += "<td>" + data[i].store + "</td>";
+							html += "<td>" + data[i].category + "</td>";
+							html += "<td>" + data[i].no + "." + data[i].name + "</td>";
+							html += "<td>" + data[i].cname + "</td>";
+							html += "<td>" + data[i].num + "</td>";
+							html += "<td>" + data[i].unit + "</td>";
+							html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>入库</button></td>";
+							html += "</tr>";
+						}	
+					}
+					$("#contentStock").html(html);
+				}
+			});
+		}
 		/*入库操作*/
-		function intoput(id,num) {
+		function intoput(id, num) {
 			g_id = id;
 			$("#num").val(num);
 			$('#addModal').modal('show');
@@ -289,5 +312,18 @@
 		}
 
 		getStockDate();
+
+		/*根据名店加载分类*/
+		function setCat(i) {
+			if(i == 1) {
+				var h = '';
+				<%for(var i in obj3){%>
+				if('<%=obj3[i].sname%>' == $('#k_store').val()) {
+					h += '<option value="<%=obj3[i].name%>"><%=obj3[i].name%></option>';
+				}
+				<%}%>
+				$('#list2').html(h);
+			}
+		}
 	</script>
 	<% include footer %>

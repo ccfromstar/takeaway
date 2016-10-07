@@ -54,5 +54,13 @@ FROM putout a
 LEFT JOIN c_material b
 ON a.name = b.name;
 
+DROP VIEW IF EXISTS `c_role`;
+CREATE VIEW c_role
+AS
+SELECT a.*,b.name as cname
+FROM erprole a
+LEFT JOIN rolecat b
+ON a.role_id = b.id;
+
 alter table booking_price add CONSTRAINT FK_PRICE_BOOKING FOREIGN KEY (bookingid) REFERENCES booking (id) ON DELETE CASCADE ON UPDATE NO ACTION;
 alter table material add constraint unique_name UNIQUE(name);

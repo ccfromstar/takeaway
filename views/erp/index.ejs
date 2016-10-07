@@ -1,197 +1,228 @@
 <% include header %>
-	<!--采购单-->
-	<h1>1.选择日期、门店和分类</h1>
-	<table class="form">
-		<tr>
-			<td>
-				<input type="text" id="date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-			</td>
-			<td>
-				<input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value)" />
-				<datalist id="list2">
+<!--采购单-->
+<h1>1.选择日期、门店和分类</h1>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+		</td>
+		<td>
+			<input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value);setCat(0);" />
+			<datalist id="list2">
 					<%for(var i in obj){%>
 						<option value="<%=obj[i].name%>">
 							<%=obj[i].name%>
 						</option>
 					<%}%>
 				</datalist>
-			</td>
-			<td>
-				<input id="category" type="text" placeholder="分类" list="list1" onblur="setDate(0,this.value)" />
-				<datalist id="list1">
+		</td>
+		<td>
+			<input id="category" type="text" placeholder="分类" list="list1" onblur="setDate(0,this.value)" />
+			<datalist id="list1">
 					<%for(var i in obj3){%>
 						<option value="<%=obj3[i].name%>">
 							<%=obj3[i].name%>
 						</option>
 					<%}%>
 				</datalist>
-			</td>
-		</tr>
-	</table>
-	<h1>2.添加材料</h1>
-	<table class="form">
-		<tr>
-			<td>
-				<input type="text" id="name" placeholder="材料名称" list="mlist" />
-				<datalist id="mlist">
+		</td>
+	</tr>
+</table>
+<h1>2.添加材料</h1>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="name" placeholder="材料名称" list="mlist" />
+			<datalist id="mlist">
 					<%for(var i in obj2){%>
 						<option value="<%=obj2[i].no+"."+obj2[i].name%>">
 							<%}%>
 				</datalist>
-			</td>
-			<td>
-				<input type="text" id="num" placeholder="数量" />
-			</td>
-			<td>
-				<button class="btn btn-xs" onclick="add()">添加</button>
-			</td>
-		</tr>
-	</table>
-	<h1>3.采购清单查询(可选日期、门店和分类)</h1>
-	<table class="form">
-		<tr>
-			<td>
-				<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-			</td>
-			<td>
-				<input type="text" id="k_store" list="list3" value="所有" />
-				<datalist id="list3">
+		</td>
+		<td>
+			<input type="text" id="num" placeholder="数量" />
+		</td>
+		<td id="addorder">
+			<button class="btn btn-xs"  onclick="add()">添加</button>
+		</td>
+	</tr>
+</table>
+<h1>3.采购清单查询(可选日期、门店和分类)</h1>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+		</td>
+		<td>
+			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
+			<datalist id="list3">
 					<%for(var i in obj){%>
 						<option value="<%=obj[i].name%>">
 							<%=obj[i].name%>
 						</option>
 					<%}%>
 				</datalist>
-				
-				<input type="text" id="k_category" list="list4" value="所有" />
-				<datalist id="list4">
+
+			<input type="text" id="k_category" list="list4" value="所有" />
+			<datalist id="list4">
 					<%for(var i in obj3){%>
 						<option value="<%=obj3[i].name%>">
 							<%=obj3[i].name%>
 						</option>
 					<%}%>
 				</datalist>
-			</td>
-			<td>
-				<button class="btn btn-xs" onclick="getDate()">筛选</button>
-				<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
-				<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
-			</td>
+		</td>
+		<td>
+			<button class="btn btn-xs" onclick="getDate()">筛选</button>
+			<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
+			<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
+		</td>
+	</tr>
+</table>
+<!--<h2>模拟材料采购总预算金额：<span id="totalout"></span>元</h2>-->
+<div class="div_auto_short">
+	<table class="table table-hover table-bordered">
+		<tr>
+			<th>门店</th>
+			<th>分类</th>
+			<th>材料名称</th>
+			<th>材料类别</th>
+			<th>数量</th>
+			<th>单位</th>
+			<th>入库情况</th>
+			<th>操作</th>
 		</tr>
+		<tbody id="content">
+		</tbody>
 	</table>
-	<div class="div_auto_short">
-		<table class="table table-hover table-bordered">
-			<tr>
-				<th>门店</th>
-				<th>分类</th>
-				<th>材料名称</th>
-				<th>材料类别</th>
-				<th>数量</th>
-				<th>单位</th>
-				<th>入库情况</th>
-				<th>操作</th>
-			</tr>
-			<tbody id="content">
-			</tbody>
-		</table>
-	</div>
-	<script>
+</div>
+<script>
 	var myDate = new Date();
-    var y = myDate.getFullYear(); 
-    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
-    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
-    var _date = y + "-" + m + "-" + d;
-    $('.Wdate').val(_date);
-    /*获取采购单列表*/
-    function getDate(){
-    		$.ajax({
-				type: "POST",
-				url: "/erp/getOrd",
-				data: {
-					k_store: $("#k_store").val(),
-					k_category: $("#k_category").val(),
-					k_date: $("#k_date").val()
-				},
-				success: function(data) {
-						var html = "";
-						for(var i in data){
-									html += "<tr>";
-									html += "<td>"+data[i].store+"</td>";
-									html += "<td>"+data[i].category+"</td>";
-									html += "<td>"+data[i].no+"."+data[i].name+"</td>";
-									html += "<td>"+data[i].cname+"</td>";
-									html += "<td>"+data[i].num+"</td>";
-									html += "<td>"+data[i].unit+"</td>";
-									html += "<td>"+data[i].inStock+"</td>";
-									html += "<td><button class='btn btn-xs' onclick='del("+data[i].id+")'>删除</button></td>";
-									html += "</tr>";
-						}
-						$("#content").html(html);
+	var y = myDate.getFullYear();
+	var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+	var d = (((myDate.getDate()) + "").length == 1) ? "0" + (myDate.getDate()) : (myDate.getDate());
+	var _date = y + "-" + m + "-" + d;
+	$('.Wdate').val(_date);
+	/*获取采购单列表*/
+	function getDate() {
+		$.ajax({
+			type: "POST",
+			url: "/erp/getOrd",
+			data: {
+				k_store: $("#k_store").val(),
+				k_category: $("#k_category").val(),
+				k_date: $("#k_date").val()
+			},
+			success: function(data) {
+				var html = "";
+				var totalout = 0;
+				for(var i in data) {
+					html += "<tr>";
+					html += "<td>" + data[i].store + "</td>";
+					html += "<td>" + data[i].category + "</td>";
+					html += "<td>" + data[i].no + "." + data[i].name + "</td>";
+					html += "<td>" + data[i].cname + "</td>";
+					html += "<td>" + data[i].num + "</td>";
+					html += "<td>" + data[i].unit + "</td>";
+					html += "<td>" + data[i].inStock + "</td>";
+					html += "<td><button class='btn btn-xs' onclick='del(" + data[i].id + ")'>删除</button></td>";
+					html += "</tr>";
+					//totalout += data[i].total;
 				}
-			});
-    }
-    /*新增材料*/
-    function add() {
-    	var tmp = $("#name").val();
-    	var s = tmp.split('.');
+				$("#content").html(html);
+				//$('#totalout').html(totalout.toFixed(2));
+			}
+		});
+	}
+	/*新增材料*/
+	function add() {
+		var tmp = $("#name").val();
+		var s = tmp.split('.');
+		$.ajax({
+			type: "POST",
+			url: "/erp/insertOrd",
+			data: {
+				store: $("#store").val(),
+				category: $("#category").val(),
+				date: $("#date").val(),
+				name: s[1],
+				num: $("#num").val()
+			},
+			success: function(data) {
+				if(data == 200) {
+					//alert('新增成功！');
+					getDate();
+					$('#name').val('');
+					$('#num').val('');
+				}
+			}
+		});
+	}
+	/*删除*/
+	function del(id) {
+		var _con = confirm("是否确认删除?");
+		if(_con) {
 			$.ajax({
 				type: "POST",
-				url: "/erp/insertOrd",
+				url: "/erp/delOrd",
 				data: {
-					store: $("#store").val(),
-					category: $("#category").val(),
-					date: $("#date").val(),
-					name: s[1],
-					num: $("#num").val()
+					id: id
 				},
 				success: function(data) {
-					if (data == 200) {
-						//alert('新增成功！');
+					if(data == 200) {
+						//alert('删除成功！');
 						getDate();
-						$('#name').val('');
-						$('#num').val('');
 					}
 				}
 			});
 		}
-    /*删除*/
-    function del(id){
-			var _con = confirm("是否确认删除?");
- 			if(_con){
- 				$.ajax({
-					type: "POST",
-					url: "/erp/delOrd",
-					data: {
-						id: id
-					},
-					success: function(data) {
-						if (data == 200) {
-							//alert('删除成功！');
-							getDate();
-						}
-					}
-				});	
- 			}
+	}
+	getDate();
+	/*导出采购单Excel表*/
+	function toExcel() {
+		$.ajax({
+			type: "POST",
+			url: "/erp/toExcelorderlist",
+			data: {
+				k_store: $("#k_store").val(),
+				k_category: $("#k_category").val(),
+				k_date: $("#k_date").val()
+			},
+			success: function(data) {
+				window.open("/excelop/temp/" + data);
+			}
+		});
+	}
+	/*切换分类*/
+	function setDate(i, val) {
+		if(i == 0) {
+			$('#k_category').val(val);
+		} else if(i == 1) {
+			$('#k_store').val(val);
+			setCat(1);
 		}
-    getDate();
-    /*导出采购单Excel表*/
-    function toExcel(){
-    	$.ajax({ type:"POST" , url: "/erp/toExcelorderlist", data:{
-    		k_store: $("#k_store").val(),
-    		k_category: $("#k_category").val(),
-			k_date: $("#k_date").val()
-    	}, success: function(data){
-    		window.open("/excelop/temp/"+data);
-      	}});
-    }
-    /*切换分类*/
-   function setDate(i,val){
-   		if(i == 0){
-   			$('#k_category').val(val);
-   		}else if(i == 1){
-   			$('#k_store').val(val);
-   		}
-   		getDate();
-   }
-	</script>
-	<% include footer %>
+		getDate();
+	}
+
+	/*根据名店加载分类*/
+	function setCat(i) {
+		if(i == 0) {
+			var h = '';
+			<%for(var i in obj3){%>
+			if('<%=obj3[i].sname%>' == $('#store').val()) {
+				h += '<option value="<%=obj3[i].name%>"><%=obj3[i].name%></option>';
+			}
+			<%}%>
+			$('#list1').html(h);
+		} else if(i == 1) {
+			var h = '';
+			<%for(var i in obj3){%>
+			if('<%=obj3[i].sname%>' == $('#k_store').val()) {
+				h += '<option value="<%=obj3[i].name%>"><%=obj3[i].name%></option>';
+			}
+			<%}%>
+			$('#list4').html(h);
+		}
+	}
+</script>
+<% include footer %>

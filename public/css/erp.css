@@ -58,6 +58,7 @@ header{
 	line-height:4.5rem;
 	border-bottom:0.1rem solid #ccc;
 	background:#F8F8F8;
+	position: relative;
 }
 	header strong{
 		font-weight: 700;
@@ -68,6 +69,15 @@ header{
 		font-weight: 400;
 		margin-left: 0.3rem;
 		font-size:1.4rem;
+	}
+	header p {
+		position:absolute;
+		display: block;
+		right:20px;
+		top:0;
+	}
+	header>p>span {
+		cursor:pointer;
 	}
 nav{
 	float:left;

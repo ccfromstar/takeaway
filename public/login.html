@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<title>云库存管理系统</title>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<script src="js/jquery.min.js"></script>
+		<script src="js/amazeui.min.js"></script>
+		<script type="text/javascript" src="js/setting.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
+		<link rel="stylesheet" href="css/amazeui.min.css" />
+		<link rel="stylesheet" href="css/basic.css" />
+		<style>
+			.header {
+				text-align: center;
+			}
+			
+			.header h1 {
+				font-size: 200%;
+				color: #333;
+				margin-top: 30px;
+			}
+			
+			.header p {
+				font-size: 14px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="header">
+			<div class="am-g">
+				<h1>云库存管理系统</h1>
+				<p>Cloud Stock Private Management System
+					<br/>你会发现工作如此的简单</p>
+			</div>
+			<hr />
+		</div>
+		<div class="am-g">
+			<div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+				<h3>登录</h3>
+				<hr>
+				<form method="post" class="am-form">
+					<label for="username">用户名:</label>
+					<input type="text" name="" id="username" value="">
+					<br>
+					<label for="password">密码:</label>
+					<input type="text" name="" id="password" value="">
+					<br>
+					<label for="remember-me">
+						<input id="remember-me" name="remember-me" type="checkbox" > 记住密码</input>
+					</label>
+					<br />
+					<div class="am-cf">
+						<input type="submit" id="login" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
+					</div>
+				</form>
+				<hr>
+				<p>© 2016 .</p>
+			</div>
+		</div>
+		<div class="am-alert am-alert-danger none errorinfo" data-am-alert></div>
+	</body>
+</html>

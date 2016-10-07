@@ -64,7 +64,12 @@ exports.sqldo = function(req, res) {
 		delCM(req, res);
 	} else if(_sql == "getUninOrd") {
 		getUninOrd(req, res);
+	} else if(_sql == "delRole") {
+		delRole(req, res);
+	} else if(_sql == "insertRole") {
+		insertRole(req, res);
 	}
+	
 };
 
 function setFileName() {
@@ -307,7 +312,8 @@ function delStore(req, res) {
 
 function insertC(req, res) {
 	var name = req.param('name');
-	var sql1 = "insert into category (name) values ('" + name + "')";
+	var sname = req.param('sname');
+	var sql1 = "insert into category (name,sname) values ('" + name + "','" + sname + "')";
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
@@ -726,5 +732,33 @@ function getUninOrd(req, res) {
 			return false;
 		}
 		res.json(rows);
+	});
+};
+
+function delRole(req, res) {
+	var id = req.param('id');
+	var sql1 = "delete from erprole where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
+function insertRole(req, res) {
+	var username = req.param('username');
+	var password = req.param('password');
+	var name = req.param('name');
+	var role_id = req.param('role_id');
+	var store = req.param('store');
+	var sql1 = "insert into erprole (username,password,name,role_id,store) values ('" + username + "','" + password + "','" + name + "'," + role_id + ",'" + store + "')";
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
 	});
 };

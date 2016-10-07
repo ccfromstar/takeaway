@@ -3,7 +3,7 @@
 <table class="form">
 	<tr>
 		<td>
-			<input type="text" id="k_store" list="list3" value="<%=k_store%>" />
+			<input type="text" id="k_store" list="list3" value="<%=k_store%>" onblur="setCat(1);" />
 			<datalist id="list3">
 					<%for(var i in obj5){%>
 						<option value="<%=obj5[i].name%>">
@@ -95,6 +95,19 @@
 				window.open("/excelop/temp/" + data);
 			}
 		});
+	}
+
+	/*根据名店加载分类*/
+	function setCat(i) {
+		if(i == 1) {
+			var h = '';
+			<%for(var i in obj3){%>
+			if('<%=obj3[i].sname%>' == $('#k_store').val()) {
+				h += '<option value="<%=obj3[i].name%>"><%=obj3[i].name%></option>';
+			}
+			<%}%>
+			$('#list2').html(h);
+		}
 	}
 </script>
 <% include footer %>
