@@ -248,7 +248,8 @@
 						html += "<td>" + data[i].cname + "</td>";
 						html += "<td>" + data[i].num + "</td>";
 						html += "<td>" + data[i].unit + "</td>";
-						html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>入库</button></td>";
+						html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>入库</button>";
+						html += " <button class='btn btn-xs' onclick='delput(" + data[i].id + ")'>删除</button></td>";
 						html += "</tr>";
 					}
 					$("#contentStock").html(html);
@@ -271,12 +272,32 @@
 							html += "<td>" + data[i].num + "</td>";
 							html += "<td>" + data[i].unit + "</td>";
 							html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>入库</button></td>";
+							html += " <button class='btn btn-xs' onclick='delput(" + data[i].id + ")'>删除</button></td>";
 							html += "</tr>";
 						}	
 					}
 					$("#contentStock").html(html);
 				}
 			});
+		}
+		/*删除*/
+		function delput(id) {
+			var _con = confirm("是否确认删除?");
+			if(_con) {
+				$.ajax({
+					type: "POST",
+					url: "/erp/delOrd",
+					data: {
+						id: id
+					},
+					success: function(data) {
+						if(data == 200) {
+							//alert('删除成功！');
+							window.location.reload();
+						}
+					}
+				});
+			}
 		}
 		/*入库操作*/
 		function intoput(id, num) {

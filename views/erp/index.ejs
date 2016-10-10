@@ -79,7 +79,7 @@
 		</td>
 	</tr>
 </table>
-<!--<h2>模拟材料采购总预算金额：<span id="totalout"></span>元</h2>-->
+<h2>材料采购总预算金额：<span id="totalout"></span>元</h2>
 <div class="div_auto_short">
 	<table class="table table-hover table-bordered">
 		<tr>
@@ -88,6 +88,8 @@
 			<th>材料名称</th>
 			<th>材料类别</th>
 			<th>数量</th>
+			<th>单价（元）</th>
+			<th>总价（元）</th>
 			<th>单位</th>
 			<th>入库情况</th>
 			<th>操作</th>
@@ -96,7 +98,32 @@
 		</tbody>
 	</table>
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:300px">
+		<div class="modal-content">
+			<div class="modal-body">
+				<table class="table table-bordered table_modeal">
+					<tr>
+						<td>数量</td>
+						<td><input type="text" id="numc" /></td>
+					</tr>
+				</table>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+				<button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal -->
 <script>
+	var g_id = 0;
 	var myDate = new Date();
 	var y = myDate.getFullYear();
 	var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
@@ -123,14 +150,17 @@
 					html += "<td>" + data[i].no + "." + data[i].name + "</td>";
 					html += "<td>" + data[i].cname + "</td>";
 					html += "<td>" + data[i].num + "</td>";
+					html += "<td>" + data[i].unitPrice + "</td>";
+					html += "<td>" + ((data[i].unitPrice)*(data[i].num)).toFixed(2) + "</td>";
 					html += "<td>" + data[i].unit + "</td>";
 					html += "<td>" + data[i].inStock + "</td>";
-					html += "<td><button class='btn btn-xs' onclick='del(" + data[i].id + ")'>删除</button></td>";
+					html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>修改数量</button>";
+					html += " <button class='btn btn-xs' onclick='del(" + data[i].id + ")'>删除</button></td>";
 					html += "</tr>";
-					//totalout += data[i].total;
+					totalout += (data[i].unitPrice)*(data[i].num);
 				}
 				$("#content").html(html);
-				//$('#totalout').html(totalout.toFixed(2));
+				$('#totalout').html(totalout.toFixed(2));
 			}
 		});
 	}
@@ -158,6 +188,30 @@
 			}
 		});
 	}
+	/*确认入库*/
+		function submitDoc() {
+			var val = $('#numc').val();
+			if(isNaN(val) || val == "") {
+				alert('总价请填写数字！');
+				return false;
+			}
+			//执行入库操作
+			$.ajax({
+				type: "POST",
+				url: "/erp/changeOrderNum",
+				data: {
+					num: $('#numc').val(),
+					id: g_id
+				},
+				success: function(data) {
+					if(data == 200) {
+						//alert('新增成功！');
+						getDate();
+						$('#addModal').modal('hide');
+					}
+				}
+			});
+		}
 	/*删除*/
 	function del(id) {
 		var _con = confirm("是否确认删除?");
@@ -203,6 +257,13 @@
 		}
 		getDate();
 	}
+	
+	/*修改操作*/
+		function intoput(id, num) {
+			g_id = id;
+			$("#numc").val(num);
+			$('#addModal').modal('show');
+		}
 
 	/*根据名店加载分类*/
 	function setCat(i) {

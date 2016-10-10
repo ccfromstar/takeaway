@@ -68,6 +68,8 @@ exports.sqldo = function(req, res) {
 		delRole(req, res);
 	} else if(_sql == "insertRole") {
 		insertRole(req, res);
+	} else if(_sql == "changeOrderNum") {
+		changeOrderNum(req, res);
 	}
 	
 };
@@ -341,13 +343,25 @@ function insertOrd(req, res) {
 	var category = req.param('category');
 	var date = req.param('date');
 	var num = req.param('num');
-	var sql1 = "insert into orderlist (store,name,category,date,num) values ('" + store + "','" + name + "','" + category + "','" + date + "','" + num + "')";
-	mysql.query(sql1, function(error, row) {
+	/*先获取库存里是否有，有的话计算出单价*/
+	var sql0 = "select * from stock where name = '"+name+"' and store = '"+store+"' and category = '"+category+"'";
+	mysql.query(sql0, function(error, row0) {
 		if(error) {
 			console.log(error);
 			return false;
 		}
-		res.send('200');
+		var unitPrice = 0;
+		if(row0[0]){
+			unitPrice = row0[0].unitPrice;
+		}
+		var sql1 = "insert into orderlist (store,name,category,date,num,unitPrice) values ('" + store + "','" + name + "','" + category + "','" + date + "','" + num + "',"+unitPrice+")";
+		mysql.query(sql1, function(error, row) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			res.send('200');
+		});
 	});
 };
 
@@ -762,3 +776,15 @@ function insertRole(req, res) {
 		res.send('200');
 	});
 };
+
+function changeOrderNum(req,res){
+	var num = req.param('num');
+	var sql1 = "update orderlist set num = "+num;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+}

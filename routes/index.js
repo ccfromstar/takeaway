@@ -1389,7 +1389,7 @@ exports.erp_category = function(req, res) {
 };
 
 exports.erp_store = function(req, res) {
-	var sql1 = "select * from store order by sname desc";
+	var sql1 = "select * from store order by name desc";
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
