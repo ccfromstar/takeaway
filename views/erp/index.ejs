@@ -38,6 +38,7 @@
 						<option value="<%=obj2[i].no+"."+obj2[i].name%>">
 							<%}%>
 				</datalist>
+			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
 		</td>
 		<td>
 			<input type="text" id="num" placeholder="数量" />
@@ -284,6 +285,18 @@
 			<%}%>
 			$('#list4').html(h);
 		}
+	}
+	
+	function filtermlist(){
+		var v = $('#s_name').val();
+		var html = '';
+		<%for(var i in obj2){%>
+		var n = '<%=obj2[i].name%>';
+		if(n.indexOf(v) != -1){
+			html += '<option value="<%=obj2[i].no+"."+obj2[i].name%>">';
+		}			
+		<%}%>
+		$('#mlist').html(html);
 	}
 </script>
 <% include footer %>
