@@ -167,6 +167,18 @@
 	}
 	/*新增材料*/
 	function add() {
+		if($('#store').val() ==''){
+			alert('请选择门店');return false;
+		}
+		if($('#category').val() ==''){
+			alert('请选择分类');return false;
+		}
+		if($('#name').val() ==''){
+			alert('请选择材料名');return false;
+		}
+		if($('#num').val() ==''){
+			alert('请填写数量');return false;
+		}
 		var tmp = $("#name").val();
 		var s = tmp.split('.');
 		$.ajax({
