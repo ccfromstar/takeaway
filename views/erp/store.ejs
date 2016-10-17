@@ -29,6 +29,9 @@
 	</div>
 	<script>
 		function add() {
+			if($('#name').val() ==''){
+				alert('请填写门店');return false;
+			}
 			$.ajax({
 				type: "POST",
 				url: "/erp/insertStore",

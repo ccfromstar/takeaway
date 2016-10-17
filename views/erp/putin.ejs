@@ -4,6 +4,7 @@
 <div class="div_auto_stock">
 	<table class="table table-hover table-bordered">
 		<tr>
+			<th>日期</th>
 			<th>门店</th>
 			<th>分类</th>
 			<th>材料名称</th>
@@ -242,6 +243,7 @@
 					var html = "";
 					for(var i in data) {
 						html += "<tr>";
+						html += "<td>" + data[i].date + "</td>";
 						html += "<td>" + data[i].store + "</td>";
 						html += "<td>" + data[i].category + "</td>";
 						html += "<td>" + data[i].no + "." + data[i].name + "</td>";

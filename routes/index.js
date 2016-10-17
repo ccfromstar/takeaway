@@ -1224,18 +1224,26 @@ exports.erp_stock = function(req, res) {
 	var k_no = req.query.q;
 	var k_cate = k_category;
 	var k_s = k_store;
+	var k_n = req.query.n;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_store = k_store == '所有' ? '' : k_store;
 	k_no = k_no ? k_no : "";
+	k_n = k_n ? k_n : "";
+	var k_n1 = "";
+	if(k_n != ""){
+		var tmp = k_n.split(".");
+		k_n1 = tmp[1];
+	}
 	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-	var sql1 = "select * from c_stock where store like '%" + k_store + "%' and no like '%" + k_no + "%' and category = '" + k_category + "'  order by no desc";
+	var sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '%" + k_no + "%' and category = '" + k_category + "'  order by no desc";
 	if(k_category == '') {
-		sql1 = "select * from c_stock where store like '%" + k_store + "%' and no like '%" + k_no + "%'  order by no desc";
+		sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '%" + k_no + "%'  order by no desc";
 	}
 	console.log(sql1);
 	var sql2 = "select * from category order by id desc";
 	var sql3 = "select * from material_category";
 	var sql4 = "select * from store order by id desc";
+	var sql5 = "select * from c_material order by id desc";
 	mysql.query(sql1, function(error, obj2) {
 		if(error) {
 			console.log(error);
@@ -1256,14 +1264,22 @@ exports.erp_stock = function(req, res) {
 						console.log(error);
 						return false;
 					}
-					res.render('erp/stock', {
-						obj2: obj2,
-						k_cate: k_cate,
-						obj3: obj3,
-						obj4: obj4,
-						obj5: obj5,
-						k_no: k_no,
-						k_store: k_s
+					mysql.query(sql5, function(error, obj6) {
+						if(error) {
+							console.log(error);
+							return false;
+						}
+						res.render('erp/stock', {
+							obj2: obj2,
+							k_cate: k_cate,
+							obj3: obj3,
+							obj4: obj4,
+							obj5: obj5,
+							obj6: obj6,
+							k_no: k_no,
+							k_store: k_s,
+							k_n:k_n
+						});
 					});
 				});
 			});

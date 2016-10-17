@@ -31,6 +31,15 @@
 				</datalist>
 		</td>
 		<td>
+			<input type="text" id="name" placeholder="材料名称" value="<%=k_n%>" list="mlist1" />
+			<datalist id="mlist1">
+					<%for(var i in obj6){%>
+						<option value="<%=obj6[i].no+"."+obj6[i].name%>">
+					<%}%>
+				</datalist>
+			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
+		</td>
+		<td>
 			<button class="btn btn-xs" onclick="getDate()">筛选</button>
 			<button class="btn btn-xs" onclick="window.location='/erp/stock?p=所有&s=所有';">查看全部</button>
 			<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
@@ -80,7 +89,7 @@
 </div>
 <script>
 	function getDate() {
-		window.location = "/erp/stock?p=" + $('#k_category').val() + "&q=" + $('#cate_id').val() + "&s=" + $('#k_store').val();
+		window.location = "/erp/stock?p=" + $('#k_category').val() + "&q=" + $('#cate_id').val() + "&s=" + $('#k_store').val()+"&n=" + $('#name').val();
 	}
 	/*导出采购单Excel表*/
 	function toExcel() {
@@ -108,6 +117,18 @@
 			<%}%>
 			$('#list2').html(h);
 		}
+	}
+	
+	function filtermlist(){
+		var v = $('#s_name').val();
+		var html = '';
+		<%for(var i in obj6){%>
+		var n = '<%=obj6[i].name%>';
+		if(n.indexOf(v) != -1){
+			html += '<option value="<%=obj6[i].no+"."+obj6[i].name%>">';
+		}			
+		<%}%>
+		$('#mlist1').html(html);
 	}
 </script>
 <% include footer %>
