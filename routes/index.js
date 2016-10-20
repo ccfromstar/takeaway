@@ -1139,6 +1139,7 @@ exports.erp_index = function(req, res) {
 	var sql1 = "select * from c_material order by id desc";
 	var sql2 = "select * from store order by id desc";
 	var sql3 = "select * from category order by id desc";
+	var sql4 = "select * from material_category";
 	mysql.query(sql1, function(error, obj2) {
 		if(error) {
 			console.log(error);
@@ -1154,10 +1155,17 @@ exports.erp_index = function(req, res) {
 					console.log(error);
 					return false;
 				}
-				res.render('erp/index', {
-					obj: obj,
-					obj2: obj2,
-					obj3: obj3
+				mysql.query(sql4, function(error, obj4) {
+					if(error) {
+						console.log(error);
+						return false;
+					}
+					res.render('erp/index', {
+						obj: obj,
+						obj2: obj2,
+						obj3: obj3,
+						obj4: obj4
+					});
 				});
 			});
 		});
@@ -1329,6 +1337,7 @@ exports.erp_byday = function(req, res) {
 	var sql1 = "select * from c_material order by id desc";
 	var sql2 = "select * from category order by id desc";
 	var sql3 = "select * from store order by id desc";
+	var sql4 = "select * from material_category";
 	mysql.query(sql1, function(error, obj2) {
 		if(error) {
 			console.log(error);
@@ -1344,10 +1353,17 @@ exports.erp_byday = function(req, res) {
 					console.log(error);
 					return false;
 				}
-				res.render('erp/byday', {
-					obj2: obj2,
-					obj3: obj3,
-					obj4: obj4
+				mysql.query(sql4, function(error, obj5) {
+					if(error) {
+						console.log(error);
+						return false;
+					}
+					res.render('erp/byday', {
+						obj2: obj2,
+						obj3: obj3,
+						obj4: obj4,
+						obj5: obj5
+					});
 				});
 			});
 		});
@@ -1358,6 +1374,7 @@ exports.erp_bymonth = function(req, res) {
 	var sql1 = "select * from c_material order by id desc";
 	var sql2 = "select * from category order by id desc";
 	var sql3 = "select * from store order by id desc";
+	var sql4 = "select * from material_category";
 	mysql.query(sql1, function(error, obj2) {
 		if(error) {
 			console.log(error);
@@ -1373,10 +1390,17 @@ exports.erp_bymonth = function(req, res) {
 					console.log(error);
 					return false;
 				}
-				res.render('erp/bymonth', {
-					obj2: obj2,
-					obj3: obj3,
-					obj4: obj4
+				mysql.query(sql4, function(error, obj5) {
+					if(error) {
+						console.log(error);
+						return false;
+					}
+					res.render('erp/bymonth', {
+						obj2: obj2,
+						obj3: obj3,
+						obj4: obj4,
+						obj5: obj5
+					});
 				});
 			});
 		});

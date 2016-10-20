@@ -25,6 +25,16 @@
 				</datalist>
 		</td>
 		<td>
+			<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
+			<datalist id="mlist1">
+					<%for(var i in obj5){%>
+						<option value="<%=obj5[i].no%>">
+							<%=obj5[i].name%>
+						</option>
+						<%}%>
+				</datalist>
+		</td>
+		<td>
 			材料名：<input type="text" id="k_name" value="*.所有" list="mlist" />
 			<datalist id="mlist">
 					<option value="*.所有">
@@ -183,6 +193,18 @@
 		<%for(var i in obj2){%>
 		var n = '<%=obj2[i].name%>';
 		if(n.indexOf(v) != -1){
+			html += '<option value="<%=obj2[i].no+"."+obj2[i].name%>">';
+		}			
+		<%}%>
+		$('#mlist').html(html);
+	}
+	
+	function setMat(){
+		var v = $('#cate_id').val();
+		var html = '';
+		<%for(var i in obj2){%>
+		var n = '<%=obj2[i].no%>';
+		if(n == v){
 			html += '<option value="<%=obj2[i].no+"."+obj2[i].name%>">';
 		}			
 		<%}%>

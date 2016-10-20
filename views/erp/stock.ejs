@@ -21,7 +21,7 @@
 				</datalist>
 		</td>
 		<td>
-			<input type="text" id="cate_id" placeholder="所属分类" value="<%=k_no%>" list="mlist" />
+			<input type="text" id="cate_id" placeholder="所属分类" value="<%=k_no%>" list="mlist" onblur="setMat();" />
 			<datalist id="mlist">
 					<%for(var i in obj4){%>
 						<option value="<%=obj4[i].no%>">
@@ -125,6 +125,18 @@
 		<%for(var i in obj6){%>
 		var n = '<%=obj6[i].name%>';
 		if(n.indexOf(v) != -1){
+			html += '<option value="<%=obj6[i].no+"."+obj6[i].name%>">';
+		}			
+		<%}%>
+		$('#mlist1').html(html);
+	}
+	
+	function setMat(){
+		var v = $('#cate_id').val();
+		var html = '';
+		<%for(var i in obj6){%>
+		var n = '<%=obj6[i].no%>';
+		if(n == v){
 			html += '<option value="<%=obj6[i].no+"."+obj6[i].name%>">';
 		}			
 		<%}%>
