@@ -779,7 +779,8 @@ function insertRole(req, res) {
 
 function changeOrderNum(req,res){
 	var num = req.param('num');
-	var sql1 = "update orderlist set num = "+num;
+	var id = req.param('id');
+	var sql1 = "update orderlist set num = "+num + "where id = "+id;
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
