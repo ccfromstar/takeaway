@@ -216,7 +216,7 @@
 				});
 			}
 		}
-		getDate();
+		
 		/*导出采购单Excel表*/
 		function toExcel() {
 			$.ajax({
@@ -263,22 +263,26 @@
 				type: "POST",
 				url: "/erp/getUninOrd",
 				success: function(data) {
+
 					var html = "";
 					for(var i in data) {
 						if(data[i].store == key){
 							html += "<tr>";
+							html += "<td>" + data[i].date + "</td>";
 							html += "<td>" + data[i].store + "</td>";
 							html += "<td>" + data[i].category + "</td>";
 							html += "<td>" + data[i].no + "." + data[i].name + "</td>";
 							html += "<td>" + data[i].cname + "</td>";
 							html += "<td>" + data[i].num + "</td>";
 							html += "<td>" + data[i].unit + "</td>";
-							html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>入库</button></td>";
+							html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>入库</button>";
 							html += " <button class='btn btn-xs' onclick='delput(" + data[i].id + ")'>删除</button></td>";
 							html += "</tr>";
 						}	
 					}
+					console.log(html);
 					$("#contentStock").html(html);
+					//document.getElementById("contentStock").innerHTML = html;
 				}
 			});
 		}
@@ -334,7 +338,7 @@
 			});
 		}
 
-		getStockDate();
+		
 
 		/*根据名店加载分类*/
 		function setCat(i) {

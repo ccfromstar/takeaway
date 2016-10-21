@@ -29,13 +29,20 @@ $(function(){
         $('nav').find('li').eq(1).css('display','none');
         $('nav').find('li').eq(3).css('display','none');
     }else if(rid == 5){
-        $('nav').find('li').eq(3).css('display','none');
+        //$('nav').find('li').eq(3).css('display','none');
+        $('nav').find('a').eq(10).css('display','none');
+        $('nav').find('a').eq(11).css('display','none');
     }
+
+
 
     /*门店判断*/
     var store = window.sessionStorage.getItem('cstore');
     var url = window.location.href;
-    console.log(url);
+    //console.log(url);
+    if(store != '-'){
+        $('nav').find('a').eq(4).attr('href',"/erp/stock?p=所有&s=" + store);
+    }
     if(store != '-'){
         if(url.indexOf('index') != -1){
             $('#store').val(store).attr('disabled','disabled');
@@ -50,9 +57,9 @@ $(function(){
         }else if(url.indexOf('stock') != -1){
             $('#k_store').val(store).attr('disabled','disabled');
             setCat(1);
-            if(url.indexOf('&s=%E6%89%80%E6%9C%89') != -1){
-                getDate();
-            }
+            //if(url.indexOf('&s=%E6%89%80%E6%9C%89') != -1){
+               // getDate();
+            //}
         }else if(url.indexOf('putout') != -1){
             $('#k_store').val(store).attr('disabled','disabled');
             $('#sk_store').val(store).attr('disabled','disabled');
@@ -66,6 +73,22 @@ $(function(){
         }else if(url.indexOf('bymonth') != -1){
             $('#k_store').val(store).attr('disabled','disabled');
             setCat(1);
+            filter();
+        }
+    }else{
+         if(url.indexOf('index') != -1){
+            getDate();
+        }else if(url.indexOf('putin') != -1){
+            getDate();
+            getStockDate();
+        }else if(url.indexOf('stock') != -1){
+           
+        }else if(url.indexOf('putout') != -1){
+            getDate();
+            getStockDate();
+        }else if(url.indexOf('byday') != -1){  
+            filter();
+        }else if(url.indexOf('bymonth') != -1){
             filter();
         }
     }
