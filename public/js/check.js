@@ -38,6 +38,7 @@ $(function(){
 
     /*门店判断*/
     var store = window.sessionStorage.getItem('cstore');
+    var cname = window.sessionStorage.getItem('cname');
     var url = window.location.href;
     //console.log(url);
     if(store != '-'){
@@ -74,7 +75,11 @@ $(function(){
             $('#k_store').val(store).attr('disabled','disabled');
             setCat(1);
             filter();
+        }else if(url.indexOf('role') != -1){
+            $('#store').val(store).attr('disabled','disabled');
+            getRolebyKey(store,cname);
         }
+        $('.btn_del').css('display','none');
     }else{
          if(url.indexOf('index') != -1){
             getDate();

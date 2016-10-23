@@ -46,6 +46,8 @@
 			<th>所属门店</th>
 			<th>操作</th>
 		</tr>
+		<tbody id="content">
+		
 		<%for(var i in obj){%>
 		<tr>
 			<td>
@@ -67,7 +69,9 @@
 				<button class="btn btn-xs" onclick="del(<%=obj[i].id%>)">删除</button>
 			</td>
 		</tr>
+
 		<%}%>
+		</tbody>
 	</table>
 	<p>权限指南：</p>
 <h1>1.申请者</h1>
@@ -84,6 +88,28 @@
 <p>可以看到自己门店的所有内容</p>
 </div>
 <script>
+	function getRolebyKey(key,name) {
+		var html = "";
+		<%for(var i in obj){%>
+						if("<%=obj[i].store%>" == key){
+							html += "<tr>";
+							html += "<td><%=obj[i].username%></td>";
+							html += "<td><%=obj[i].password%></td>";
+							html += "<td><%=obj[i].name%></td>";
+							html += "<td><%=obj[i].cname%></td>";
+							html += "<td><%=obj[i].store%></td>";
+							if("<%=obj[i].name%>" == name){
+								html += "<td></td>";
+							}else{
+								html += "<td><button class='btn btn-xs' onclick='del(<%=obj[i].id%>)''>删除</button></td>";
+							}
+							
+							html += "</tr>";
+						}	
+		<%}%>
+		$("#content").html(html);
+	}
+
 	function add() {
 		$.ajax({
 			type: "POST",

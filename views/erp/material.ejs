@@ -42,7 +42,7 @@
 						<%=obj[i].cname%>
 					</td>
 					<td>
-						<button class="btn btn-xs" onclick="del(<%=obj[i].id%>)">删除</button>
+						<button class="btn_del btn btn-xs" onclick="del(<%=obj[i].id%>)">删除</button>
 					</td>
 				</tr>
 				<%}%>
@@ -50,6 +50,15 @@
 	</div>
 	<script>
 		function add() {
+			if($('#name').val() ==''){
+				alert('材料名称必填！');return false;
+			}
+			if($('#unit').val() ==''){
+				alert('单位必填！');return false;
+			}
+			if($('#cate_id').val() ==''){
+				alert('所属分类必填！');return false;
+			}
 			$.ajax({
 				type: "POST",
 				url: "/erp/insertM",
