@@ -124,6 +124,7 @@
 					totalout += data[i].total;
 					totaldif += data[i].difference;
 				}
+				totalout = Math.round(totalout * 100) / 100;
 				totaldif = Math.round(totaldif * 100) / 100;
 				$("#content").html(html);
 				//计算当天总支出和总差价
