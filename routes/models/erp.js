@@ -439,7 +439,7 @@ function getPutInbyDay(req, res) {
 	k_name = k_name == '所有' ? '' : k_name;
 	var change1 = '';
 	if(k_cate_id != ''){
-		change1 = " no = '"+k_cate_id+"' and ";
+		change1 = " no like '"+k_cate_id+"%' and ";
 	}
 	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and  date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	console.log(sql1);
@@ -463,7 +463,7 @@ function getPutInbyMonth(req, res) {
 	k_name = k_name == '所有' ? '' : k_name;
 	var change1 = '';
 	if(k_cate_id != ''){
-		change1 = " no = '"+k_cate_id+"' and ";
+		change1 = " no like '"+k_cate_id+"%' and ";
 	}
 	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%'  and date like '" + k_date + "%' order by id desc";
 	if(k_category == '') {
