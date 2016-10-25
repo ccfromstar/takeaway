@@ -433,10 +433,15 @@ function getPutInbyDay(req, res) {
 	var k_date = req.param('k_date');
 	var k_date_end = req.param('k_date_end');
 	var k_name = req.param('k_name');
+	var k_cate_id = req.param('k_cate_id');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
-	var sql1 = "select * from c_putin where store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and  date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var change1 = '';
+	if(k_cate_id != ''){
+		change1 = " no = '"+k_cate_id+"' and ";
+	}
+	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and  date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
@@ -452,12 +457,17 @@ function getPutInbyMonth(req, res) {
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
 	var k_name = req.param('k_name');
+	var k_cate_id = req.param('k_cate_id');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
-	var sql1 = "select * from c_putin where store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%'  and date like '" + k_date + "%' order by id desc";
+	var change1 = '';
+	if(k_cate_id != ''){
+		change1 = " no = '"+k_cate_id+"' and ";
+	}
+	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%'  and date like '" + k_date + "%' order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_putin where store like '%"+k_store+"%' and name like '%" + k_name + "%' and  date like '" + k_date + "%' order by id desc";
+		sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and name like '%" + k_name + "%' and  date like '" + k_date + "%' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {

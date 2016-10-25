@@ -33,7 +33,7 @@ ON a.name = b.name;
 DROP VIEW IF EXISTS `c_putin`;
 CREATE VIEW c_putin
 AS
-SELECT a.*,b.unit,b.cname
+SELECT a.*,b.unit,b.cname,b.no
 FROM putin a
 LEFT JOIN c_material b
 ON a.name = b.name;
