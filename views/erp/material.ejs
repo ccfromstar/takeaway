@@ -19,6 +19,7 @@
 			</td>
 			<td>
 				<button class="btn btn-xs" onclick="add()">新增</button>
+				<button class="btn btn-xs" onclick="toExcelMat()">导出Excel</button>
 			</td>
 		</tr>
 	</table>
@@ -93,6 +94,20 @@
 					}
 				});	
  			}
+		}
+		
+		/*导出入库Excel表*/
+		function toExcelMat() {
+			$.ajax({
+				type: "POST",
+				url: "/erp/toExcelMat",
+				data: {
+
+				},
+				success: function(data) {
+					window.open("/excelop/temp/" + data);
+				}
+			});
 		}
 	</script>
 	<% include footer %>
