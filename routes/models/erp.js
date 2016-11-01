@@ -595,12 +595,17 @@ function getStock(req, res) {
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_name = req.param('k_name');
+	var k_cate_id = req.param('k_cate_id');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
-	var sql1 = "select * from c_stock where store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%' and num > 0 order by id desc";
+	var change1 = '';
+	if(k_cate_id != ''){
+		change1 = " no like '"+k_cate_id+"%' and ";
+	}
+	var sql1 = "select * from c_stock where "+change1+" store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%' and num > 0 order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_stock where store like '%"+k_store+"%' and name like '%" + k_name + "%' and num > 0 order by id desc";
+		sql1 = "select * from c_stock where "+change1+" store like '%"+k_store+"%' and name like '%" + k_name + "%' and num > 0 order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {

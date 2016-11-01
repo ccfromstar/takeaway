@@ -15,7 +15,7 @@
 							</option>
 						<%}%>
 				</datalist>
-			<td>
+			</td>
 				<td>
 					<input id="category" type="text" list="list1" value="所有" />
 					<datalist id="list1">
@@ -25,6 +25,16 @@
 					<%}%>
 				</datalist>
 				</td>
+				<td>
+			<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
+			<datalist id="mlist1">
+					<%for(var i in obj6){%>
+						<option value="<%=obj6[i].no%>">
+							<%=obj6[i].name%>
+						</option>
+						<%}%>
+				</datalist>
+		</td>
 				<td>
 					<input type="text" id="k_name" value="*.所有" list="mlist" />
 					<datalist id="mlist">
@@ -161,7 +171,8 @@
 				data: {
 					k_store: $("#k_store").val(),
 					k_category: $("#category").val(),
-					k_name: s[1]
+					k_name: s[1],
+					k_cate_id: $("#cate_id").val()
 				},
 				success: function(data) {
 					var html = "";
@@ -365,6 +376,18 @@
 			<%for(var i in obj4){%>
 			var n = '<%=obj4[i].name%>';
 			if(n.indexOf(v) != -1){
+				html += '<option value="<%=obj4[i].no+"."+obj4[i].name%>">';
+			}			
+			<%}%>
+			$('#mlist').html(html);
+		}
+		
+		function setMat(){
+			var v = $('#cate_id').val();
+			var html = '';
+			<%for(var i in obj4){%>
+			var n = '<%=obj4[i].no%>';
+			if(n == v){
 				html += '<option value="<%=obj4[i].no+"."+obj4[i].name%>">';
 			}			
 			<%}%>

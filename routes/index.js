@@ -1300,6 +1300,7 @@ exports.erp_putout = function(req, res) {
 	var sql2 = "select * from category order by id desc";
 	var sql3 = "select * from c_material order by id desc";
 	var sql4 = "select * from store order by id desc";
+	var sql5 = "select * from material_category";
 	mysql.query(sql1, function(error, obj2) {
 		if(error) {
 			console.log(error);
@@ -1321,11 +1322,18 @@ exports.erp_putout = function(req, res) {
 						console.log(error);
 						return false;
 					}
-					res.render('erp/putout', {
-						obj2: obj2,
-						obj3: obj3,
-						obj4: obj4,
-						obj5: obj5
+					mysql.query(sql5, function(error, obj6) {
+						if(error) {
+							console.log(error);
+							return false;
+						}
+						res.render('erp/putout', {
+							obj2: obj2,
+							obj3: obj3,
+							obj4: obj4,
+							obj5: obj5,
+							obj6: obj6
+						});
 					});
 				});
 			});
