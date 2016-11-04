@@ -46,6 +46,7 @@
 		</td>
 	</tr>
 </table>
+<h2>库存结余金额：<span id="totalout"><%=totalout%></span>元</h2>
 <div class="div_auto">
 	<table class="table table-hover table-bordered">
 		<tr>
@@ -98,7 +99,9 @@
 			url: "/erp/toExcelstock",
 			data: {
 				k_store: $('#k_store').val(),
-				k_category: $("#k_category").val()
+				k_category: $("#k_category").val(),
+				cate_id: $("#cate_id").val(),
+				k_n: $("#name").val()
 			},
 			success: function(data) {
 				window.open("/excelop/temp/" + data);

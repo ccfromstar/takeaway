@@ -175,8 +175,14 @@ function toExcelputinM(req, res) {
 			console.log(error);
 			return false;
 		}
+		/*計算总入库消费金额*/
+		var totalout = 0;
+		for(var i in obj) {
+			totalout += obj[i].total;
+		}
+		totalout = Math.round(totalout * 100) / 100;
 		//用数据源(对象)data渲染Excel模板
-		var obj_str = '[ [{"date": "' + k_date + '"}],';
+		var obj_str = '[ [{"date": "' + k_date+'","totalout": "' + totalout+'"}],';
 		obj_str += JSON.stringify(obj) + "]";
 		//console.log(obj_str);
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
@@ -190,24 +196,45 @@ function toExcelputinM(req, res) {
 function toExcelstock(req, res) {
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
+	var k_no = req.param('k_no');
+	var cate_id = req.param('cate_id');
+	var k_n = req.param('k_n');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
+	k_no = k_no ? k_no : "";
+	cate_id = cate_id ? cate_id : "";
+	k_n = k_n ? k_n : "";
+	var k_n1 = "";
+	if(k_n != ""){
+		var tmp = k_n.split(".");
+		k_n1 = tmp[1];
+	}
 	//获得Excel模板的buffer对象
 	var exlBuf = fs.readFileSync("./public/excelop/template/stock.xlsx");
 	var excelname = setFileName();
 	//数据源
 	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-	var sql1 = "select * from c_stock where store like '%"+k_store+"%' and category = '" + k_category + "'  order by no desc";
+	var sql1 = "select * from c_stock where store like '%"+k_store+"%' and name like '%"+k_n1+"%' and no like '"+cate_id+"%' and category = '" + k_category + "'  order by no desc";
 	if(k_category == '') {
-		sql1 = "select * from c_stock where store like '%"+k_store+"%' order by no desc";
+		sql1 = "select * from c_stock where store like '%"+k_store+"%' and name like '%"+k_n1+"%' and no like '"+cate_id+"%' order by no desc";
 	}
+	console.log(sql1);
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
 			return false;
 		}
+		/*计算库存结余金额*/
+		var totalout = 0;
+		for(var i in obj){
+			totalout += (obj[i].unitPrice)*(obj[i].num);
+		}
+		totalout = Math.round(totalout * 100) / 100;
 		//用数据源(对象)data渲染Excel模板
-		ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2) {
+		var obj_str = '[ [{"totalout": "' + totalout + '"}],';
+		obj_str += JSON.stringify(obj) + "]";
+		
+		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
 			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
 			res.send(excelname);
 		});
@@ -270,8 +297,14 @@ function toExcelputoutM(req, res) {
 			console.log(error);
 			return false;
 		}
+		/*計算总入库消费金额*/
+		var totalout = 0;
+		for(var i in obj) {
+			totalout += obj[i].total;
+		}
+		totalout = Math.round(totalout * 100) / 100;
 		//用数据源(对象)data渲染Excel模板
-		var obj_str = '[ [{"date": "' + k_date + '"}],';
+		var obj_str = '[ [{"date": "' + k_date+'","totalout": "' + totalout+'"}],';
 		obj_str += JSON.stringify(obj) + "]";
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
 			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
@@ -860,8 +893,14 @@ function toExcelputinD(req, res) {
 			console.log(error);
 			return false;
 		}
+		/*計算总入库消费金额*/
+		var totalout = 0;
+		for(var i in obj) {
+			totalout += obj[i].total;
+		}
+		totalout = Math.round(totalout * 100) / 100;
 		//用数据源(对象)data渲染Excel模板
-		var obj_str = '[ [{"date": "' + k_date +'~'+k_date_end+'"}],';
+		var obj_str = '[ [{"date": "' + k_date +'~'+k_date_end+'","totalout": "' + totalout+'"}],';
 		obj_str += JSON.stringify(obj) + "]";
 		//console.log(obj_str);
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
@@ -892,9 +931,17 @@ function toExcelputoutD(req, res) {
 			console.log(error);
 			return false;
 		}
+		
+		/*計算总入库消费金额*/
+		var totalout = 0;
+		for(var i in obj) {
+			totalout += obj[i].total;
+		}
+		totalout = Math.round(totalout * 100) / 100;
 		//用数据源(对象)data渲染Excel模板
-		var obj_str = '[ [{"date": "' + k_date +'~'+k_date_end+'"}],';
+		var obj_str = '[ [{"date": "' + k_date +'~'+k_date_end+'","totalout": "' + totalout+'"}],';
 		obj_str += JSON.stringify(obj) + "]";
+		
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
 			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
 			res.send(excelname);

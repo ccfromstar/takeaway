@@ -1243,15 +1243,16 @@ exports.erp_stock = function(req, res) {
 		k_n1 = tmp[1];
 	}
 	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-	var sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '%" + k_no + "%' and category = '" + k_category + "'  order by no desc";
+	var sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '" + k_no + "%' and category = '" + k_category + "'  order by no desc";
 	if(k_category == '') {
-		sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '%" + k_no + "%'  order by no desc";
+		sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '" + k_no + "%'  order by no desc";
 	}
 	console.log(sql1);
 	var sql2 = "select * from category order by id desc";
 	var sql3 = "select * from material_category";
 	var sql4 = "select * from store order by id desc";
 	var sql5 = "select * from c_material order by id desc";
+	console.log(sql1);
 	mysql.query(sql1, function(error, obj2) {
 		if(error) {
 			console.log(error);
@@ -1277,6 +1278,12 @@ exports.erp_stock = function(req, res) {
 							console.log(error);
 							return false;
 						}
+						/*计算库存结余金额*/
+						var totalout = 0;
+						for(var i in obj2){
+							totalout += (obj2[i].unitPrice)*(obj2[i].num);
+						}
+						totalout = Math.round(totalout * 100) / 100;
 						res.render('erp/stock', {
 							obj2: obj2,
 							k_cate: k_cate,
@@ -1286,7 +1293,8 @@ exports.erp_stock = function(req, res) {
 							obj6: obj6,
 							k_no: k_no,
 							k_store: k_s,
-							k_n:k_n
+							k_n:k_n,
+							totalout:totalout
 						});
 					});
 				});

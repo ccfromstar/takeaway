@@ -26,7 +26,8 @@ $(function(){
         $('nav').find('li').eq(3).css('display','none');
     }else if(rid == 4){
         $('nav').find('li').eq(0).css('display','none');
-        $('nav').find('li').eq(1).css('display','none');
+        /*$('nav').find('li').eq(1).css('display','none');*/
+       $('nav').find('a').eq(5).css('display','none');
         $('nav').find('li').eq(3).css('display','none');
     }else if(rid == 5){
         //$('nav').find('li').eq(3).css('display','none');
