@@ -1500,3 +1500,19 @@ exports.erp_role = function(req, res) {
 exports.erp_home = function(req, res) {
 	res.render('erp/home',{});
 };
+
+/*store begin*/
+exports.s_list = function(req, res) {
+	var sql3 = "select m.maincourse,m.jardiniere,m.staplefood,m.imgname,m.id,m.name,m.price,m.aheadprice,r.numtoday,r.numtomorrow from menu m left join repertory r on r.menuid = m.id order by m.sortid asc";
+	mysql.query(sql3, function(err3, rows3) {
+		if(err3) {
+			console.log(err3);
+			return false;
+		}
+		res.render('store/list', {
+			url: req.url,
+			menu_s: rows3
+		});
+	});
+}
+/*store end*/

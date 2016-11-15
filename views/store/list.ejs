@@ -1,0 +1,81 @@
+<% include header %>
+<%for(var i in menu_s){%>
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<%=menu_s[i].name%>
+	</div>
+	<div class="panel-body">
+		<figure>
+			<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+			<figcaption>
+				<%=menu_s[i].jardiniere%>
+			</figcaption>
+		</figure>
+		<ul class="nav nav-pills nav-stacked">
+			<li class="active">
+				<a href="#" onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+					<span class="badge pull-right">价格：¥<%=menu_s[i].price%></span>点餐
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<%}%>
+<div style="height:60px;"></div>
+<div class="float_bottom_div">
+    <table style="width:100%;height:60px;">
+        <tr>
+            <td style="vertical-align:middle;color:#FFFFFF;cursor:pointer;text-align:center;font-size:18px;font-weight:bold;" onclick="gostep1()">
+                                购物车
+            </td>
+        </tr>
+    </table>
+</div>  
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">请选择辅料</h4>
+			</div>
+			<div class="modal-body">
+				<% include fl %>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" onclick="sureBooking()">确定</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal -->
+</div>
+<script>
+	var _id,_name,_price;
+	var _list = [];
+	function showInfo(id,name,price){
+		_id = id;
+		_name = name;
+		_price = price;
+		$('#myModal').modal('show');
+	}
+	
+	function sureBooking(){
+		var item = {
+			id : _id,
+			name : _name,
+			price : _price,
+			fl1 : jqradio('fl1'),
+			fl2 : jqradio('fl2')
+		};
+		_list.push(item);
+		$('#myModal').modal('hide');
+		console.log(_list);
+	}
+	
+	function jqradio(name){
+	    return $(':checked[name="' + name + '"]').val();
+	}
+</script>
+<% include footer %>

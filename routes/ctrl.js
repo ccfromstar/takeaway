@@ -30,6 +30,9 @@ module.exports = function (app, routes) {
     app.get('/weixin/orderaddress',routes.w_orderaddress);
     app.get('/weixin/list',routes.w_list);
     app.post('/weixin/getAddressByAPI',routes.getAddressByAPI);
+    
+    //store门店
+    app.get('/store/list',routes.s_list);
 
     //cms
     app.get('/cms/booking',routes.checkLogin);
