@@ -1,0 +1,27 @@
+<% include header %>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">提示信息</h3>
+    </div>
+    <div class="panel-body">
+        <p>支付成功！</p>
+        <p>您的取餐二维码为:</p>
+        <div id="code"></div>
+        <br/>
+        <p>请用手机微信扫一扫后凭号取餐</p>       
+        <button type="button" class="btn btn-default" onclick="cancelPay()">关闭</button>
+    </div>
+</div>
+<script>
+	$("#code").qrcode({
+		render: "table", //table方式
+		width: 150, //宽度
+		height: 150, //高度
+		text: "<%=no%>" //任意内容
+	});
+	
+	function cancelPay(){
+		window.location = '/store/list';
+	}
+</script>
+<% include footer %>

@@ -33,6 +33,10 @@ module.exports = function (app, routes) {
     
     //store门店
     app.get('/store/list',routes.s_list);
+    app.get('/store/cart',routes.s_cart);
+    app.get('/store/kitchen',routes.s_kitchen);
+    app.get('/sbookingsuccess',routes.s_bookingsuccess);
+    app.get('/store/wait',routes.s_wait);
 
     //cms
     app.get('/cms/booking',routes.checkLogin);

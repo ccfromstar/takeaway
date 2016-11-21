@@ -40,22 +40,38 @@ exports.servicedo = function(req, res) {
 			res.json(result);
 
 		});
-	}else if(_sql == "checkLogin") {
+	} else if(_sql == "checkLogin") {
 		var uname = req.param("uname");
 		var pwd = req.param("pwd");
 		var sql = "select * from c_role where username = '" + uname + "'";
 		console.log(sql);
 		mysql.query(sql, function(err, result) {
-			if (err) return console.error(err.stack);
-			if (!result[0]) {
+			if(err) return console.error(err.stack);
+			if(!result[0]) {
 				res.send("400");
 				return;
 			}
-			if (result[0].password == pwd) {
+			if(result[0].password == pwd) {
 				res.json(result[0]);
 			} else {
 				res.send("400");
 			}
+		});
+	} else if(_sql == "getList"){
+		var sql1 = "select * from sbooking where state_id = 2";
+		mysql.query(sql1, function(error, obj) {
+			res.send(obj);
+		});
+	} else if(_sql == "getListf"){
+		var sql1 = "select * from sbooking where state_id = 3";
+		mysql.query(sql1, function(error, obj) {
+			res.send(obj);
+		});
+	}else if(_sql == "bookfinish"){
+		var bookingno = req.param("bookingno");
+		var sql1 = "update sbooking set state_id = 3 where bookingno = '"+bookingno+"'";
+		mysql.query(sql1, function(error, obj) {
+			res.send(obj);
 		});
 	}
 }
@@ -1238,14 +1254,14 @@ exports.erp_stock = function(req, res) {
 	k_no = k_no ? k_no : "";
 	k_n = k_n ? k_n : "";
 	var k_n1 = "";
-	if(k_n != ""){
+	if(k_n != "") {
 		var tmp = k_n.split(".");
 		k_n1 = tmp[1];
 	}
 	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-	var sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '" + k_no + "%' and category = '" + k_category + "'  order by no desc";
+	var sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%" + k_n1 + "%' and no like '" + k_no + "%' and category = '" + k_category + "'  order by no desc";
 	if(k_category == '') {
-		sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%"+k_n1+"%' and no like '" + k_no + "%'  order by no desc";
+		sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%" + k_n1 + "%' and no like '" + k_no + "%'  order by no desc";
 	}
 	console.log(sql1);
 	var sql2 = "select * from category order by id desc";
@@ -1280,8 +1296,8 @@ exports.erp_stock = function(req, res) {
 						}
 						/*计算库存结余金额*/
 						var totalout = 0;
-						for(var i in obj2){
-							totalout += (obj2[i].unitPrice)*(obj2[i].num);
+						for(var i in obj2) {
+							totalout += (obj2[i].unitPrice) * (obj2[i].num);
 						}
 						totalout = Math.round(totalout * 100) / 100;
 						res.render('erp/stock', {
@@ -1293,8 +1309,8 @@ exports.erp_stock = function(req, res) {
 							obj6: obj6,
 							k_no: k_no,
 							k_store: k_s,
-							k_n:k_n,
-							totalout:totalout
+							k_n: k_n,
+							totalout: totalout
 						});
 					});
 				});
@@ -1490,7 +1506,9 @@ exports.erp_role = function(req, res) {
 					return false;
 				}
 				res.render('erp/role', {
-					obj: obj,obj2: obj2,obj3: obj3
+					obj: obj,
+					obj2: obj2,
+					obj3: obj3
 				});
 			});
 		});
@@ -1498,7 +1516,7 @@ exports.erp_role = function(req, res) {
 };
 
 exports.erp_home = function(req, res) {
-	res.render('erp/home',{});
+	res.render('erp/home', {});
 };
 
 /*store begin*/
@@ -1514,5 +1532,32 @@ exports.s_list = function(req, res) {
 			menu_s: rows3
 		});
 	});
+}
+
+exports.s_cart = function(req, res) {
+	res.render('store/cart');
+}
+
+exports.s_bookingsuccess = function(req, res) {
+	var alipay_id = req.session.alipay_id;
+	var sql1 = "update sbooking set state_id = 2 where bookingno = '" + alipay_id + "'";
+	console.log(sql1);
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.render('store/bookingsuccess', {
+			no: alipay_id
+		});
+	});
+};
+
+exports.s_kitchen = function(req, res) {
+	res.render('store/kitchen');
+}
+
+exports.s_wait = function(req, res) {
+	res.render('store/wait');
 }
 /*store end*/

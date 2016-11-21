@@ -25,7 +25,7 @@
 <div class="float_bottom_div">
     <table style="width:100%;height:60px;">
         <tr>
-            <td style="vertical-align:middle;color:#FFFFFF;cursor:pointer;text-align:center;font-size:18px;font-weight:bold;" onclick="gostep1()">
+            <td style="vertical-align:middle;color:#FFFFFF;cursor:pointer;text-align:center;font-size:18px;font-weight:bold;" onclick="toCart()">
                                 购物车
             </td>
         </tr>
@@ -76,6 +76,15 @@
 	
 	function jqradio(name){
 	    return $(':checked[name="' + name + '"]').val();
+	}
+	
+	function toCart(){
+		var cart_list = '';
+		for(var i in _list){
+			cart_list = (cart_list == '')?JSON.stringify(_list[i]):cart_list + '@' + JSON.stringify(_list[i]);
+		}
+		window.sessionStorage.setItem('cart',cart_list);
+		window.location = '/store/cart';
 	}
 </script>
 <% include footer %>

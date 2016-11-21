@@ -1,0 +1,60 @@
+<% include header %>
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		购物车信息确认
+	</div>
+	<div class="panel-body">
+		您购买的内容为：
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>菜名</th>
+					<th>辅料1</th>
+					<th>辅料2</th>
+					<th>价格</th>
+				</tr>
+			</thead>
+			<tbody id = 'temp_cart'>
+			
+			</tbody>
+		</table>
+		应付金额为：
+		<div id='totalPay'></div>
+		付款方式：
+		<div style="margin-top:3px;"><input type="radio" name="paytype" onclick="document.all.paytype1.value = '支付宝';" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px9;" checked><img class="pay_class" src="/img/zfb.png" alt=""></input></div>
+        <div style="margin-top:3px;"><input type="radio" name="paytype" onclick="document.all.paytype1.value = '微信';" style="vertical-align:text-bottom; margin-bottom:1px; margin-bottom:-1px9;"><img class="pay_class_wx" src="/img/wx.png" alt=""></input></div>
+		<hr />
+		<button type="button" class="btn btn-primary" onclick="submitPay()">确认付款</button>
+		<button type="button" class="btn btn-default" onclick="cancelPay()">取消订餐</button>
+	</div>
+	<form method="post" name="booking" action="/400/createDocStore">
+		<input type="hidden" name="price" id="price" />
+		<input type="hidden" name="detail" id="detail" />
+		<input type="hidden" name="paytype1" value="支付宝" />
+	</form>
+</div>
+<script>
+	var cart = window.sessionStorage.getItem('cart');
+	console.log(cart);
+	var arr1 = cart.split('@');
+	var temp_cart = '';
+	var totalPay = 0;
+	for(var i in arr1) {
+		var o = JSON.parse(arr1[i]);
+		temp_cart += '<tr><td>'+o.name + '</td><td>' + o.fl1 + '</td><td>' + o.fl2 + '</td><td>¥'+o.price+'</td></tr>';
+		totalPay += Number(o.price);
+	}
+	$('#temp_cart').html(temp_cart);
+	$('#totalPay').html('¥'+totalPay);
+	
+	function cancelPay(){
+		window.location = '/store/list';
+	}
+	
+	function submitPay(){
+		$('#price').val(totalPay);
+		$('#detail').val(temp_cart);
+		document.booking.submit();
+	}
+</script>
+<% include footer %>
