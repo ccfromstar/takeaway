@@ -37,6 +37,8 @@ module.exports = function (app, routes) {
     app.get('/store/kitchen',routes.s_kitchen);
     app.get('/sbookingsuccess',routes.s_bookingsuccess);
     app.get('/store/wait',routes.s_wait);
+    
+    app.get('/scan',routes.scan_js);
 
     //cms
     app.get('/cms/booking',routes.checkLogin);

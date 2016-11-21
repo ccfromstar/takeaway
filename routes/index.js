@@ -1560,4 +1560,69 @@ exports.s_kitchen = function(req, res) {
 exports.s_wait = function(req, res) {
 	res.render('store/wait');
 }
+
+exports.scan_js = function(req, res) {
+	var timestamp = parseInt(new Date().getTime() / 1000) + '';
+	var nonceStr = Math.random().toString(36).substr(2, 15);
+	var appId = "wxe2a20ae8d978330b";
+	var appSecret = "5160fed55fa7f8cffe2677213b270608";
+	var wx_url = "http://www.4000191177.com" + req.url;
+	console.log("wx_url:" + wx_url);
+	//判断access_token和jsapi_ticket是否已经获得，并且时效在2小时(7200s)以内
+	var end_time = new Date();
+	var timediff = end_time.getTime() - strat_time.getTime() //时间差的毫秒数
+		//console.log(end_time + "-->" + strat_time);
+	timediff = timediff / 1000;
+	//if(access_token == "" || jsapi_ticket == "" || Number(timediff) > 7200){
+	if(1 == 1) {
+		console.log("first access_token");
+		//1.获取access_token
+		var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appId + "&secret=" + appSecret;
+		request(url, function(err, response, body) {
+			if(!err && response.statusCode == 200) {
+				console.log("body:" + body);
+				var o = JSON.parse(body);
+				access_token = o.access_token;
+				console.log("access_token:" + access_token);
+				//2.获取jsapi_ticket
+				var url_jsapi = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' + access_token + '&type=jsapi';
+				request(url_jsapi, function(err_jsapi, response_jsapi, body_jsapi) {
+					if(!err_jsapi && response_jsapi.statusCode == 200) {
+						console.log("body_jsapi:" + body_jsapi);
+						jsapi_ticket = (JSON.parse(body_jsapi)).ticket;
+						console.log("jsapi_ticket:" + jsapi_ticket);
+						strat_time = new Date();
+						var signature = sign(jsapi_ticket, nonceStr, timestamp, wx_url);
+						//var url_info = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='+access_token+'&openid=oEDF2xBoerpEFGh3brZPkWfVRZZg&lang=zh_CN';
+						var url_info = 'https://api.weixin.qq.com/cgi-bin/user/get?access_token=' + access_token + '&next_openid=';
+						request(url_info, function(err_info, response_info, body_info) {
+							if(!err_info && response_info.statusCode == 200) {
+
+								res.render('scan', {
+									signature: signature,
+									jsapi_ticket: jsapi_ticket,
+									body_info: body_info
+								});
+							}
+						});
+					}
+				});
+			}
+		});
+	} else {
+		console.log("not first access_token");
+		var signature = sign(jsapi_ticket, nonceStr, timestamp, wx_url);
+		//var url_info = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='+access_token+'&openid=oEDF2xBoerpEFGh3brZPkWfVRZZg&lang=zh_CN';
+		var url_info = 'https://api.weixin.qq.com/cgi-bin/user/get?access_token=' + access_token + '&next_openid=';
+		request(url_info, function(err_info, response_info, body_info) {
+			if(!err_info && response_info.statusCode == 200) {
+				res.render('scan', {
+					signature: signature,
+					jsapi_ticket: jsapi_ticket,
+					body_info: body_info
+				});
+			}
+		});
+	}
+}
 /*store end*/
