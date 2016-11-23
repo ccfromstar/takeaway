@@ -1,4 +1,94 @@
 <% include header %>
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active">
+        <a href="#item1" data-toggle="tab">
+                      盖浇饭
+        </a>
+    </li>
+    <li><a href="#item2" data-toggle="tab">配菜</a></li>
+    <li><a href="#item3" data-toggle="tab">饮料</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade in active" id="item1">
+    	<%for(var i in menu_s){
+    		if(menu_s[i].maincourse == '盖浇饭'){%>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<%=menu_s[i].name%>
+				</div>
+				<div class="panel-body">
+					<figure>
+						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+						<figcaption>
+							<%=menu_s[i].jardiniere%>
+						</figcaption>
+					</figure>
+					<ul class="nav nav-pills nav-stacked">
+						<li class="active">
+							<a href="#" onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+								<span class="badge pull-right">价格：¥<%=menu_s[i].price%></span>点餐
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		<%}
+		}%>
+    </div>
+    <div class="tab-pane fade" id="item2">
+        <%for(var i in menu_s){
+    		if(menu_s[i].maincourse == '配菜'){%>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<%=menu_s[i].name%>
+				</div>
+				<div class="panel-body">
+					<figure>
+						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+						<figcaption>
+							<%=menu_s[i].jardiniere%>
+						</figcaption>
+					</figure>
+					<ul class="nav nav-pills nav-stacked">
+						<li class="active">
+							<a href="#" onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+								<span class="badge pull-right">价格：¥<%=menu_s[i].price%></span>点餐
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		<%}
+		}%>
+    </div>
+    <div class="tab-pane fade" id="item3">
+        <%for(var i in menu_s){
+    		if(menu_s[i].maincourse == '饮料'){%>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<%=menu_s[i].name%>
+				</div>
+				<div class="panel-body">
+					<figure>
+						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+						<figcaption>
+							<%=menu_s[i].jardiniere%>
+						</figcaption>
+					</figure>
+					<ul class="nav nav-pills nav-stacked">
+						<li class="active">
+							<a href="#" onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+								<span class="badge pull-right">价格：¥<%=menu_s[i].price%></span>点餐
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		<%}
+		}%>
+    </div>
+</div>
+<!--
 <%for(var i in menu_s){%>
 <div class="panel panel-primary">
 	<div class="panel-heading">
@@ -21,6 +111,7 @@
 	</div>
 </div>
 <%}%>
+-->
 <div style="height:60px;"></div>
 <div class="float_bottom_div">
     <table style="width:100%;height:60px;">
@@ -37,10 +128,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">请选择辅料</h4>
+				<h4 class="modal-title" id="myModalLabel">请确认份数</h4>
 			</div>
 			<div class="modal-body">
+				<input type="number" class="form-control" id="cnum" value="1" />
+				<!--
 				<% include fl %>
+				-->
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -66,8 +160,7 @@
 			id : _id,
 			name : _name,
 			price : _price,
-			fl1 : jqradio('fl1'),
-			fl2 : jqradio('fl2')
+			num : $('#cnum').val()
 		};
 		_list.push(item);
 		$('#myModal').modal('hide');

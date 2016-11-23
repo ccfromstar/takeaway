@@ -57,25 +57,25 @@ exports.servicedo = function(req, res) {
 				res.send("400");
 			}
 		});
-	} else if(_sql == "getList"){
+	} else if(_sql == "getList") {
 		var sql1 = "select * from sbooking where state_id = 2";
 		mysql.query(sql1, function(error, obj) {
 			res.send(obj);
 		});
-	} else if(_sql == "getListf"){
+	} else if(_sql == "getListf") {
 		var sql1 = "select * from sbooking where state_id = 3";
 		mysql.query(sql1, function(error, obj) {
 			res.send(obj);
 		});
-	}else if(_sql == "bookfinish"){
+	} else if(_sql == "bookfinish") {
 		var bookingno = req.param("bookingno");
-		var sql1 = "update sbooking set state_id = 3 where bookingno = '"+bookingno+"'";
+		var sql1 = "update sbooking set state_id = 3 where bookingno = '" + bookingno + "'";
 		mysql.query(sql1, function(error, obj) {
 			res.send(obj);
 		});
-	}else if(_sql == "bookend"){
+	} else if(_sql == "bookend") {
 		var bookingno = req.param("bookingno");
-		var sql1 = "update sbooking set state_id = 5 where bookingno = '"+bookingno+"'";
+		var sql1 = "update sbooking set state_id = 5 where bookingno = '" + bookingno + "'";
 		mysql.query(sql1, function(error, obj) {
 			res.send(obj);
 		});
@@ -957,6 +957,7 @@ function paysignjsapi(appid, attach, body, mch_id, nonce_str, notify_url, openid
 };
 
 exports.pay = function(req, res) {
+	console.log('run');
 	var bookingNo = req.query.bookingNo;
 	var total_fee = req.query.total_fee;
 	//var total_fee = 1;
@@ -991,15 +992,13 @@ exports.pay = function(req, res) {
 			var code_url = getXMLNodeValue('code_url', body.toString("utf-8"));
 			var tmp = code_url.split('[');
 			var tmp3 = tmp[2].split(']');
-			if(!req.session.cuser) {
-				res.redirect('/');
-			} else {
-				res.render('pay', {
-					prepay_id: tmp1[0],
-					code_url: tmp3[0],
-					total_fee: total_fee / 100
-				});
-			}
+
+			res.render('pay', {
+				prepay_id: tmp1[0],
+				code_url: tmp3[0],
+				total_fee: total_fee / 100
+			});
+
 			//res.redirect(tmp3[0]);
 		}
 	});
@@ -1134,12 +1133,12 @@ exports.paydo = function(req, res) {
 
 	});
 	req.on("end", function() {
-		//console.log(_da);
+		console.log(_da);
 		var out_trade_no = getXMLNodeValue('out_trade_no', _da.toString("utf-8"));
 		var tmp = out_trade_no.split('[');
 		var tmp1 = tmp[2].split(']');
 		var bookingno = tmp1[0];
-		var sql1 = "update booking set status = '配送中' where bookingno = '" + bookingno + "'";
+		var sql1 = "update sbooking set state_id = 2 where bookingno = '" + bookingno + "'";
 		mysql.query(sql1, function(error, obj) {
 			if(error) {
 				console.log(error);
@@ -1568,67 +1567,67 @@ exports.s_wait = function(req, res) {
 }
 
 exports.scan_js = function(req, res) {
-	var timestamp = parseInt(new Date().getTime() / 1000) + '';
-	var nonceStr = Math.random().toString(36).substr(2, 15);
-	var appId = "wxe2a20ae8d978330b";
-	var appSecret = "5160fed55fa7f8cffe2677213b270608";
-	var wx_url = "http://www.4000191177.com" + req.url;
-	console.log("wx_url:" + wx_url);
-	//判断access_token和jsapi_ticket是否已经获得，并且时效在2小时(7200s)以内
-	var end_time = new Date();
-	var timediff = end_time.getTime() - strat_time.getTime() //时间差的毫秒数
-		//console.log(end_time + "-->" + strat_time);
-	timediff = timediff / 1000;
-	//if(access_token == "" || jsapi_ticket == "" || Number(timediff) > 7200){
-	if(1 == 1) {
-		console.log("first access_token");
-		//1.获取access_token
-		var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appId + "&secret=" + appSecret;
-		request(url, function(err, response, body) {
-			if(!err && response.statusCode == 200) {
-				console.log("body:" + body);
-				var o = JSON.parse(body);
-				access_token = o.access_token;
-				console.log("access_token:" + access_token);
-				//2.获取jsapi_ticket
-				var url_jsapi = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' + access_token + '&type=jsapi';
-				request(url_jsapi, function(err_jsapi, response_jsapi, body_jsapi) {
-					if(!err_jsapi && response_jsapi.statusCode == 200) {
-						console.log("body_jsapi:" + body_jsapi);
-						jsapi_ticket = (JSON.parse(body_jsapi)).ticket;
-						console.log("jsapi_ticket:" + jsapi_ticket);
-						strat_time = new Date();
-						var signature = sign(jsapi_ticket, nonceStr, timestamp, wx_url);
-						//var url_info = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='+access_token+'&openid=oEDF2xBoerpEFGh3brZPkWfVRZZg&lang=zh_CN';
-						var url_info = 'https://api.weixin.qq.com/cgi-bin/user/get?access_token=' + access_token + '&next_openid=';
-						request(url_info, function(err_info, response_info, body_info) {
-							if(!err_info && response_info.statusCode == 200) {
+		var timestamp = parseInt(new Date().getTime() / 1000) + '';
+		var nonceStr = Math.random().toString(36).substr(2, 15);
+		var appId = "wxe2a20ae8d978330b";
+		var appSecret = "5160fed55fa7f8cffe2677213b270608";
+		var wx_url = "http://www.4000191177.com" + req.url;
+		console.log("wx_url:" + wx_url);
+		//判断access_token和jsapi_ticket是否已经获得，并且时效在2小时(7200s)以内
+		var end_time = new Date();
+		var timediff = end_time.getTime() - strat_time.getTime() //时间差的毫秒数
+			//console.log(end_time + "-->" + strat_time);
+		timediff = timediff / 1000;
+		//if(access_token == "" || jsapi_ticket == "" || Number(timediff) > 7200){
+		if(1 == 1) {
+			console.log("first access_token");
+			//1.获取access_token
+			var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appId + "&secret=" + appSecret;
+			request(url, function(err, response, body) {
+				if(!err && response.statusCode == 200) {
+					console.log("body:" + body);
+					var o = JSON.parse(body);
+					access_token = o.access_token;
+					console.log("access_token:" + access_token);
+					//2.获取jsapi_ticket
+					var url_jsapi = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' + access_token + '&type=jsapi';
+					request(url_jsapi, function(err_jsapi, response_jsapi, body_jsapi) {
+						if(!err_jsapi && response_jsapi.statusCode == 200) {
+							console.log("body_jsapi:" + body_jsapi);
+							jsapi_ticket = (JSON.parse(body_jsapi)).ticket;
+							console.log("jsapi_ticket:" + jsapi_ticket);
+							strat_time = new Date();
+							var signature = sign(jsapi_ticket, nonceStr, timestamp, wx_url);
+							//var url_info = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='+access_token+'&openid=oEDF2xBoerpEFGh3brZPkWfVRZZg&lang=zh_CN';
+							var url_info = 'https://api.weixin.qq.com/cgi-bin/user/get?access_token=' + access_token + '&next_openid=';
+							request(url_info, function(err_info, response_info, body_info) {
+								if(!err_info && response_info.statusCode == 200) {
 
-								res.render('scan', {
-									signature: signature,
-									jsapi_ticket: jsapi_ticket,
-									body_info: body_info
-								});
-							}
-						});
-					}
-				});
-			}
-		});
-	} else {
-		console.log("not first access_token");
-		var signature = sign(jsapi_ticket, nonceStr, timestamp, wx_url);
-		//var url_info = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='+access_token+'&openid=oEDF2xBoerpEFGh3brZPkWfVRZZg&lang=zh_CN';
-		var url_info = 'https://api.weixin.qq.com/cgi-bin/user/get?access_token=' + access_token + '&next_openid=';
-		request(url_info, function(err_info, response_info, body_info) {
-			if(!err_info && response_info.statusCode == 200) {
-				res.render('scan', {
-					signature: signature,
-					jsapi_ticket: jsapi_ticket,
-					body_info: body_info
-				});
-			}
-		});
+									res.render('scan', {
+										signature: signature,
+										jsapi_ticket: jsapi_ticket,
+										body_info: body_info
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+		} else {
+			console.log("not first access_token");
+			var signature = sign(jsapi_ticket, nonceStr, timestamp, wx_url);
+			//var url_info = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='+access_token+'&openid=oEDF2xBoerpEFGh3brZPkWfVRZZg&lang=zh_CN';
+			var url_info = 'https://api.weixin.qq.com/cgi-bin/user/get?access_token=' + access_token + '&next_openid=';
+			request(url_info, function(err_info, response_info, body_info) {
+				if(!err_info && response_info.statusCode == 200) {
+					res.render('scan', {
+						signature: signature,
+						jsapi_ticket: jsapi_ticket,
+						body_info: body_info
+					});
+				}
+			});
+		}
 	}
-}
-/*store end*/
+	/*store end*/

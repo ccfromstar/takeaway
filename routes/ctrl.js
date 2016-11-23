@@ -107,7 +107,7 @@ module.exports = function (app, routes) {
     app.post('/uploadimg',routes.uploadimg);
     app.get('/wechat',routes.wechat);
     app.post('/wechat',routes.wechatdo);
-    app.get('/pay',routes.checkuserLogin);
+    //app.get('/pay',routes.checkuserLogin);
     app.get('/pay',routes.pay);
     app.post('/pay',routes.paydo);
     //公众号支付test

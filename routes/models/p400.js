@@ -60,13 +60,13 @@ exports.getsql = function(req, res) {
 
 function getpay(req, res) {
 	var id = req.param('id');
-	var sql1 = "select status from booking where bookingno = '" + id + "'";
+	var sql1 = "select state_id from sbooking where bookingno = '" + id + "'";
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
 			return false;
 		}
-		if(obj[0].status == "配送中") {
+		if(obj[0].state_id == 2) {
 			res.send("200");
 		} else {
 			res.send("400");
