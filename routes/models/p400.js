@@ -67,6 +67,7 @@ function getpay(req, res) {
 			return false;
 		}
 		if(obj[0].state_id == 2) {
+			req.session.alipay_id = id;
 			res.send("200");
 		} else {
 			res.send("400");

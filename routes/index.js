@@ -75,7 +75,7 @@ exports.servicedo = function(req, res) {
 		});
 	} else if(_sql == "bookend") {
 		var bookingno = req.param("bookingno");
-		var sql1 = "update sbooking set state_id = 5 where bookingno = '" + bookingno + "'";
+		var sql1 = "update sbooking set state_id = 4 where bookingno = '" + bookingno + "'";
 		mysql.query(sql1, function(error, obj) {
 			res.send(obj);
 		});
