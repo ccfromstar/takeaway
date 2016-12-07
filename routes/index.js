@@ -957,7 +957,7 @@ function paysignjsapi(appid, attach, body, mch_id, nonce_str, notify_url, openid
 };
 
 exports.pay = function(req, res) {
-	console.log('run');
+	console.log('run--p1');
 	var bookingNo = req.query.bookingNo;
 	var total_fee = req.query.total_fee;
 	//var total_fee = 1;
@@ -978,12 +978,14 @@ exports.pay = function(req, res) {
 	//formData  += "<sign>66191B931A9919156237AD17E40856E7</sign>";
 	formData += "<sign>" + paysign('wxe2a20ae8d978330b', 'test', body, '1282215201', 'ibuaiVcKdpRxkhJA', 'http://www.4000191177.com/pay', 'oEDF2xBoerpEFGh3brZPkWfVRZZg', bookingNo, '14.23.150.211', total_fee, 'NATIVE') + "</sign>";
 	formData += "</xml>";
+	console.log(formData);
 	request({
 		url: url,
 		method: 'POST',
 		body: formData
 	}, function(err, response, body) {
 		if(!err && response.statusCode == 200) {
+			console.log('run--p2');
 			console.log(body);
 			var prepay_id = getXMLNodeValue('prepay_id', body.toString("utf-8"));
 			var tmp = prepay_id.split('[');
@@ -992,7 +994,7 @@ exports.pay = function(req, res) {
 			var code_url = getXMLNodeValue('code_url', body.toString("utf-8"));
 			var tmp = code_url.split('[');
 			var tmp3 = tmp[2].split(']');
-
+			
 			res.render('pay', {
 				prepay_id: tmp1[0],
 				code_url: tmp3[0],

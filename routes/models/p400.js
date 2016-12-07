@@ -222,6 +222,7 @@ function createbooking(req, res) {
 }
 
 function createbookingstore(req, res) {
+	console.log('run1');
 	var pricetotal = req.body.price;
 	var detail = req.body.detail;
 	var paytype = req.body.paytype1;
@@ -273,6 +274,7 @@ function createbookingstore(req, res) {
 
 			} else if(paytype == "微信") {
 				//跳转到微信的支付界面
+				console.log('run2');
 				res.redirect('/pay?bookingNo=' + bookingno + '&total_fee=' + (pricetotal * 100));
 			}
 		});
