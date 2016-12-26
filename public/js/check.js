@@ -39,7 +39,7 @@ $(function(){
     	for(var i=0;i<arr1.length;i++){
     		console.log(arr1[i]);
     		if(arr1[i] == "0"){
-    			$('nav').find('li').eq(i).css('display','none');
+    			$('nav').find('.dda').eq(i).css('display','none');
     		}
     	}
     }
