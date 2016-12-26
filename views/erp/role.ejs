@@ -22,6 +22,12 @@
 				</datalist>
 		</td>
 		<td>
+			<input name="r_list1" type="checkbox" value="1" /> 采购管理
+			<input name="r_list2" type="checkbox" value="1" /> 库存管理
+			<input name="r_list3" type="checkbox" value="1" /> 财务管理
+			<input name="r_list4" type="checkbox" value="1" /> 系统管理
+		</td>
+		<td>
 			<input id="store" type="text" placeholder="门店" list="list2" />
 			<datalist id="list2">
 					<%for(var i in obj3){%>
@@ -109,8 +115,27 @@
 		<%}%>
 		$("#content").html(html);
 	}
+	
+	function jqchk(name){ //jquery获取复选框值
+	    var chk_value = '';
+	    $('input[name="' + name + '"]:checked').each(function (){
+	        if (chk_value == ""){
+	            chk_value = $(this).val();
+	        }else{
+	            chk_value = chk_value + "*" + $(this).val();
+	        }
+	    }
+	    );
+	    return chk_value;
+	}
 
 	function add() {
+		/*设置自定义权限*/
+		var r_list1 = (jqchk("r_list1"))==1?1:0;
+		var r_list2 = (jqchk("r_list2"))==1?1:0;
+		var r_list3 = (jqchk("r_list3"))==1?1:0;
+		var r_list4 = (jqchk("r_list4"))==1?1:0;
+		var r_list = r_list1 + "*" + r_list2  + "*" + r_list3  + "*" + r_list4;
 		$.ajax({
 			type: "POST",
 			url: "/erp/insertRole",
@@ -119,7 +144,8 @@
 				password: $("#password").val(),
 				name: $("#name").val(),
 				role_id: $("#role_id").val(),
-				store: $("#store").val()
+				store: $("#store").val(),
+				rolelist: r_list
 			},
 			success: function(data) {
 				if(data == 200) {

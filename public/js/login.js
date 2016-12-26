@@ -54,6 +54,7 @@ $(function() {
 				window.sessionStorage.setItem('croleid',data.role_id);
 				window.sessionStorage.setItem('crolename',data.cname);
 				window.sessionStorage.setItem('cstore',data.store);
+				window.sessionStorage.setItem("crolelist",data.rolelist);
 				window.location = '/erp';
 			}
 		});
