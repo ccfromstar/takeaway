@@ -21,7 +21,7 @@
 					<%}}%>
 				</datalist>
 		</td>
-		<td>
+		<td id="list_detail" style="display:none" >
 			<input name="r_list1" type="checkbox" value="1" /> 采购清单
 			<input name="r_list2" type="checkbox" value="1" /> 入库
 			<input name="r_list3" type="checkbox" value="1" /> 库存数
@@ -99,6 +99,8 @@
 <p>可以看到自己门店的除了系统管理外的所有内容</p>
 <h1>6.超级管理员</h1>
 <p>可以看到自己门店的所有内容</p>
+<h1>6.自定义</h1>
+<p>可以自己定义权限</p>
 </div>
 <script>
 	function getRolebyKey(key,name) {
@@ -188,5 +190,17 @@
 			});
 		}
 	}
+	
+	function set_list_detail(){
+		if($('#role_id').val() == 7){
+			$('#list_detail').show();
+		}else{
+			$('#list_detail').hide();
+		}
+	}
+	
+	setInterval(function(){
+		set_list_detail();
+	},1000);
 </script>
 <% include footer %>
