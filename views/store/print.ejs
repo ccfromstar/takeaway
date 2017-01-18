@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+	<head>
+		<title>打单机控制中心</title>
+		<link href="/css/storelayout.css" rel="stylesheet" type="text/css" />
+		<script src="/js/jquery.min.js"></script>
+		<link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<script src="/plugin/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/js/cookiesoperator.js"></script>
+		<script type="text/javascript" src="/plugin/craftpip/dist/jquery-confirm.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/plugin/craftpip/css/jquery-confirm.css">
+		<link href="/plugin/select2/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="/plugin/select2/dist/js/select2.min.js"></script>
+		<script type="text/javascript" src="/js/fun_weixin.js"></script>
+		<script type="text/javascript" src="/js/jquery.qrcode.min.js"></script>
+		<!-- 插入打印控件 -->
+      <OBJECT  ID="jatoolsPrinter" CLASSID="CLSID:B43D3361-D075-4BE2-87FE-057188254255"
+                  codebase="jatoolsPrinter.cab#version=8,6,0,0"></OBJECT> 
+	</head>
+
+	<body>
+		<div id='page1'  style='width:250px;text-align: center;'>
+          <h3>外卖侠取餐小票</h3>
+            <table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>菜名</th>
+						<th style="width:50px">数量</th>
+						<th>单价</th>
+					</tr>
+				</thead>
+				<tbody id = 'temp_cart'>
+				
+				</tbody>
+			</table>
+			总价：<span id='totalPay'></span>
+			<br/>
+			订单号: <span id='bookingno'></span>
+			<br/>
+			<img id="bookingno_img" src="" ></img>
+       </div>
+		<script>
+			var _id = 0;
+			
+			function doPrint(ip) {
+            myDoc = {
+	                settings:{
+	                  topMargin:100,
+	                  leftMargin:20,
+	                  bottomMargin:100,
+	                  rightMargin:20,
+	                  printer:ip //设置打印机 
+	                },
+	                documents: document,
+	                /*
+	                 要打印的div 对象在本文档中，控件将从本文档中的 id 为 'page1' 的div对象，
+	                 作为首页打印id 为'page2'的作为第二页打印            */
+	                copyrights: '杰创软件拥有版权  www.jatools.com' // 版权声明,必须   
+	            };
+	            document.getElementById("jatoolsPrinter").print(myDoc, false); // 直接打印，不弹出打印机设置对话框 
+	        }
+			
+			function getList() {
+				$.ajax({
+					type: "POST",
+					url: "/service/getPrint",
+					data: {
+						
+					},
+					success: function(data) {
+						/*获取打票信息打票*/
+						if(data != "200"){
+							$('#temp_cart').html(data[0].detail);
+							$('#totalPay').html(data[0].pricetotal);
+							$('#bookingno').html(data[0].bookingno);
+							$('#bookingno_img').attr("src","http://qrcode.shuogesha.com/qrcode?pixel=100_100&content="+data[0].bookingno);
+							$("#code").qrcode({
+								render: "table", //table方式
+								width: 150, //宽度
+								height: 150, //高度
+								text: data[0].bookingno //任意内容
+							});
+							doPrint(data[0].printIP);
+							console.log(data[0].printIP+'打票成功！');
+							//doPrint("POS-58C");  //厨房打单机
+							//console.log('POS-58C打票成功！');
+						}
+						
+					}
+				});
+			}
+			
+			var t = setInterval(function() {
+				getList();
+			}, 3000);
+			
+			getList();
+		</script>
+	</body>
+
+</html>

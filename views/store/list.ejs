@@ -1,35 +1,32 @@
 <% include header %>
+<image src="../img/logo2.jpg" style="width:100%"></image>
 <ul id="myTab" class="nav nav-tabs">
     <li class="active">
         <a href="#item1" data-toggle="tab">
-                      盖浇饭
+            	爆款
         </a>
     </li>
-    <li><a href="#item2" data-toggle="tab">配菜</a></li>
+    <li><a href="#item5" data-toggle="tab">主食</a></li>
+    <!--<li><a href="#item2" data-toggle="tab">配菜</a></li>
     <li><a href="#item3" data-toggle="tab">饮料</a></li>
+    <li><a href="#item4" data-toggle="tab">侠酱</a></li>-->
 </ul>
 <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade in active" id="item1">
     	<%for(var i in menu_s){
-    		if(menu_s[i].maincourse == '盖浇饭'){%>
+    		if(menu_s[i].maincourse == '爆款'){%>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<%=menu_s[i].name%>
 				</div>
 				<div class="panel-body">
-					<figure>
+					<figure onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
 						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
 						<figcaption>
 							<%=menu_s[i].jardiniere%>
+							<span class="badge pull-right">¥<%=menu_s[i].price%></span>
 						</figcaption>
 					</figure>
-					<ul class="nav nav-pills nav-stacked">
-						<li class="active">
-							<a href="#" onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
-								<span class="badge pull-right">价格：¥<%=menu_s[i].price%></span>点餐
-							</a>
-						</li>
-					</ul>
 				</div>
 			</div>
 		<%}
@@ -43,19 +40,13 @@
 					<%=menu_s[i].name%>
 				</div>
 				<div class="panel-body">
-					<figure>
+					<figure onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
 						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
 						<figcaption>
 							<%=menu_s[i].jardiniere%>
+							<span class="badge pull-right">¥<%=menu_s[i].price%></span>
 						</figcaption>
 					</figure>
-					<ul class="nav nav-pills nav-stacked">
-						<li class="active">
-							<a href="#" onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
-								<span class="badge pull-right">价格：¥<%=menu_s[i].price%></span>点餐
-							</a>
-						</li>
-					</ul>
 				</div>
 			</div>
 		<%}
@@ -69,19 +60,53 @@
 					<%=menu_s[i].name%>
 				</div>
 				<div class="panel-body">
-					<figure>
+					<figure onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
 						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
 						<figcaption>
 							<%=menu_s[i].jardiniere%>
+							<span class="badge pull-right">¥<%=menu_s[i].price%></span>
 						</figcaption>
 					</figure>
-					<ul class="nav nav-pills nav-stacked">
-						<li class="active">
-							<a href="#" onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
-								<span class="badge pull-right">价格：¥<%=menu_s[i].price%></span>点餐
-							</a>
-						</li>
-					</ul>
+				</div>
+			</div>
+		<%}
+		}%>
+    </div>
+    <div class="tab-pane fade" id="item4">
+        <%for(var i in menu_s){
+    		if(menu_s[i].maincourse == '侠酱'){%>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<%=menu_s[i].name%>
+				</div>
+				<div class="panel-body">
+					<figure onclick="showInfo(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+						<figcaption>
+							<%=menu_s[i].jardiniere%>
+							<span class="badge pull-right">¥<%=menu_s[i].price%></span>
+						</figcaption>
+					</figure>
+				</div>
+			</div>
+		<%}
+		}%>
+    </div>
+    <div class="tab-pane fade" id="item5">
+        <%for(var i in menu_s){
+    		if(menu_s[i].maincourse == '主食'){%>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<%=menu_s[i].name%>
+				</div>
+				<div class="panel-body">
+					<figure onclick="showInfoZS(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+						<figcaption>
+							<%=menu_s[i].jardiniere%>
+							<span class="badge pull-right">¥<%=menu_s[i].price%></span>
+						</figcaption>
+					</figure>
 				</div>
 			</div>
 		<%}
@@ -128,9 +153,10 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">请确认份数</h4>
+				<h4 class="modal-title" id="myModalLabel">请确认数量</h4>
 			</div>
 			<div class="modal-body">
+				<label for="cnum">请确认数量</label>
 				<input type="number" class="form-control" id="cnum" value="1" />
 				<!--
 				<% include fl %>
@@ -138,7 +164,29 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button type="button" class="btn btn-primary" onclick="sureBooking()">确定</button>
+				<button type="button" class="btn btn-primary" onclick="sureBooking()">加入购物车</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal -->
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">请确认数量</h4>
+			</div>
+			<div class="modal-body">
+				<label for="cnum">请确认数量</label>
+				<input type="number" class="form-control" id="cnum1" value="1" />
+				<% include fl %>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" onclick="sureBookingZS()">加入购物车</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -148,11 +196,23 @@
 <script>
 	var _id,_name,_price;
 	var _list = [];
+	var ip = window.localStorage.getItem("IP");
+	if(!ip || ip == "null"){
+		ip = prompt("请配置ip地址:","");
+		window.localStorage.setItem("IP",ip);
+	}
 	function showInfo(id,name,price){
 		_id = id;
 		_name = name;
 		_price = price;
 		$('#myModal').modal('show');
+	}
+	
+	function showInfoZS(id,name,price){
+		_id = id;
+		_name = name;
+		_price = price;
+		$('#myModal1').modal('show');
 	}
 	
 	function sureBooking(){
@@ -164,6 +224,18 @@
 		};
 		_list.push(item);
 		$('#myModal').modal('hide');
+		console.log(_list);
+	}
+	
+	function sureBookingZS(){
+		var item = {
+			id : _id,
+			name : _name + "("+jqradio('fl1')+")",
+			price : _price,
+			num : $('#cnum1').val()
+		};
+		_list.push(item);
+		$('#myModal1').modal('hide');
 		console.log(_list);
 	}
 	

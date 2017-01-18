@@ -69,7 +69,7 @@ exports.servicedo = function(req, res) {
 		});
 	} else if(_sql == "bookfinish") {
 		var bookingno = req.param("bookingno");
-		var sql1 = "update sbooking set state_id = 3 where bookingno = '" + bookingno + "'";
+		var sql1 = "update sbooking set state_id = 3 where state_id = 1 and bookingno = '" + bookingno + "'";
 		mysql.query(sql1, function(error, obj) {
 			res.send(obj);
 		});
@@ -79,7 +79,35 @@ exports.servicedo = function(req, res) {
 		mysql.query(sql1, function(error, obj) {
 			res.send(obj);
 		});
-	}
+	} else if(_sql == "getPrint") {
+		var sql1 = "select * from sbooking where isPrint = 0 and state_id = 3";
+		mysql.query(sql1, function(error, obj) {
+			console.log(obj[0]);
+			if(!obj[0]){
+				res.send("200");
+			}else{
+				var s = obj[0];
+				var sql2 = "update sbooking set isPrint = 1 where bookingno = '" + s.bookingno + "'";
+				mysql.query(sql2, function(error, obj2) {
+					res.send(obj);
+				});
+			}
+		});
+	} else if(_sql == "getPrintc") {
+		var sql1 = "select * from sbooking where isPrint = 1 and state_id = 3";
+		mysql.query(sql1, function(error, obj) {
+			console.log(obj[0]);
+			if(!obj[0]){
+				res.send("200");
+			}else{
+				var s = obj[0];
+				var sql2 = "update sbooking set isPrint = 2 where bookingno = '" + s.bookingno + "'";
+				mysql.query(sql2, function(error, obj2) {
+					res.send(obj);
+				});
+			}
+		});
+	} 
 }
 
 exports.runSQL = function(req, res) {
@@ -1140,7 +1168,7 @@ exports.paydo = function(req, res) {
 		var tmp = out_trade_no.split('[');
 		var tmp1 = tmp[2].split(']');
 		var bookingno = tmp1[0];
-		var sql1 = "update sbooking set state_id = 2 where bookingno = '" + bookingno + "'";
+		var sql1 = "update sbooking set state_id = 3 where state_id = 1 and bookingno = '" + bookingno + "'";
 		mysql.query(sql1, function(error, obj) {
 			if(error) {
 				console.log(error);
@@ -1529,6 +1557,7 @@ exports.erp_home = function(req, res) {
 /*store begin*/
 exports.s_list = function(req, res) {
 	var sql3 = "select m.maincourse,m.jardiniere,m.staplefood,m.imgname,m.id,m.name,m.price,m.aheadprice,r.numtoday,r.numtomorrow from menu m left join repertory r on r.menuid = m.id order by m.sortid asc";
+	console.log(sql3);
 	mysql.query(sql3, function(err3, rows3) {
 		if(err3) {
 			console.log(err3);
@@ -1547,7 +1576,7 @@ exports.s_cart = function(req, res) {
 
 exports.s_bookingsuccess = function(req, res) {
 	var alipay_id = req.session.alipay_id;
-	var sql1 = "update sbooking set state_id = 2 where bookingno = '" + alipay_id + "'";
+	var sql1 = "update sbooking set state_id = 3 where state_id = 1 and bookingno = '" + alipay_id + "'";
 	console.log(sql1);
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
@@ -1566,6 +1595,14 @@ exports.s_kitchen = function(req, res) {
 
 exports.s_wait = function(req, res) {
 	res.render('store/wait');
+}
+
+exports.s_print = function(req, res) {
+	res.render('store/print');
+}
+
+exports.s_cprint = function(req, res) {
+	res.render('store/cprint');
 }
 
 exports.scan_js = function(req, res) {

@@ -66,7 +66,7 @@ function getpay(req, res) {
 			console.log(error);
 			return false;
 		}
-		if(obj[0].state_id == 2) {
+		if(obj[0].state_id == 3) {
 			req.session.alipay_id = id;
 			res.send("200");
 		} else {
@@ -226,6 +226,7 @@ function createbookingstore(req, res) {
 	var pricetotal = req.body.price;
 	var detail = req.body.detail;
 	var paytype = req.body.paytype1;
+	var ip = req.body.ip;
 	var myDate = new Date();
 	var y = myDate.getFullYear() + "";
 	var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1) + "";
@@ -250,7 +251,7 @@ function createbookingstore(req, res) {
 			_bno = "0" + _bno;
 		}
 		bookingno = bookingno + _bno;
-		var sql1 = "insert into sbooking (bookingno,pricetotal,detail) values ('" + bookingno + "'," + pricetotal + ",'" + detail + "')";
+		var sql1 = "insert into sbooking (bookingno,pricetotal,detail,printIP) values ('" + bookingno + "'," + pricetotal + ",'" + detail + "','"+ip+"')";
 		console.log(sql1);
 		mysql.query(sql1, function(err1, rows1) {
 			if(err1) {

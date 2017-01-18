@@ -793,14 +793,7 @@ function delCM(req, res) {
 };
 
 function getUninOrd(req, res) {
-	var k_store = req.param('k_store');
-	var k_category = req.param('k_category');
-	var k_date = req.param('k_date');
-	k_category = k_category == '所有' ? '' : k_category;
-	k_store = k_store == '所有' ? '' : k_store;
-	//var sql1 = "select * from c_orderlist where inStock = '未入库' order by id desc";
-	var sql1 = "select * from c_orderlist where store like '%" + k_store + "%' and category like '%" + k_category + "%' and date like '%" + k_date + "%' and inStock = '未入库' order by id desc";
-	console.log(sql1);
+	var sql1 = "select * from c_orderlist where inStock = '未入库' order by id desc";
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
 			console.log(error);
@@ -828,8 +821,7 @@ function insertRole(req, res) {
 	var name = req.param('name');
 	var role_id = req.param('role_id');
 	var store = req.param('store');
-	var rolelist = req.param('rolelist');
-	var sql1 = "insert into erprole (username,password,name,role_id,store,rolelist) values ('" + username + "','" + password + "','" + name + "'," + role_id + ",'" + store + "','"+rolelist+"')";
+	var sql1 = "insert into erprole (username,password,name,role_id,store) values ('" + username + "','" + password + "','" + name + "'," + role_id + ",'" + store + "')";
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);

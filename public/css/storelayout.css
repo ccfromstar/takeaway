@@ -1,6 +1,6 @@
-*{margin:0;padding:0;font-size:14px;font-family:微软雅黑;color: #797979;}
+*{margin:0;padding:0;font-size:14px;font-family:微软雅黑;color: #fff;}
 .arrow{margin-top:220px;}
-.menuImg{width:100%;}
+.menuImg{width:70%;}
 figcaption{padding:10px 0}
 label{margin-top:5px}
 .flimg{width:100px;height:100px;}
@@ -42,7 +42,7 @@ label{margin-top:5px}
 #table_list_front th{text-align: center;line-height: 25px;}
 .topright{cursor:pointer;color:#FFFFFF;font-size:14px;margin-top: 8px;}
 .topright_no{color:#FFFFFF;font-size:14px;margin-top: 8px;}
-.float_bottom_div{position:fixed;bottom: 0px;width:100%;background-color:rgba(0,0,0,0.8);height:60px;}
+.float_bottom_div{position:fixed;bottom: 0px;width:100%;background-color:#EC7000;height:60px;}
 .tdtop{vertical-align:middle;}
 .optiontable td{padding:3px;}
 .loginactive{
@@ -133,3 +133,51 @@ label{margin-top:5px}
 	width: 100%;
 	min-height: 200px;
 }
+.nav>li>a{
+	padding:10px 15px !important;
+}
+.panel-body,body{
+	background-color: #131313 !important;
+}
+.panel-primary>.panel-heading,.btn-primary{
+	background-color: #EC7000 !important;
+	border-color: #EC7000 !important;
+}
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{
+	background-color: #EC7000 !important;
+}
+.nav-tabs>li>a{
+	font-size: 26px !important;
+	color:#EC7000;
+}
+.panel-primary{
+	border-color: #131313 !important;
+}
+figure{
+	text-align: center;
+}
+.panel-primary>.panel-heading{
+	text-align: center;
+}
+.badge, .nav-pills>.active>a>.badge{
+	font-size: 32px !important;
+	color:#fff;
+}
+figcaption{
+	font-size: 20px !important;
+	color:#fff;
+}
+.badge{
+	background-color: #131313 !important;
+}
+label{
+	color:#000;
+}
+.list-group-item{
+	background-color:#131313 !important;
+	font-size: 20px;
+}
+.panel-title{
+	font-family:微软雅黑 !important;
+}
+

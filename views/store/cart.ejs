@@ -30,6 +30,7 @@
 		<input type="hidden" name="price" id="price" />
 		<input type="hidden" name="detail" id="detail" />
 		<input type="hidden" name="paytype1" value="微信" />
+		<input type="hidden" name="ip" id="ip" />
 	</form>
 </div>
 <script>
@@ -53,6 +54,7 @@
 	function submitPay(){
 		$('#price').val(totalPay);
 		$('#detail').val(temp_cart);
+		$('#ip').val(window.localStorage.getItem("IP"));
 		document.booking.submit();
 	}
 </script>
