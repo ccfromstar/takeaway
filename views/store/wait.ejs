@@ -16,40 +16,80 @@
 		<script type="text/javascript" src="/js/fun_weixin.js"></script>
 		<script type="text/javascript" src="/js/jquery.qrcode.min.js"></script>
 		<style>
-			.left {
-				float: left;
-				width: 50%;
-			}
-			
-			.right {
-				float: right;
-				width: 50%;
+			h3 {
+				font-size:40px !important;
 			}
 		</style>
 	</head>
 
 	<body>
-		<div class="left">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">准备中</h3>
-				</div>
+		<table style="width:100%;">
+			<tr>
+				<td style="width:30%;vertical-align:top;">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">准备中</h3>
+						</div>
+						<div class="panel-body">
+							<ul id="list1" class="list-group">
+							</ul>
+						</div>
+					</div>
+				</td>
+				<td style="width:70%;vertical-align:top;">
+					<div class="panel panel-primary">
 				<div class="panel-body">
-					<ul id="list1" class="list-group">
-					</ul>
+					<div id="myCarousel" class="carousel slide" data-ride="carousel">
+					    <!-- 轮播（Carousel）指标 
+					    <ol class="carousel-indicators">
+					        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					        <li data-target="#myCarousel" data-slide-to="1"></li>
+					        <li data-target="#myCarousel" data-slide-to="2"></li>
+					    </ol>   -->
+					    <!-- 轮播（Carousel）项目 -->
+					    <div class="carousel-inner">
+					        <div class="item active">
+					            <img src="/img/adv/1.png" style="width:100%" alt="First slide">
+					            <div class="carousel-caption"></div>
+					        </div>
+					        <div class="item">
+					            <img src="/img/adv/2.png" style="width:100%" alt="Second slide">
+					            <div class="carousel-caption"></div>
+					        </div>
+					        <div class="item">
+					            <img src="/img/adv/3.png" style="width:100%" alt="Third slide">
+					            <div class="carousel-caption"></div>
+					        </div>
+					        <div class="item">
+					            <img src="/img/adv/4.png" style="width:100%" alt="Third slide">
+					            <div class="carousel-caption"></div>
+					        </div>
+					        <div class="item">
+					            <img src="/img/adv/5.png" style="width:100%" alt="Third slide">
+					            <div class="carousel-caption"></div>
+					        </div>
+					        <div class="item">
+					            <img src="/img/adv/6.png" style="width:100%" alt="Third slide">
+					            <div class="carousel-caption"></div>
+					        </div>
+					        <div class="item">
+					            <img src="/img/adv/7.png" style="width:100%" alt="Third slide">
+					            <div class="carousel-caption"></div>
+					        </div>
+					    </div>
+					    <!-- 轮播（Carousel）导航 -->
+					    <a class="carousel-control left" href="#myCarousel" 
+					        data-slide="prev">
+					    </a>
+					    <a class="carousel-control right" href="#myCarousel" 
+					        data-slide="next">
+					    </a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="right">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">广告区</h3>
-				</div>
-				<div class="panel-body">
-					
-				</div>
-			</div>
-		</div>
+				</td>
+			</tr>
+		</table>
 		<script>
 			var _id = 0;
 			function getList() {
