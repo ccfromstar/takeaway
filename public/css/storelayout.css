@@ -1,4 +1,4 @@
-*{margin:0;padding:0;font-size:14px;font-family:微软雅黑;color: #fff;}
+*{margin:0;padding:0;font-size:20px;font-family:微软雅黑;color: #fff;}
 .arrow{margin-top:220px;}
 .menuImg{width:70%;}
 figcaption{padding:10px 0}
@@ -42,7 +42,7 @@ label{margin-top:5px}
 #table_list_front th{text-align: center;line-height: 25px;}
 .topright{cursor:pointer;color:#FFFFFF;font-size:14px;margin-top: 8px;}
 .topright_no{color:#FFFFFF;font-size:14px;margin-top: 8px;}
-.float_bottom_div{position:fixed;bottom: 0px;width:100%;background-color:#EC7000;height:60px;}
+.float_bottom_div{position:fixed;bottom: 0px;width:100%;background-color:#FCD034;height:60px;}
 .tdtop{vertical-align:middle;}
 .optiontable td{padding:3px;}
 .loginactive{
@@ -140,14 +140,14 @@ label{margin-top:5px}
 	background-color: #131313 !important;
 }
 .panel-primary>.panel-heading,.btn-primary{
-	background-color: #EC7000 !important;
-	border-color: #EC7000 !important;
+	background-color: #FE5200 !important;
+	border-color: #FE5200 !important;
 }
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{
 	background-color: #EC7000 !important;
 }
 .nav-tabs>li>a{
-	font-size: 26px !important;
+	font-size: 36px !important;
 	color:#EC7000;
 }
 .panel-primary{
@@ -179,5 +179,8 @@ label{
 }
 .panel-title{
 	font-family:微软雅黑 !important;
+}
+.checkbox-inline{
+	font-size: 20px;
 }
 

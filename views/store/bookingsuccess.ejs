@@ -1,5 +1,5 @@
 <% include header %>
-<div class="panel panel-success">
+<div class="panel panel-success" onclick="cancelPay()" style="height:1000px;background-color:#131313 !important;">
     <div class="panel-heading">
         <h3 class="panel-title">提示信息</h3>
     </div>
@@ -8,7 +8,8 @@
         <p>您的取餐编号为：<%=no%></p>
         <br/>
         <p>请凭小票取餐</p>       
-        <button type="button" class="btn btn-default" onclick="cancelPay()">关闭</button>
+        <!--<button type="button" class="btn btn-default" onclick="cancelPay()">关闭</button>-->
+        <p>请点击屏幕跳回点餐界面</p>
     </div>
 </div>
 <script>
