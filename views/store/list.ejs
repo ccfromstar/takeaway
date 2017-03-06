@@ -101,14 +101,27 @@
 					<%=menu_s[i].name%>
 				</div>
 				<div class="panel-body">
-					<figure onclick="showInfoZS(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
-						<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
-						<figcaption>
-							<%=menu_s[i].jardiniere%>
-							<p><span class="badge pull-right">园区友情价¥<%=menu_s[i].price%></span>
-							<span class="badge pull-right">原价¥<%=menu_s[i].aheadprice%></span></p>
-						</figcaption>
-					</figure>
+					<%
+						var n = menu_s[i].name;
+						if(n.indexOf('田鸡')==-1){%>
+						<figure onclick="showInfoZS(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+							<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+							<figcaption>
+								<%=menu_s[i].jardiniere%>
+								<p><span class="badge pull-right">园区友情价¥<%=menu_s[i].price%></span>
+								<span class="badge pull-right">原价¥<%=menu_s[i].aheadprice%></span></p>
+							</figcaption>
+						</figure>
+					<%}else{%>
+						<figure onclick="showInfoMIAN(<%=menu_s[i].id%>,'<%=menu_s[i].name%>',<%=menu_s[i].price%>)">
+							<img src="../pic/<%=menu_s[i].imgname%>" class="img-thumbnail menuImg">
+							<figcaption>
+								<%=menu_s[i].jardiniere%>
+								<p><span class="badge pull-right">园区友情价¥<%=menu_s[i].price%></span>
+								<span class="badge pull-right">原价¥<%=menu_s[i].aheadprice%></span></p>
+							</figcaption>
+						</figure>
+					<%}%>
 				</div>
 			</div>
 		<%}
@@ -195,6 +208,28 @@
 	</div>
 	<!-- /.modal -->
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">请确认数量</h4>
+			</div>
+			<div class="modal-body">
+				<label for="cnum">请确认数量</label>
+				<input type="number" class="form-control" id="cnum1" value="1" />
+				<% include fl2 %>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" onclick="sureBookingMIAN()">加入购物车</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal -->
+</div>
 <script>
 	var _id,_name,_price;
 	var _list = [];
@@ -215,6 +250,13 @@
 		_name = name;
 		_price = price;
 		$('#myModal1').modal('show');
+	}
+	
+	function showInfoMIAN(id,name,price){
+		_id = id;
+		_name = name;
+		_price = price;
+		$('#myModal2').modal('show');
 	}
 	
 	function sureBooking(){
@@ -238,6 +280,18 @@
 		};
 		_list.push(item);
 		$('#myModal1').modal('hide');
+		console.log(_list);
+	}
+	
+	function sureBookingMIAN(){
+		var item = {
+			id : _id,
+			name : _name + "("+jqradio('fl2')+")",
+			price : _price,
+			num : $('#cnum1').val()
+		};
+		_list.push(item);
+		$('#myModal2').modal('hide');
 		console.log(_list);
 	}
 	
