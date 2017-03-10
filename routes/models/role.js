@@ -22,7 +22,7 @@ exports.sqldo = function (req, res) {
 function sendSMS(req,res){
     var mobile = req.param('mobile');
     var code = req.param('code');
-    var url = "http://121.199.16.178/webservice/sms.php?method=Submit&account=cf_michaelgaolove&password=michaelgaolove&mobile="+mobile+"&content=您的动态码是："+code+"。请不要把动态码泄露给其他人。";
+    var url = "http://121.199.16.178/webservice/sms.php?method=Submit&account=&password=&mobile="+mobile+"&content=您的动态码是："+code+"。请不要把动态码泄露给其他人。";
     request(url,function(err,response,body){
         if(!err && response.statusCode == 200){
               console.log(body);
