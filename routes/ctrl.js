@@ -31,6 +31,8 @@ module.exports = function (app, routes) {
     app.get('/weixin/list',routes.w_list);
     app.post('/weixin/getAddressByAPI',routes.getAddressByAPI);
     
+    app.get('/weixin/export',routes.w_export);
+    
     //store门店
     app.get('/store/list',routes.s_list);
     app.get('/store/cart',routes.s_cart);

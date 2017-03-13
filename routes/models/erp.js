@@ -76,6 +76,8 @@ exports.sqldo = function(req, res) {
 		toExcelputinD(req, res);
 	} else if(_sql == "toExcelputoutD") {
 		toExcelputoutD(req, res);
+	} else if(_sql == "toExcelRB"){
+		toExcelRB(req,res);
 	}
 	
 };
@@ -947,4 +949,41 @@ function toExcelputoutD(req, res) {
 			res.send(excelname);
 		});
 	});
+}
+
+function toExcelRB(req, res) {
+	var bookingno = req.param('d');
+	var s1 = bookingno.replace('-','');
+	s1 = s1.replace('-','');
+	//console.log(s1);
+	//获得Excel模板的buffer对象
+	var exlBuf = fs.readFileSync("./public/excelop/template/store1.xlsx");
+	var excelname = setFileName1(bookingno);
+	//数据源
+	
+	var sql1 = "select * from sbooking where bookingno like '"+s1+"%' order by id asc";
+	//console.log(sql1);
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		console.log(obj);
+		//用数据源(对象)data渲染Excel模板
+		var obj_str = '[ [{"date": "123"}],';
+		obj_str += JSON.stringify(obj) + "]";
+		//console.log(obj_str);
+		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+			res.send(excelname);
+		});
+	});
+}
+
+function setFileName1(bn) {
+	var myDate = new Date();
+	var hh = myDate.getHours();
+	var mm = myDate.getMinutes();
+	var ss = myDate.getSeconds();
+	return bn + "____" + hh + mm + ss + ".xlsx";
 }

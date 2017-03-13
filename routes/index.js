@@ -670,6 +670,12 @@ exports.w_list = function(req, res) {
 	});
 }
 
+exports.w_export = function(req,res){
+		res.render('weixin/export', {
+			
+		});
+}
+
 exports.reg = function(req, res) {
 	res.render('front/reg');
 };
