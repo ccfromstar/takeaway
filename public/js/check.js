@@ -8,6 +8,7 @@ $(function(){
 
     /*权限判断*/
     var rid = window.sessionStorage.getItem('croleid');
+    var rolelist = window.sessionStorage.getItem('crolelist');
 
     if(rid == 1){
         $('nav').find('a').eq(2).css('display','none');
@@ -33,6 +34,14 @@ $(function(){
         //$('nav').find('li').eq(3).css('display','none');
         $('nav').find('a').eq(10).css('display','none');
         $('nav').find('a').eq(11).css('display','none');
+    }else if(rid == 7){
+    	var arr1 = rolelist.split("*");
+    	for(var i=0;i<arr1.length;i++){
+    		console.log(arr1[i]);
+    		if(arr1[i] == "0"){
+    			$('nav').find('.dda').eq(i).css('display','none');
+    		}
+    	}
     }
 
 

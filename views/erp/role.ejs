@@ -21,6 +21,19 @@
 					<%}}%>
 				</datalist>
 		</td>
+		<td id="list_detail" style="display:none" >
+			<input name="r_list1" type="checkbox" value="1" /> 采购清单
+			<input name="r_list2" type="checkbox" value="1" /> 入库
+			<input name="r_list3" type="checkbox" value="1" /> 库存数
+			<input name="r_list4" type="checkbox" value="1" /> 出库
+			<input name="r_list5" type="checkbox" value="1" /> 日报表
+			<input name="r_list6" type="checkbox" value="1" /> 月报表
+			<input name="r_list7" type="checkbox" value="1" /> 门店
+			<input name="r_list8" type="checkbox" value="1" /> 分类
+			<input name="r_list9" type="checkbox" value="1" /> 材料类别
+			<input name="r_list10" type="checkbox" value="1" /> 材料
+			<input name="r_list11" type="checkbox" value="1" /> 用户权限
+		</td>
 		<td>
 			<input id="store" type="text" placeholder="门店" list="list2" />
 			<datalist id="list2">
@@ -86,6 +99,8 @@
 <p>可以看到自己门店的除了系统管理外的所有内容</p>
 <h1>6.超级管理员</h1>
 <p>可以看到自己门店的所有内容</p>
+<h1>6.自定义</h1>
+<p>可以自己定义权限</p>
 </div>
 <script>
 	function getRolebyKey(key,name) {
@@ -109,8 +124,34 @@
 		<%}%>
 		$("#content").html(html);
 	}
+	
+	function jqchk(name){ //jquery获取复选框值
+	    var chk_value = '';
+	    $('input[name="' + name + '"]:checked').each(function (){
+	        if (chk_value == ""){
+	            chk_value = $(this).val();
+	        }else{
+	            chk_value = chk_value + "*" + $(this).val();
+	        }
+	    }
+	    );
+	    return chk_value;
+	}
 
 	function add() {
+		/*设置自定义权限*/
+		var r_list1 = (jqchk("r_list1"))==1?1:0;
+		var r_list2 = (jqchk("r_list2"))==1?1:0;
+		var r_list3 = (jqchk("r_list3"))==1?1:0;
+		var r_list4 = (jqchk("r_list4"))==1?1:0;
+		var r_list5 = (jqchk("r_list5"))==1?1:0;
+		var r_list6 = (jqchk("r_list6"))==1?1:0;
+		var r_list7 = (jqchk("r_list7"))==1?1:0;
+		var r_list8 = (jqchk("r_list8"))==1?1:0;
+		var r_list9 = (jqchk("r_list9"))==1?1:0;
+		var r_list10 = (jqchk("r_list10"))==1?1:0;
+		var r_list11 = (jqchk("r_list11"))==1?1:0;
+		var r_list = r_list1 + "*" + r_list2  + "*" + r_list3  + "*" + r_list4  + "*" + r_list5  + "*" + r_list6  + "*" + r_list7  + "*" + r_list8  + "*" + r_list9  + "*" + r_list10  + "*" + r_list11;
 		$.ajax({
 			type: "POST",
 			url: "/erp/insertRole",
@@ -119,7 +160,8 @@
 				password: $("#password").val(),
 				name: $("#name").val(),
 				role_id: $("#role_id").val(),
-				store: $("#store").val()
+				store: $("#store").val(),
+				rolelist: r_list
 			},
 			success: function(data) {
 				if(data == 200) {
@@ -148,5 +190,17 @@
 			});
 		}
 	}
+	
+	function set_list_detail(){
+		if($('#role_id').val() == 7){
+			$('#list_detail').show();
+		}else{
+			$('#list_detail').hide();
+		}
+	}
+	
+	setInterval(function(){
+		set_list_detail();
+	},1000);
 </script>
 <% include footer %>

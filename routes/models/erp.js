@@ -823,7 +823,8 @@ function insertRole(req, res) {
 	var name = req.param('name');
 	var role_id = req.param('role_id');
 	var store = req.param('store');
-	var sql1 = "insert into erprole (username,password,name,role_id,store) values ('" + username + "','" + password + "','" + name + "'," + role_id + ",'" + store + "')";
+	var rolelist = req.param('rolelist');
+	var sql1 = "insert into erprole (username,password,name,role_id,store,rolelist) values ('" + username + "','" + password + "','" + name + "'," + role_id + ",'" + store + "','" + rolelist + "')";
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
