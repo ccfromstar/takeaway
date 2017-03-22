@@ -1611,6 +1611,10 @@ exports.s_cprint = function(req, res) {
 	res.render('store/cprint');
 }
 
+exports.s_tprint = function(req, res) {
+	res.render('store/temp_print');
+}
+
 exports.scan_js = function(req, res) {
 		var timestamp = parseInt(new Date().getTime() / 1000) + '';
 		var nonceStr = Math.random().toString(36).substr(2, 15);

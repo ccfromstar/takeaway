@@ -41,6 +41,7 @@ module.exports = function (app, routes) {
     app.get('/store/wait',routes.s_wait);
     app.get('/store/print',routes.s_print);
     app.get('/store/cprint',routes.s_cprint);
+    app.get('/store/tprint',routes.s_tprint);
     
     app.get('/scan',routes.scan_js);
 

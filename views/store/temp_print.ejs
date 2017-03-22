@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+	<head>
+		<title>临时打单</title>
+		<link href="/css/storelayout1.css" rel="stylesheet" type="text/css" />
+		<script src="/js/jquery.min.js"></script>
+		<link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<script src="/plugin/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/js/cookiesoperator.js"></script>
+		<script type="text/javascript" src="/plugin/craftpip/dist/jquery-confirm.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/plugin/craftpip/css/jquery-confirm.css">
+		<link href="/plugin/select2/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="/plugin/select2/dist/js/select2.min.js"></script>
+		<script type="text/javascript" src="/js/fun_weixin.js"></script>
+		<script type="text/javascript" src="/js/jquery.qrcode.min.js"></script>
+		<!-- 插入打印控件 -->
+      <OBJECT  ID="jatoolsPrinter" CLASSID="CLSID:B43D3361-D075-4BE2-87FE-057188254255"
+                  codebase="jatoolsPrinter.cab#version=8,6,0,0"></OBJECT> 
+	</head>
+
+	<body>
+		<div id='page1'  style='width:250px;text-align: center;'>
+          <h3>外卖侠小票</h3>
+            <table class="table table-bordered">
+				<tr>
+					<td>订单号</td>
+					<td>ld-201703231130-79</td>
+				</tr>
+				<tr>
+					<td>类型</td>
+					<td>零点</td>
+				</tr>
+				<tr>
+					<td>下单时间</td>
+					<td>2017-3-21 21:02:21</td>
+				</tr>
+				<tr>
+					<td>预定送餐时间</td>
+					<td>2017-3-23 11:30:00</td>
+				</tr>
+				<tr>
+					<td>客户</td>
+					<td>Ellen Wang</td>
+				</tr>
+				<tr>
+					<td>总价</td>
+					<td>1044</td>
+				</tr>
+				<tr>
+					<td>联系电话</td>
+					<td>13671713024</td>
+				</tr>
+				<tr>
+					<td>配送地址</td>
+					<td>上海市中环内环以外(20份起送) 长宁区福泉北路518号9号楼5楼</td>
+				</tr>
+				<tr>
+					<td>付款状态</td>
+					<td>已付款</td>
+				</tr>
+				<tr>
+					<td>配送状态</td>
+					<td>已确认</td>
+				</tr>
+				<tr>
+					<td>抬头信息</td>
+					<td>泰克科技（中国）有限公司</td>
+				</tr>
+				<tr>
+					<td>菜品</td>
+					<td>外卖侠麻辣鸡米套餐7份；千页豆腐五花肉套餐7份；酱烧超级狮子头套餐8份；文火煮香辣牛腩套餐9份；老上海手切辣肉套餐7份。</td>
+				</tr>
+				<tr>
+					<td>备注</td>
+					<td>微辣，需要消费水单</td>
+				</tr>
+			</table>
+       </div>
+       
+		<script>
+			var _id = 0;
+			
+			function doPrint(ip) {
+            myDoc = {
+	                settings:{
+	                  topMargin:100,
+	                  leftMargin:20,
+	                  bottomMargin:100,
+	                  rightMargin:20,
+	                  printer:ip //设置打印机 
+	                },
+	                documents: document,
+	                /*
+	                 要打印的div 对象在本文档中，控件将从本文档中的 id 为 'page1' 的div对象，
+	                 作为首页打印id 为'page2'的作为第二页打印            */
+	                copyrights: '杰创软件拥有版权  www.jatools.com' // 版权声明,必须   
+	            };
+	            document.getElementById("jatoolsPrinter").print(myDoc, false); // 直接打印，不弹出打印机设置对话框 
+	        }
+			
+			function print(){
+				doPrint("POS-58C");  //厨房打单机
+				console.log('POS-58C打票成功！');
+			}
+			
+			function getList() {
+				$.ajax({
+					type: "POST",
+					url: "/service/getPrintc",
+					data: {
+						
+					},
+					success: function(data) {
+						/*获取打票信息打票*/
+						if(data != "200"){
+							$('#temp_cart').html(data[0].detail);
+							$('#totalPay').html(data[0].pricetotal);
+							$('#bookingno').html(data[0].bookingno);
+							$('#bookingno_img').attr("src","http://qrcode.shuogesha.com/qrcode?pixel=100_100&content="+data[0].bookingno);
+							$("#code").qrcode({
+								render: "table", //table方式
+								width: 150, //宽度
+								height: 150, //高度
+								text: data[0].bookingno //任意内容
+							});
+							//doPrint(data[0].printIP);
+							//console.log(data[0].printIP+'打票成功！');
+							doPrint("POS-58C");  //厨房打单机
+							console.log('POS-58C打票成功！');
+						}
+						
+					}
+				});
+			}
+			
+			/*
+			var t = setInterval(function() {
+				getList();
+			}, 3000);
+			
+			getList();*/
+			
+			print();
+		</script>
+	</body>
+
+</html>
