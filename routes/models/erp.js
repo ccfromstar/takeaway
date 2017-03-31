@@ -78,6 +78,8 @@ exports.sqldo = function(req, res) {
 		toExcelputoutD(req, res);
 	} else if(_sql == "toExcelRB"){
 		toExcelRB(req,res);
+	} else if(_sql == "moveStock"){
+		moveStock(req,res);
 	}
 	
 };
@@ -328,6 +330,24 @@ function insertM(req, res) {
 		res.send('200');
 	});
 };
+
+function moveStock(req, res) {
+	var f_store = req.param('f_store');
+	var s_material = req.param('s_material');
+	var s_unitPrice = req.param('s_unitPrice');
+	var m_category = req.param('m_category');
+	var s_sum = req.param('s_sum');
+	var t_store = req.param('t_store');
+	var sql1 = "insert into move_stock (f_store,s_material,s_sum,t_store,s_unitPrice,m_category) values ('" + f_store + "','" + s_material + "',"+ s_sum + ",'"+ t_store + "',"+ s_unitPrice + ",'" + m_category + "')";
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
 
 function insertStore(req, res) {
 	var name = req.param('name');

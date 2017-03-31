@@ -47,6 +47,58 @@
 	</tr>
 </table>
 <h2>库存结余金额：<span id="totalout"><%=totalout%></span>元</h2>
+
+<h1>2.移库操作</h1>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="f_store" placeholder="原门店" list="list_f_store" />
+			<datalist id="list_f_store">
+					<%for(var i in obj5){%>
+						<option value="<%=obj5[i].name%>">
+							<%=obj5[i].name%>
+						</option>
+					<%}%>
+			</datalist>
+		</td>
+		<td>
+			<input type="text" id="s_material" placeholder="材料名" list="list_s_material" />
+			<datalist id="list_s_material">
+					<%for(var i in obj6){%>
+						<option value="<%=obj6[i].no+"."+obj6[i].name%>">
+					<%}%>
+			</datalist>		
+		</td>
+		<td>
+			<input type="number" id="s_unitPrice" placeholder="单价" />
+		</td>
+		<td>
+			<input type="text" id="m_category" list="list_m_category" placeholder="材料用途分类" />
+			<datalist id="list_m_category">
+					<%for(var i in obj3){%>
+						<option value="<%=obj3[i].name%>">
+					<%}%>
+			</datalist>
+		</td>
+		<td>
+			<input type="number" id="s_sum" placeholder="数量" />
+		</td>
+		<td>
+			<input type="text" id="t_store" placeholder="目标门店" list="list_t_store" />
+			<datalist id="list_t_store">
+					<%for(var i in obj5){%>
+						<option value="<%=obj5[i].name%>">
+							<%=obj5[i].name%>
+						</option>
+					<%}%>
+			</datalist>
+		</td>
+		<td>
+			<button class="btn btn-xs" onclick="moveStock()">移库</button>
+		</td>
+	</tr>
+</table>
+
 <div class="div_auto">
 	<table class="table table-hover table-bordered">
 		<tr>
@@ -89,6 +141,26 @@
 	</table>
 </div>
 <script>
+	function moveStock(){
+			$.ajax({
+				type: "POST",
+				url: "/erp/moveStock",
+				data: {
+					f_store: $("#f_store").val(),
+					s_material: $("#s_material").val(),
+					s_unitPrice: $("#s_unitPrice").val(),
+					m_category: $("#m_category").val(),
+					s_sum: $("#s_sum").val(),
+					t_store: $("#t_store").val()
+				},
+				success: function(data) {
+					if(data == 200) {
+						alert("移库成功！");	
+					}
+				}
+			});
+	}
+	
 	function getDate() {
 		window.location = "/erp/stock?p=" + $('#k_category').val() + "&q=" + $('#cate_id').val() + "&s=" + $('#k_store').val()+"&n=" + $('#name').val();
 	}
