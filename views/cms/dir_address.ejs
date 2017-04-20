@@ -4,16 +4,14 @@
     <tr>
       <td class="tbleft_gury"><% include left-nav %></td>
       <td>
-      		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增地址</button>
+      		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增企业</button>
 			<table class="table table-hover" id="table_list">
     		<thead>
       			<tr>
         			<th>序号</th>
-        			<th>地址</th>
-        			<th>预订配送时间</th>
-        			<th>即时配送时间</th>
-        			<th>送餐员</th>
-        			<th>联系方式</th>
+        			<th>公司</th>
+        			<th>合同有效期</th>
+        			<th>密码</th>
         			<th>操作</th>
       			</tr>
     		</thead>
@@ -22,10 +20,8 @@
       			<tr>
         			<td><%-address[i].id%></td>
         			<td><%=address[i].name%></td>
-        			<td>次日<%=address[i].b_starttime%>-<%=address[i].b_endtime%></td>
-        			<td>当日<%=address[i].i_starttime%>-<%=address[i].i_endtime%></td>
-        			<td><%=address[i].sender%></td>
-        			<td><%=address[i].tel%></td>
+        			<td><%=address[i].deadline%></td>
+        			<td><%=address[i].code%></td>
         			<td>
         				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=address[i].id%>)">编辑</button>
         				<button type="button" class="btn btn-default btn-xs" onclick="delinfo(<%=address[i].id%>)">删除</button>
@@ -57,52 +53,34 @@
          <div class="modal-body">
             <table class="table table-bordered">
                 <tr>
-                    <td>地址</td>
-                    <td colspan="3"><input type="text" class="input-sm form-control" id="name"></input></td>
+                    <td>公司名称</td>
+                    <td><input type="text" class="input-sm form-control" id="name"></input></td>
+                    <td>负责人</td>
+                    <td><input type="text" class="input-sm form-control" id="sender" ></input></td>
                 </tr>   
                 <tr>
-                    <td>预订配送时间</td>
-                    <td colspan="3">
-                    	<div class="floatleftmid">次日</div> 
-                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
-    						<input type="text" class="form-control" id="b_starttime" value="00:00" >
-    						<span class="input-group-addon">
-        						<span class="glyphicon glyphicon-time"></span>
-    						</span>
-						</div></div>
- 						<div class="floatleftmid"> - </div>
-                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
-    						<input type="text" class="form-control" id="b_endtime" value="00:00" >
-    						<span class="input-group-addon">
-        						<span class="glyphicon glyphicon-time"></span>
-    						</span>
-						</div></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>即时配送时间</td>
-                    <td colspan="3">
-                    	<div class="floatleftmid">当日</div> 
-                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
-    						<input type="text" class="form-control" id="i_starttime" value="00:00" >
-    						<span class="input-group-addon">
-        						<span class="glyphicon glyphicon-time"></span>
-    						</span>
-						</div></div>
- 						<div class="floatleftmid"> - </div>
-                    	<div class="floatleft"><div class="input-group clockpicker" style="width:100px;" data-autoclose="true" >
-    						<input type="text" class="form-control" id="i_endtime" value="00:00" >
-    						<span class="input-group-addon">
-        						<span class="glyphicon glyphicon-time"></span>
-    						</span>
-						</div></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>送餐员</td>
-                    <td><input type="text" class="input-sm form-control" id="sender" ></input></td>
-                    <td>联系方式</td>
+                    <td>地址</td>
+                    <td><input type="text" class="input-sm form-control" id="address" ></input></td>
+                    <td>负责人手机号</td>
                     <td><input type="text" class="input-sm form-control" id="tel" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
+                </tr>
+                <tr>
+                    <td>配送地址</td>
+                    <td><input type="text" class="input-sm form-control" id="send_address" ></input></td>
+                    <td>单价</td>
+                    <td><input type="text" class="input-sm form-control" id="price" ></input></td>
+                </tr>
+                <tr>
+                    <td>结账周期</td>
+                    <td><input type="text" class="input-sm form-control" id="type" ></input></td>
+                    <td>合同有效期</td>
+                    <td><input type="text" class="input-sm form-control" id="deadline" ></input></td>
+                </tr>
+                <tr>
+                    <td>配送时间</td>
+                    <td><input type="text" class="input-sm form-control" id="sendtime" ></input></td>
+                    <td></td>
+                    <td></td>
                 </tr>
              </table>
              <input type="hidden" id="docid" ></input>
@@ -122,11 +100,13 @@
 	function newDoc(){
 		$("#name").val("");
 		$("#sender").val("");
+		$("#address").val("");
 		$("#tel").val("");
-		$("#b_starttime").val("00:00");
-		$("#b_endtime").val("00:00");
-		$("#i_starttime").val("00:00");
-		$("#i_endtime").val("00:00");
+		$("#send_address").val("");
+		$("#price").val("");
+		$("#type").val("");
+		$("#deadline").val("");
+		$("#sendtime").val("");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
@@ -141,36 +121,31 @@
         $.ajax({ type:"POST" , url: "/address/getinfo", data:{id:id}, success: function(data){
                $("#name").val(data[0].name); 
                $("#sender").val(data[0].sender); 
+               $("#address").val(data[0].address);
                $("#tel").val(data[0].tel);
-               $("#b_starttime").val(data[0].b_starttime);
-               $("#b_endtime").val(data[0].b_endtime);
-               $("#i_starttime").val(data[0].i_starttime);
-               $("#i_endtime").val(data[0].i_endtime);
+               $("#send_address").val(data[0].send_address);
+               $("#price").val(data[0].price);
+               $("#type").val(data[0].type);
+               $("#deadline").val(data[0].deadline);
+               $("#sendtime").val(data[0].sendtime);
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
     }
 
 	function submitDoc(){
-		if($("#name").val()==""){
-			$.alert({title: '提示信息',content: '地址必填！'});return false;
-		}
-		if($("#sender").val()==""){
-			$.alert({title: '提示信息',content: '送餐员必填！'});return false;
-		}
-		if($("#tel").val()==""){
-			$.alert({title: '提示信息',content: '联系方式必填！'});return false;
-		}
 		if($("#docid").val()=="0"){
 			//insert
 			$.ajax({ type:"POST" , url: "/address/insert", data:{
                 name:$("#name").val(),
-                b_starttime:$("#b_starttime").val()+":00",
-                b_endtime:$("#b_endtime").val()+":00",
-                i_starttime:$("#i_starttime").val()+":00",
-                i_endtime:$("#i_endtime").val()+":00",
                 sender:$("#sender").val(),
+                address:$("#address").val(),
                 tel:$("#tel").val(),
+                send_address:$("#send_address").val(),
+                price:$("#price").val(),
+                type:$("#type").val(),
+                sendtime:$("#sendtime").val(),
+                deadline:$("#deadline").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -181,12 +156,14 @@
 			//update
 			$.ajax({ type:"POST" , url: "/address/update", data:{
                 name:$("#name").val(),
-                b_starttime:$("#b_starttime").val()+":00",
-                b_endtime:$("#b_endtime").val()+":00",
-                i_starttime:$("#i_starttime").val()+":00",
-                i_endtime:$("#i_endtime").val()+":00",
                 sender:$("#sender").val(),
                 tel:$("#tel").val(),
+                address:$("#address").val(),
+                send_address:$("#send_address").val(),
+                price:$("#price").val(),
+                type:$("#type").val(),
+                sendtime:$("#sendtime").val(),
+                deadline:$("#deadline").val(),
                 docid:$("#docid").val(),
                 }, success: function(data){
                     if(data==200){

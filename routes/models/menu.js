@@ -49,16 +49,8 @@ function sql_openbooking(req,res){
 
 function sql_insert(req, res) {
     var name = req.param('name');
-    var price = req.param('price');
-    var aheadprice = req.param('aheadprice');
-    var aheadnum = req.param('aheadnum');
-    var immediatelynum = req.param('immediatelynum');
-    var sortid = req.param('sortid');
-    var maincourse = req.param('maincourse');
-    var jardiniere = req.param('jardiniere');
-    var staplefood = req.param('staplefood');
     var  imgname = req.param('imgname');
-    var insertSql = "insert into menu (name,price,aheadprice,aheadnum,immediatelynum,sortid,maincourse,jardiniere,staplefood,imgname) values ('"+name+"',"+price+","+aheadprice+","+aheadnum+","+immediatelynum+","+sortid+",'"+maincourse+"','"+jardiniere+"','"+staplefood+"','"+imgname+"')";
+    var insertSql = "insert into menu (name,imgname) values ('"+name+"','"+imgname+"')";
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
           req.session.infor = "新建成功！";
@@ -87,27 +79,12 @@ function sql_select(req, res) {
 
 function sql_update(req, res) {
     var name = req.param('name');
-    var price = req.param('price');
-    var aheadprice = req.param('aheadprice');
-    var aheadnum = req.param('aheadnum');
-    var immediatelynum = req.param('immediatelynum');
-    var sortid = req.param('sortid');
-    var maincourse = req.param('maincourse');
-    var jardiniere = req.param('jardiniere');
-    var staplefood = req.param('staplefood');
-    var  imgname = req.param('imgname');
+    var imgname = req.param('imgname');
     var id = req.param('docid');
     var updateSql = "update menu set name = '"+name
-     +"',price ="+price
-     +",aheadprice ="+aheadprice
-     +",aheadnum ="+aheadnum
-     +",immediatelynum ="+immediatelynum
-     +",sortid ="+sortid
-     +",maincourse ='"+maincourse
-     +"',jardiniere ='"+jardiniere
-     +"',staplefood ='"+staplefood
      +"',imgname ='"+imgname
      +"'  where id = "+id;
+    console.log(updateSql);
     mysql.query(updateSql ,function(error,obj){
           if(error){console.log(error);return false;}
           req.session.infor = "修改成功！";

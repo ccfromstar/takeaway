@@ -12,19 +12,32 @@ exports.sqldo = function (req, res) {
 
 function sql_insert(req, res) {
     var name = req.param('name');
-    var b_starttime = req.param('b_starttime');
-    var b_endtime = req.param('b_endtime');
-    var i_starttime = req.param('i_starttime');
-    var i_endtime = req.param('i_endtime');
     var sender = req.param('sender');
+    var address = req.param('address');
     var tel = req.param('tel');
-    var insertSql = "insert into address (name,b_starttime,b_endtime,i_starttime,i_endtime,sender,tel) values ('"+name+"','"+b_starttime+"','"+b_endtime+"','"+i_starttime+"','"+i_endtime+"','"+sender+"',"+tel+")";
+    var send_address = req.param('send_address');
+    var price = req.param('price');
+    var type = req.param('type');
+    var deadline = req.param('deadline');
+    var sendtime = req.param('sendtime');
+    var code = addNumber(6);
+
+    var insertSql = "insert into address (name,sender,address,tel,send_address,price,type,deadline,code,sendtime) values ('"+name+"','"+sender+"','"+address+"','"+tel+"','"+send_address+"','"+price+"','"+type+"','"+deadline+"','"+code+"','"+sendtime+"')";
+    console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
           req.session.infor = "新建成功！";
           res.send("200");
     });
 };
+
+function addNumber(_idx){
+        var str = '';
+        for(var i = 0; i < _idx; i += 1){
+        str += Math.floor(Math.random() * 10);
+        }
+        return str;
+}
 
 function sql_delete(req, res) {
     var id = req.param('id');
@@ -53,20 +66,24 @@ function sql_select(req, res) {
 
 function sql_update(req, res) {
     var name = req.param('name');
-    var b_starttime = req.param('b_starttime');
-    var b_endtime = req.param('b_endtime');
-    var i_starttime = req.param('i_starttime');
-    var i_endtime = req.param('i_endtime');
     var sender = req.param('sender');
+    var address = req.param('address');
     var tel = req.param('tel');
+    var send_address = req.param('send_address');
+    var price = req.param('price');
+    var type = req.param('type');
+    var deadline = req.param('deadline');
+    var sendtime = req.param('sendtime');
     var id = req.param('docid');
     var updateSql = "update address set name = '"+name
-     +"',b_starttime ='"+b_starttime
-     +"',b_endtime ='"+b_endtime
-     +"',i_starttime ='"+i_starttime
-     +"',i_endtime ='"+i_endtime
      +"',sender ='"+sender
+     +"',address ='"+address
      +"',tel ='"+tel
+     +"',send_address ='"+send_address
+     +"',price ='"+price
+     +"',type ='"+type
+     +"',sendtime ='"+sendtime
+     +"',deadline ='"+deadline
      +"'  where id = "+id;
     mysql.query(updateSql ,function(error,obj){
           if(error){console.log(error);return false;}

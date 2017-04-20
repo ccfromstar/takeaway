@@ -1,10 +1,10 @@
 <!--业务逻辑-->
 <%
 	var CONSTANT1,parms,CONSTANT2,CONSTANT3,CONSTANTRole;
-	CONSTANT1 = "提前一天预定,当日预定,400,客户管理,财务,数据管理,系统设置".split(",");
-	CONSTANT2 = "group-item,group-item,group-item,group-item,group-item,group-item,group-item".split(",");
-	CONSTANT3 = "booking,immediate,400,customer,finance_d,address,option".split(",");
-	CONSTANTRole = "show,show,show,show,show,show,show".split(",");
+	CONSTANT1 = "财务,数据管理".split(",");
+	CONSTANT2 = "group-item,group-item".split(",");
+	CONSTANT3 = "finance_d,address".split(",");
+	CONSTANTRole = "show,show".split(",");
 
 	if(role=="财务"){
 		CONSTANTRole[2] = "hide";CONSTANTRole[3] = "hide";CONSTANTRole[5] = "hide";CONSTANTRole[6] = "hide";
@@ -15,13 +15,9 @@
 	}
 
 	parms = url.split("?p=");
-	if(parms[0]=="/cms/address" || parms[0]=="/cms/menu" || parms[0]=="/cms/role"){CONSTANT2[5] = "group-item-selected";}
-	else if(parms[0]=="/cms/booking"){CONSTANT2[0] = "group-item-selected";}
-	else if(parms[0]=="/cms/immediate"){CONSTANT2[1] = "group-item-selected";}
-	else if(parms[0]=="/cms/400"){CONSTANT2[2] = "group-item-selected";}
-	else if(parms[0]=="/cms/customer"){CONSTANT2[3] = "group-item-selected";}
-	else if(parms[0]=="/cms/option"){CONSTANT2[6] = "group-item-selected";}	
-	else if(parms[0]=="/cms/finance_d" || parms[0]=="/cms/finance_m" || parms[0]=="/cms/finance_y" || parms[0]=="/cms/finance_z"){CONSTANT2[4] = "group-item-selected";}
+	if(parms[0]=="/cms/address" || parms[0]=="/cms/menu" || parms[0]=="/cms/role"){CONSTANT2[1] = "group-item-selected";}
+	else if(parms[0]=="/cms/option"){CONSTANT2[2] = "group-item-selected";}	
+	else if(parms[0]=="/cms/finance_d" || parms[0]=="/cms/finance_m" || parms[0]=="/cms/finance_y" || parms[0]=="/cms/finance_z"){CONSTANT2[0] = "group-item-selected";}
 %>
 <!--页面逻辑-->
 <%for(var i in CONSTANT1){

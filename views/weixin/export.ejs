@@ -48,6 +48,7 @@
 				<button type="button" class="am-btn am-btn-default" onclick="sumbitDoc()">导出</button>
 		  </fieldset>
 		</form>
+		<div id="result"></div>
 		<div class="am-alert am-alert-success none successinfo" data-am-alert>
 		</div>
 		<script>
@@ -59,7 +60,9 @@
 						d:$('#date').val()
 					},
 					success: function(data) {
+						//alert(data);
 						window.open("/excelop/temp/" + data);
+						$('#result').html('<a href="/excelop/temp/'+data+'">'+data+'</a>');
 					}
 				});
 			}
