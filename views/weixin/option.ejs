@@ -30,8 +30,8 @@
 
 <div style="margin-left: 20px;">
 	<div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="date1"></span></div>
-	<div style="margin-left:0px;padding-top:5px;">A套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numA" value="0" onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
-	<div style="margin-left:0px;padding-top:5px;">B套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numB" value="0" onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+	<div style="margin-left:0px;padding-top:5px;">A套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numA"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+	<div style="margin-left:0px;padding-top:5px;">B套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numB"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
 	<div style="margin-left:0px;padding-top:5px;">总份数：<span id="numTotal"></span> 份</div>
 </div>
 
@@ -78,7 +78,7 @@
 
 <script type="text/javascript">
   //判断登陆状态
-  var sessionID = window.sessionStorage.getItem("sessionID");
+  var sessionID = window.localStorage.getItem("sessionID");
   if(!sessionID){
   	window.location = '/weixin/login';
   }
@@ -176,6 +176,14 @@ function GetDateStr(AddDayCount) {
 	}
 	
 	function booking(){
+		var numA = $('#numA').val();
+		if(!numA){
+			alert('套餐A数量必填！');return false;
+		}
+		var numB = $('#numB').val();
+		if(!numB){
+			alert('套餐B数量必填！');return false;
+		}
 		$.ajax({ 
 			type:"POST" ,
 			url: "/role/insertBooking",

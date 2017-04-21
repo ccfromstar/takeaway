@@ -78,7 +78,7 @@ function loginweixin() {
         }else if(data==500){
           alert("用户已绑定其他手机,请先解除绑定！");return false;
         }else{
-        	window.sessionStorage.setItem("sessionID",data);
+        	window.localStorage.setItem("sessionID",data);
           window.location = "/weixin/option";
         } 
     }});
