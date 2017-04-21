@@ -17,6 +17,9 @@ exports.sqldo = function (req, res) {
     else if(_sql == "regwxUser"){regwxUser(req,res);}
     else if(_sql == "sendSMS"){sendSMS(req,res);}
     else if(_sql == "updateUser"){updateUser(req,res);}
+    else if(_sql == "getCinfo"){getCinfo(req,res);}
+    else if(_sql == "getMenu"){getMenu(req,res);}
+    else if(_sql == "insertBooking"){insertBooking(req,res);}
 };
 
 function sendSMS(req,res){
@@ -60,6 +63,25 @@ function sql_insert(req, res) {
           if(error){console.log(error);return false;}
           req.session.infor = "新建成功！";
           res.send("200");
+    });
+};
+
+function insertBooking(req, res) {
+    var cid = req.param('cid');
+    var date1 = req.param('date1');
+    var numA = req.param('numA');
+    var numB = req.param('numB');
+    var numTotal = req.param('numTotal');
+    var priceTotal = req.param('priceTotal');
+    var insertSql = "insert into com_booking (cid,date1,date2,numA,numB,numTotal,priceTotal) values ('"+cid+"','"+date1+"',now(),'"+numA+"','"+numB+"','"+numTotal+"','"+priceTotal+"')";
+    mysql.query(insertSql ,function(error,obj){
+          if(error){console.log(error);return false;}
+          var sql2 = 'select * from com_booking where id = '+obj.insertId;
+          mysql.query(sql2 ,function(error,obj2){
+		    if(error){console.log(error);return false;}
+		    obj2[0].date2 = (obj2[0].date2).Format("yyyy-MM-dd hh:mm:ss");
+		    res.send(obj2);   
+		  });
     });
 };
 
@@ -178,11 +200,7 @@ function chekuserlogin (req, res) {
       if(obj[0]){
         if(method == 1){
           if(obj[0].password == password){
-            req.session.cuser = obj[0].name;
-            req.session.cid =  obj[0].id;
-            req.session.ctel =  obj[0].username;
-            req.session.favorable = obj[0].favorable;
-            res.send("200");
+            res.send(obj[0].id);
           }else{
               res.send("300");
           }
@@ -200,33 +218,37 @@ function chekuserlogin (req, res) {
   });
 }
 
+function getCinfo(req, res) {
+    var id = req.param('id');
+    var delSql = "select * from address where id = "+id;
+    mysql.query(delSql ,function(error,rows1){
+          if(error){console.log(error);return false;}
+          res.send(rows1);
+    });
+};
+
+function getMenu(req, res) {
+    var companyName = req.param('companyName');
+    var delSql = "select * from menu where name = '"+companyName+"'";
+    console.log(delSql);
+    mysql.query(delSql ,function(error,rows1){
+          if(error){console.log(error);return false;}
+          res.send(rows1);
+    });
+};
+
 function chekwxuserlogin (req, res) {
   var username = req.param('username');
   var password = req.param('password');
   var method = Number(req.param('method'));
-    var Sql = "select id,username,password,name,favorable from user where username = '"+username+"'";
+    var Sql = "select * from address where tel = '"+username+"'";
     mysql.query(Sql ,function(error,obj){
       if(error){console.log(error);return false;}
       if(obj[0]){
         if(method == 1){
-          if(obj[0].password == password){
-            req.session.cuser = obj[0].name;
-            req.session.cid =  obj[0].id;
-            req.session.ctel =  obj[0].username;
-            req.session.favorable = obj[0].favorable;
-            //bind openid
-            var sql2 = "select openid from user where id = "+obj[0].id;
-            mysql.query(sql2 ,function(error,obj2){
-                if(obj2[0].openid){
-                  res.send("500");
-                }else{
-                  var sql1 = "update user set openid = '"+req.session.openid+"' where id = "+obj[0].id;
-                  mysql.query(sql1 ,function(error,obj1){
-                    if(error){console.log(error);return false;}
-                    res.send("200");
-                  });
-                }
-            });
+          if(obj[0].code == password){
+          	console.log(obj[0].id);
+            res.send(obj[0].id+"");
           }else{
               res.send("400");
           }
@@ -236,7 +258,7 @@ function chekwxuserlogin (req, res) {
             req.session.ctel =  obj[0].username;
             req.session.favorable = obj[0].favorable;
             //bind openid
-            var sql2 = "select openid from user where id = "+obj[0].id;
+            var sql2 = "select openid from user where id = "+obj[0].id;	            
             mysql.query(sql2 ,function(error,obj2){
                 if(obj2[0].openid){
                   res.send("500");
@@ -263,4 +285,26 @@ function unbind (req, res) {
       if(error){console.log(error);return false;}
       res.send("200");
   });       
+}
+
+Date.prototype.Format = function(fmt) {
+	var d = this;
+	var o = {
+		"M+": d.getMonth() + 1, //月份
+		"d+": d.getDate(), //日
+		"h+": d.getHours(), //小时
+		"m+": d.getMinutes(), //分
+		"s+": d.getSeconds(), //秒
+		"q+": Math.floor((d.getMonth() + 3) / 3), //季度
+		"S": d.getMilliseconds() //毫秒
+	};
+	if(/(y+)/.test(fmt)) {
+		fmt = fmt.replace(RegExp.$1, (d.getFullYear() + "").substr(4 - RegExp.$1.length));
+	}
+	for(var k in o) {
+		if(new RegExp("(" + k + ")").test(fmt)) {
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		}
+	}
+	return fmt;
 }

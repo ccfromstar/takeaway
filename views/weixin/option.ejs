@@ -4,51 +4,46 @@
 <table style="width:95%;margin:auto;">
     <tr>
       <td style="width:40%">
-        <!--<img src="/img/logoreg.png" style="width:100%;" />-->
       </td>
       <td style="vertical-align:top;padding-left:10px;">
-        <div style="font-size:18px;color:#AF311A;font-weight:bold;text-align:right;width:100%"><%=cuser%> <%=ctel%></div>
         <div style="padding-top:5px;font-size:14px;text-align:right;width:100%">
-          <button class="btn btn-default" onclick="logout()">登出</button>
+         
         </div>
       </td>
     </tr>
 </table>
 <div style="height:10px;"></div>
-<%if(!record[0]){%>
-  <div style="width:100%;text-align:center;margin-top:100px">
-      您还没有订单,可以点击
-      <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="window.location='http://mp.weixin.qq.com/s?__biz=MzI1MjExMjAyNg==&mid=401276142&idx=1&sn=079d79b8a439b9afa1940220c56e76ae&scene=0&previewkey=WGxCbh%2Fi86CP6F4DGIExG8wqSljwj2bfCUaCyDofEow%3D#wechat_redirect'">我要订餐</div>  
-  </div>
-<%}%>
-<%for(var i in record){%>
-<table class="optiontable" style="width:95%;margin:auto;;border: 1px solid #eee;" onclick="getbookingprice('<%=record[i].id%>','<%=record[i].bookingno%>','<%=record[i].status%>','<%=record[i].linkname%>','<%=record[i].linktel%>','<%=record[i].addressname+record[i].addressdetail%>','<%=record[i].sendtime%>','<%=record[i].paytype%>','<%=record[i].invoicetitle%>','<%=record[i].numtotal%>','<%=record[i].pricetotalold%>','<%=record[i].pricetotal%>');">
-  <tr style="background:#AF311A;">
-    <td style="color:#ffffff"><%=record[i].bookingno%></td>
-    <td style="text-align:right;color:#ffffff"><%=record[i].status%></td>
-  </tr>
-  <tr>
-    <td>
-      <%if(record[i].status == "未付款" && record[i].paytype == "微信"){%>
-          <button class="btn btn-default btn-xs" onclick="pay('<%=record[i].bookingno%>',<%=record[i].pricetotal%>)">付款</button>
-      <%}else if(record[i].status == "未付款" && record[i].paytype == "支付宝"){%>
-          未付款，请在电脑上打开支付
-      <%}else{%>
-          <%=record[i].sendtime%>
-      <%}%>
-    </td>
-    <td style="text-align:right">数量 <%=record[i].numtotal%> 份</td>
-  </tr>
-  <tr>
-    <td>金额 ¥ <%=record[i].pricetotalold%></td>
-    <td style="text-align:right">实付金额 ¥ <%=record[i].pricetotal%></td>
-  </tr>
-</table>
-<div style="height:8px;"></div>
-<%}%>
-<div style="height:10px;"></div>
-<!--分页符-->  
-<div style="height:10px;"></div>
+<div style="margin-left: 20px;">
+			<div style="margin-left:0px;padding-top:5px;">公司名称：<span id="bk1" style="margin-right:30px;"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">负责人：<span id="bk2"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">负责人手机号：<span id="bk3"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">地址：<span id="bk4"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">配送地址：<span id="bk5"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">单价：<span id="bk6"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">结账周期：<span id="bk7"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">合同有效期：<span id="bk8"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">配送时间：<span id="bk9"></span></div>
+</div>
+            
+
+<div id="menu_pdf" style="width:100%;text-align:center;margin-top:10px"></div>
+
+<div style="margin-left: 20px;">
+	<div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="date1"></span></div>
+	<div style="margin-left:0px;padding-top:5px;">A套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numA" value="0" onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+	<div style="margin-left:0px;padding-top:5px;">B套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numB" value="0" onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+	<div style="margin-left:0px;padding-top:5px;">总份数：<span id="numTotal"></span> 份</div>
+</div>
+
+<div style="width:100%;text-align:center;margin-top:10px">
+    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="booking()">完成</div>  
+</div>
+
+<div style="margin-left: 20px;">
+	<div style="margin-left:0px;padding-top:5px;">
+		如需变更数量，请联系客服 : <a href="tel:4000191177">4000191177</a>
+	</div>
+</div>
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
@@ -58,19 +53,17 @@
          <div class="modal-body">
             <table style="width:100%;margin-left:0px;margin-bottom:5px;">
               <tr>
-                <th style="width:50px;">订单号</th><th id="bk1"></th><th style="width:60px;"></th><th style="width:60px;text-align:right;" id="bk2"></th>
+                <th style="width:100px;">订餐成功</th>
               </tr>
             </table>
             <hr style="margin-top:0px !important;margin-bottom:0px !important;">
-            <div style="margin-left:0px;padding-top:5px;">联系人：<span id="bk3" style="margin-right:30px;"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">联系电话：<span id="bk8"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">地点：<span id="bk4"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">送达时间：<span id="bk5"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="bo1" style="margin-right:30px;"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">总数量：<span id="bo2"></span> 份</div>
+            <div style="margin-left:0px;padding-top:5px;">A套餐：<span id="bo3"></span> 份</div>
+            <div style="margin-left:0px;padding-top:5px;">B套餐：<span id="bo4"></span> 份</div>
             <hr style="margin-top:5px !important;margin-bottom:5px !important;">
-            <div id="bookingdetail"></div>
-            <hr style="margin-top:5px !important;margin-bottom:5px !important;">
-            <div style="margin-left:0px;padding-top:5px;">支付方式：<span id="bk6"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">开票信息：<span id="bk7"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">总金额：¥<span id="bo5"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">下单时间：<span id="bo6"></span></div>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" 
@@ -84,8 +77,56 @@
 </div><!-- /.modal -->
 
 <script type="text/javascript">
+  //判断登陆状态
+  var sessionID = window.sessionStorage.getItem("sessionID");
+  if(!sessionID){
+  	window.location = '/weixin/login';
+  }
+  
+  var sessionCompany = '';
+  
+  function getCompanyInfo(){
+  	$.ajax({ type:"POST" , data:{id:sessionID},url: "/role/getCinfo", success: function(data){
+        $("#bk1").html(data[0].name);
+        $("#bk2").html(data[0].sender);
+        $("#bk3").html(data[0].tel);
+        $("#bk4").html(data[0].address);
+        $("#bk5").html(data[0].send_address);
+        $("#bk6").html(data[0].price);
+        $("#bk7").html(data[0].type);
+        $("#bk8").html(data[0].deadline);
+        $("#bk9").html(data[0].sendtime);
+        sessionCompany = data[0].name;
+        getMenu();
+        //获取送餐日期
+        $('#date1').html(GetDateStr(1));
+    }});
+  }
+  
+function GetDateStr(AddDayCount) { 
+	var myDate = new Date(); 
+	myDate.setDate(myDate.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+	var y = myDate.getFullYear();
+	var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+	var d = (((myDate.getDate()) + "").length == 1) ? "0" + (myDate.getDate()) : (myDate.getDate());
+	return y+"-"+m+"-"+d; 
+} 
+  
+  function getMenu(){
+  	$.ajax({ type:"POST" , data:{companyName:sessionCompany},url: "/role/getMenu", success: function(data){
+  	   console.log(data);
+       $('#menu_pdf').html("<div onclick='window.open(\"/pic/"+data[0].imgname+"\");' style='cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;' >菜单</div>");
+    }});
+  }
+
   function toPage(i){
     window.location = "/weixin/option?p="+i;
+  }
+  
+  function computTotal(){
+  	var numA = Number($('#numA').val());
+  	var numB = Number($('#numB').val());
+  	$('#numTotal').html(numA+numB);
   }
 
   function getbookingprice(id,bk1,bk2,bk3,bk8,bk4,bk5,bk6,bk7,num,price,price1){
@@ -120,18 +161,44 @@
     }});
  }
 
-function logout() {
-    $.ajax({ type:"POST" , url: "/role/unbind", success: function(data){
-        if(data==200){
-           window.location = "/weixin/login";
-        }else{
-          alert("登出出错！");return false;
-        }
-    }});
-}
-
-function pay(bookingno,pricetotal) {
-  window.location='/jsapipay?bookingNo='+bookingno+'&total_fee='+(pricetotal*100);
-}
+	function logout() {
+	    $.ajax({ type:"POST" , url: "/role/unbind", success: function(data){
+	        if(data==200){
+	           window.location = "/weixin/login";
+	        }else{
+	          alert("登出出错！");return false;
+	        }
+	    }});
+	}
+	
+	function pay(bookingno,pricetotal) {
+	  window.location='/jsapipay?bookingNo='+bookingno+'&total_fee='+(pricetotal*100);
+	}
+	
+	function booking(){
+		$.ajax({ 
+			type:"POST" ,
+			url: "/role/insertBooking",
+			data:{
+				cid:sessionID,
+				date1:$('#date1').html(),
+				numA:$('#numA').val(),
+				numB:$('#numB').val(),
+				numTotal:$('#numTotal').html(),
+				priceTotal:Number($('#numTotal').html())*Number($("#bk6").html())
+			},
+			success: function(data){
+	        		$("#bo1").html($('#date1').html());
+			        $("#bo2").html($('#numTotal').html());
+			        $("#bo3").html($('#numA').val());
+			        $("#bo4").html($('#numB').val());
+			        $("#bo5").html(Number($('#numTotal').html())*Number($("#bk6").html()));
+			        $("#bo6").html(data[0].date2);
+		           $('#addModal').modal('show');
+	    	}
+		});
+	}
+	
+	getCompanyInfo();
 </script>
 <% include footer %>

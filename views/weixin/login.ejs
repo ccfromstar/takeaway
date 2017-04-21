@@ -1,12 +1,11 @@
 <!--页面逻辑-->
 <% include header %>
 <div style="height:50px"></div>
-<!--
 <table style="width:95%;margin:auto;">
   <tr>
-    <td style="width:100%;text-align:center"><img src="/img/logoreg.png" style="width:45%;" /></td>
+    <td style="width:100%;text-align:center"><img src="/img/logo-by.jpg" style="width:45%;" /></td>
   </tr>
-</table>-->
+</table>
 <form method="post" action="logindo">
       <table style="width:100%;margin:auto;">
         <tr>
@@ -17,12 +16,12 @@
         <tr>
           <td colspan="2">
               <p>手机号码</p>
-              <input type="text" class="input form-control" id="login_name"></input>
+              <input type="number" class="input form-control" id="login_name"></input>
           </td>
         </tr>
         <tr>
           <td colspan="2">
-              <p><span class="loginactive" onclick="changeMethod(1)" id="logintype1">登陆密码</span><span class="Vertical">|</span><span id="logintype2" onclick="changeMethod(2)">忘记密码</span></p>
+              <p><span class="loginactive" onclick="changeMethod(1)" id="logintype1">登陆密码</span></p>
                         <div id="method1">
                             <input type="password" class="input form-control" id="pwd"></input>
                         </div>
@@ -38,11 +37,6 @@
         <tr>
           <td colspan="2" style="text-align:center;">
               <div id="login1" style="cursor:pointer;margin:35px auto;text-align:center;color:#FFFFFF;font-size:16px;width:50%;background:#AF311A;height:40px;line-height:40px;display:inline-block;border-radius:10px;" onclick="loginweixin()" >登 陆</div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align:center;padding-top:15px;cursor:pointer;color:#AF311A" onclick="window.location='/weixin/reg';">
-                        立即注册
           </td>
         </tr>
       </table>
@@ -77,15 +71,16 @@ function loginweixin() {
         password:$("#pwd").val(),
         method:method
         }, success: function(data){
-        if(data==200){
-           window.location = "/weixin/option";
-        }else if(data==300){
+        if(data==300){
           alert("用户不存在！");return false;
         }else if(data==400){
           alert("密码错误！");return false;
         }else if(data==500){
           alert("用户已绑定其他手机,请先解除绑定！");return false;
-        }
+        }else{
+        	window.sessionStorage.setItem("sessionID",data);
+          window.location = "/weixin/option";
+        } 
     }});
 }
 </script>
