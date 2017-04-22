@@ -20,6 +20,8 @@ exports.sqldo = function (req, res) {
     else if(_sql == "getCinfo"){getCinfo(req,res);}
     else if(_sql == "getMenu"){getMenu(req,res);}
     else if(_sql == "insertBooking"){insertBooking(req,res);}
+    else if(_sql == "queryBooking"){queryBooking(req,res);}
+    else if(_sql == "queryBooking2"){queryBooking2(req,res);}
 };
 
 function sendSMS(req,res){
@@ -82,6 +84,33 @@ function insertBooking(req, res) {
 		    obj2[0].date2 = (obj2[0].date2).Format("yyyy-MM-dd hh:mm:ss");
 		    res.send(obj2);   
 		  });
+    });
+};
+
+function queryBooking(req, res) {
+    var cid = req.param('cid');
+    var date = req.param('date');
+    var insertSql = "select * from com_booking where cid = "+cid + " and date1 = '"+date+"'";
+    console.log(insertSql);
+    mysql.query(insertSql ,function(error,obj){
+        if(error){console.log(error);return false;}
+        if(obj[0]){
+        	obj[0].date2 = (obj[0].date2).Format("yyyy-MM-dd hh:mm:ss");
+        	res.json(obj);
+        }else{
+        	res.send("400");
+        }
+    });
+};
+
+function queryBooking2(req, res) {
+    var cid = req.param('cid');
+    var date = req.param('date');
+    var insertSql = "select sum(numTotal) as numTotal,sum(priceTotal) as priceTotal from com_booking where cid = "+cid + " and date1 like '"+date+"%'";
+    console.log(insertSql);
+    mysql.query(insertSql ,function(error,obj){
+        if(error){console.log(error);return false;}
+        res.json(obj);
     });
 };
 

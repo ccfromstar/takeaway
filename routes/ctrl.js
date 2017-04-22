@@ -22,6 +22,7 @@ module.exports = function (app, routes) {
     app.get('/weixin/booking',routes.w_booking);
     app.get('/weixin/bookingsuccess',routes.w_bookingsuccess);
     app.get('/weixin/option',routes.w_option);
+    app.get('/weixin/query',routes.w_query);
     app.get('/weixin/login',routes.w_login);
     app.get('/weixin/reg',routes.w_reg);
     app.get('/wechat',routes.wechat);

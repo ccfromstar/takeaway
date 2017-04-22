@@ -1,0 +1,187 @@
+<% include header %>
+
+
+<div style="width:100%;text-align:center;margin-top:10px">
+	<h1>订单查询</h1>
+	<div style="margin-bottom:10px;padding-top:5px;">日账单查询</div>
+	<input type="text" name="bookingdate" id="date" style="cursor:pointer" readonly  class="Wdate"  onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="query()">查询</div>  
+</div>
+
+<div style="width:100%;text-align:center;margin-top:10px">
+	<div style="margin-bottom:10px;padding-top:5px;">月账单查询</div>
+	<input type="text" name="bookingdate" id="date2" style="cursor:pointer" readonly  class="Wdate"  onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
+    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="query2()">查询</div>  
+	<div style="margin-left:0px;padding-top:5px;">当月总份数：<span id="numTotal"></span> 份</div>
+    <div style="margin-left:0px;padding-top:5px;">当月总金额：¥<span id="priceTotal"></span></div>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table style="width:100%;margin-left:0px;margin-bottom:5px;">
+              <tr>
+                <th style="width:100px;">订单信息</th>
+              </tr>
+            </table>
+            <hr style="margin-top:0px !important;margin-bottom:0px !important;">
+            <div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="bo1" style="margin-right:30px;"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">总数量：<span id="bo2"></span> 份</div>
+            <div style="margin-left:0px;padding-top:5px;">A套餐：<span id="bo3"></span> 份</div>
+            <div style="margin-left:0px;padding-top:5px;">B套餐：<span id="bo4"></span> 份</div>
+            <hr style="margin-top:5px !important;margin-bottom:5px !important;">
+            <div style="margin-left:0px;padding-top:5px;">总金额：¥<span id="bo5"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">下单时间：<span id="bo6"></span></div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+  //判断登陆状态
+  var sessionID = window.localStorage.getItem("sessionID");
+  if(!sessionID){
+  	window.location = '/weixin/login';
+  }
+  
+  var sessionCompany = '';
+  
+  function getCompanyInfo(){
+  	$.ajax({ type:"POST" , data:{id:sessionID},url: "/role/getCinfo", success: function(data){
+        $("#bk1").html(data[0].name);
+        $("#bk2").html(data[0].sender);
+        $("#bk3").html(data[0].tel);
+        $("#bk4").html(data[0].address);
+        $("#bk5").html(data[0].send_address);
+        $("#bk6").html(data[0].price);
+        $("#bk7").html(data[0].type);
+        $("#bk8").html(data[0].deadline);
+        $("#bk9").html(data[0].sendtime);
+        sessionCompany = data[0].name;
+        getMenu();
+        //获取送餐日期
+        $('#date1').html(GetDateStr(1));
+    }});
+  }
+  
+function GetDateStr(AddDayCount) { 
+	var myDate = new Date(); 
+	myDate.setDate(myDate.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+	var y = myDate.getFullYear();
+	var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+	var d = (((myDate.getDate()) + "").length == 1) ? "0" + (myDate.getDate()) : (myDate.getDate());
+	return y+"-"+m+"-"+d; 
+} 
+  
+  function getMenu(){
+  	$.ajax({ type:"POST" , data:{companyName:sessionCompany},url: "/role/getMenu", success: function(data){
+  	   console.log(data);
+       $('#menu_pdf').html("<div onclick='window.open(\"/pic/"+data[0].imgname+"\");' style='cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;' >菜单</div>");
+    }});
+  }
+
+  function toPage(i){
+    window.location = "/weixin/option?p="+i;
+  }
+  
+  function computTotal(){
+  	var numA = Number($('#numA').val());
+  	var numB = Number($('#numB').val());
+  	$('#numTotal').html(numA+numB);
+  }
+
+  function getbookingprice(id,bk1,bk2,bk3,bk8,bk4,bk5,bk6,bk7,num,price,price1){
+    $.ajax({ type:"POST" , url: "/customer/getbookingdetail",data:{id:id},  success: function(data){
+        var _html = "<table style='margin-top:5px;width:100%;'>";
+        var j = 0;
+        //_html += "<thead><tr><th>序号</th><th>品名</th><th>售价</th><th>优惠价</th><th>数量</th><th>小计</th><th>优惠备注</th></tr></thead> <tbody>"
+        for(var i in data){
+            j += 1;
+            var ap = "";
+            ap = (data[i].remark=="")?"-":data[i].aheadprice;
+            _html += "<tr>";
+            _html += "<td style='text-align:left;padding-top:5px;width:100px'>"+data[i].name+"</td>";
+            _html += "<td style='text-align:left;padding-top:5px;'> x "+data[i].num+"</td>";
+            _html += "<td style='text-align:right;color:#DB551B;padding-top:5px;'> ¥"+data[i].pricetotal+"</td>";
+            _html += "</tr>";
+        }
+        //_html += "<tr><td colspan='4'>合计</td><td style='color:#DB551B'>"+num+"</td><td style='color:#DB551B'>"+price+"</td><td>实付金额：<span style='color:#DB551B'>"+price1+"</span></td></tr>";
+        _html += "</table>";
+        _html += "<div style='color:#DB551B;padding-top:5px;'>合计："+num+" 份</div>";
+        _html += "<div style='color:#DB551B;padding-top:5px;'>实付金额：¥"+price1+"</div>";
+        $("#bookingdetail").html(_html);
+        $("#bk1").html(bk1);
+        $("#bk2").html(bk2);
+        $("#bk3").html(bk3);
+        $("#bk4").html(bk4);
+        $("#bk5").html(bk5);
+        $("#bk6").html(bk6);
+        $("#bk7").html(bk7);
+        $("#bk8").html(bk8);
+        $('#addModal').modal('show');
+    }});
+ }
+
+	function logout() {
+	    $.ajax({ type:"POST" , url: "/role/unbind", success: function(data){
+	        if(data==200){
+	           window.location = "/weixin/login";
+	        }else{
+	          alert("登出出错！");return false;
+	        }
+	    }});
+	}
+	
+	function pay(bookingno,pricetotal) {
+	  window.location='/jsapipay?bookingNo='+bookingno+'&total_fee='+(pricetotal*100);
+	}
+	
+	function query(){
+		$.ajax({ 
+			type:"POST" ,
+			url: "/role/queryBooking",
+			data:{
+				cid:sessionID,
+				date:$('#date').val()
+			},
+			success: function(data){
+				if(data == "400"){
+					alert("当天没有订单！");return false;
+				}
+	        		$("#bo1").html(data[0].date1);
+			        $("#bo2").html(data[0].numTotal);
+			        $("#bo3").html(data[0].numA);
+			        $("#bo4").html(data[0].numB);
+			        $("#bo5").html(data[0].priceTotal);
+			        $("#bo6").html(data[0].date2);
+		           $('#addModal').modal('show');
+	    	}
+		});
+	}
+	
+	function query2(){
+		$.ajax({ 
+			type:"POST" ,
+			url: "/role/queryBooking2",
+			data:{
+				cid:sessionID,
+				date:$('#date2').val()
+			},
+			success: function(data){
+				//console.log(data);
+				$('#numTotal').html(data[0].numTotal);
+				$('#priceTotal').html(data[0].priceTotal);
+	    	}
+		});
+	}
+	
+	getCompanyInfo();
+</script>
+<% include footer %>

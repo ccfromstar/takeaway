@@ -296,6 +296,12 @@ exports.w_option = function(req, res) {
 	});
 };
 
+exports.w_query = function(req, res) {
+	res.render('weixin/query', {
+		
+	});
+};
+
 exports.booking_front = function(req, res) {
 	if(!req.session.cuser) {
 		res.redirect('/');
