@@ -124,9 +124,12 @@ function sql_toExcel(req, res){
     var ss = myDate.getSeconds();
     var excelname = "~"+y+m+d+hh+mm+ss+".xlsx"
     //数据源
-    var sql1 = "select * from booking where bookingno like '"+key+"%'";
+    var sql1 = "select * from v_com_booking where date1 like '"+key+"'";
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
+        for(var i in obj){
+            	obj[i].date2 = (obj[i].date2).Format("yyyy-MM-dd hh:mm:ss");
+        }
         //用数据源(对象)data渲染Excel模板
         ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
             fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
@@ -477,7 +480,6 @@ Date.prototype.Format = function(fmt) {
 
 function sql_toExcelm(req, res){
     var key = req.param('id');
-    var bd = req.param('bd');
     //获得Excel模板的buffer对象
     var exlBuf = fs.readFileSync("./public/excelop/template/finance_m.xlsx");
     var myDate = new Date();
@@ -489,103 +491,14 @@ function sql_toExcelm(req, res){
     var ss = myDate.getSeconds();
     var excelname = "~"+y+m+d+hh+mm+ss+".xlsx"
     //数据源
-    var sql1 = "select bookingno,numtotal,type,pricetotal,paytype from booking where bookingno like '"+key+"%'";
+    var sql1 = "select * from v_com_booking where date1 like '"+key+"%'";
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
-        //得到所选月份的所有订单,按月份来计算数据
-        var bookingnno,m,_day,num_1,num_2,num_3,num_4,num_5,num_6,num_7,num_8,num_9;
-        for(var i=1;i<32;i++){
-            if(!_day){
-                _day=i;
-                num_1="0";num_2="0";num_3="0";num_4="0";num_5="0";num_6="0";num_7="0";num_8="0";num_9="0";
-            }else{
-                _day = _day + "," +i;
-                num_1 = num_1 + ",0";
-                num_2 = num_2 + ",0";
-                num_3 = num_3 + ",0";
-                num_4 = num_4 + ",0";
-                num_5 = num_5 + ",0";
-                num_6 = num_6 + ",0";
-                num_7 = num_7 + ",0";
-                num_8 = num_8 + ",0";
-                num_9 = num_9 + ",0";
-            }
-        }
-        _day = _day.split(",");
-        num_1 = num_1.split(",");
-        num_2 = num_2.split(",");
-        num_3 = num_3.split(",");
-        num_4 = num_4.split(",");
-        num_5 = num_5.split(",");
-        num_6 = num_6.split(",");
-        num_7 = num_7.split(",");
-        num_8 = num_8.split(",");
-        num_9 = num_9.split(",");
         for(var i in obj){
-            for(var j=0;j<_day.length;j++){
-                bookingnno = obj[i].bookingno;
-                m = Number(bookingnno.substring(6,8));
-                if(m == Number(_day[j])){
-                    if(obj[i].type == "预定"){
-                        num_1[j] = Number(num_1[j]) + Number(obj[i].numtotal);
-                        num_2[j] = Number(num_2[j]) + Number(obj[i].pricetotal);
-                    }else{
-                        num_3[j] = Number(num_3[j]) + Number(obj[i].numtotal);
-                        num_4[j] = Number(num_4[j]) + Number(obj[i].pricetotal);
-                    }
-                    if(obj[i].paytype == "微信"){
-                        num_5[j] = Number(num_5[j]) + Number(obj[i].pricetotal);
-                    }else if(obj[i].paytype == "支付宝"){
-                        num_6[j] = Number(num_6[j]) + Number(obj[i].pricetotal);
-                    }else{
-                        num_7[j] = Number(num_7[j]) + Number(obj[i].pricetotal);
-                    }
-                    num_8[j] = Number(num_8[j]) + Number(obj[i].numtotal);
-                    num_9[j] = Number(num_9[j]) + Number(obj[i].pricetotal);
-                }
-            }
+            	obj[i].date2 = (obj[i].date2).Format("yyyy-MM-dd hh:mm:ss");
         }
-        var _data = "[";
-        var j = 0;
-        var n1=0;var n2=0;var n3=0;var n4=0;var n5=0;var n6=0;var n7=0;var n8=0;var n9=0;
-        for(var i=0;i<num_8.length;i++){
-            j = j + 1;
-            if(Number(num_8[i])!=0){
-                _data += "{'dt':'"+bd + "-" + ((j+"").length==1?"0"+j:j)+"',";
-                _data += "'num1':'"+num_1[i]+"',"
-                _data += "'num2':'"+num_2[i]+"',"
-                _data += "'num3':'"+num_3[i]+"',"
-                _data += "'num4':'"+num_4[i]+"',"
-                _data += "'num5':'"+num_5[i]+"',"
-                _data += "'num6':'"+num_6[i]+"',"
-                _data += "'num7':'"+num_7[i]+"',"
-                _data += "'num8':'"+num_8[i]+"',"
-                _data += "'num9':'"+num_9[i]+"'},"
-                n1 = n1 + Number(num_1[i]);
-                n2 = n2 + Number(num_2[i]);
-                n3 = n3 + Number(num_3[i]);
-                n4 = n4 + Number(num_4[i]);
-                n5 = n5 + Number(num_5[i]);
-                n6 = n6 + Number(num_6[i]);
-                n7 = n7 + Number(num_7[i]);
-                n8 = n8 + Number(num_8[i]);
-                n9 = n9 + Number(num_9[i]);
-            }
-        }
-                _data += "{'dt':'合计',";
-                _data += "'num1':'"+n1+"',"
-                _data += "'num2':'"+n2+"',"
-                _data += "'num3':'"+n3+"',"
-                _data += "'num4':'"+n4+"',"
-                _data += "'num5':'"+n5+"',"
-                _data += "'num6':'"+n6+"',"
-                _data += "'num7':'"+n7+"',"
-                _data += "'num8':'"+n8+"',"
-                _data += "'num9':'"+n9+"'}"
-        _data += "]";
-        var _xls = eval('(' + _data + ')');
         //用数据源(对象)data渲染Excel模板
-        ejsExcel.renderExcelCb(exlBuf, _xls, function(exlBuf2){
+        ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
             fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
             res.send(excelname);
         });

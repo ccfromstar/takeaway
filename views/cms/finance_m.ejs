@@ -13,7 +13,7 @@
       		报表日期
       		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly value="<%=bookingdate%>" class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
       		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
-      		<!--<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出月报表</button>-->
+      		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出月报表</button>
       	</div>
       	<table class="table table-hover" id="table_list" >
     		<thead>
@@ -57,7 +57,7 @@
 
   function toExcel(){
       var _d = $("#bookingdate").val();
-      $.ajax({ type:"POST" , url: "/finance_d/toExcelm", data:{id:_d.replace(/-/g,""),bd:_d}, success: function(data){
+      $.ajax({ type:"POST" , url: "/finance_d/toExcelm", data:{id:_d}, success: function(data){
         window.open("/excelop/temp/"+data);
         }});
   }
