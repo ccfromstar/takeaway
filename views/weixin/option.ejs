@@ -196,6 +196,10 @@ function GetDateStr(AddDayCount) {
 				priceTotal:Number($('#numTotal').html())*Number($("#bk6").html())
 			},
 			success: function(data){
+				if(data=="400"){
+	           		alert("您当天已经下过订单，不能重复订餐！");
+	           		return false;
+	        	}
 	        		$("#bo1").html($('#date1').html());
 			        $("#bo2").html($('#numTotal').html());
 			        $("#bo3").html($('#numA').val());

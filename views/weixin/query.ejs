@@ -50,6 +50,7 @@
   if(!sessionID){
   	window.location = '/weixin/login';
   }
+
   
   var sessionCompany = '';
   
@@ -176,6 +177,9 @@ function GetDateStr(AddDayCount) {
 			},
 			success: function(data){
 				//console.log(data);
+				if(!data[0].numTotal){
+					alert('当月没有订单！');
+				}
 				$('#numTotal').html(data[0].numTotal);
 				$('#priceTotal').html(data[0].priceTotal);
 	    	}

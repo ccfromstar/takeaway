@@ -75,15 +75,23 @@ function insertBooking(req, res) {
     var numB = req.param('numB');
     var numTotal = req.param('numTotal');
     var priceTotal = req.param('priceTotal');
-    var insertSql = "insert into com_booking (cid,date1,date2,numA,numB,numTotal,priceTotal) values ('"+cid+"','"+date1+"',now(),'"+numA+"','"+numB+"','"+numTotal+"','"+priceTotal+"')";
-    mysql.query(insertSql ,function(error,obj){
-          if(error){console.log(error);return false;}
-          var sql2 = 'select * from com_booking where id = '+obj.insertId;
-          mysql.query(sql2 ,function(error,obj2){
-		    if(error){console.log(error);return false;}
-		    obj2[0].date2 = (obj2[0].date2).Format("yyyy-MM-dd hh:mm:ss");
-		    res.send(obj2);   
-		  });
+    var sql0 = "select * from com_booking where date1 = '"+date1+"' and cid = "+cid;
+    mysql.query(sql0 ,function(error,obj0){
+    	if(error){console.log(error);return false;}
+    	if(obj0[0]){
+    		res.send("400");
+    		return false;
+    	}
+    	var insertSql = "insert into com_booking (cid,date1,date2,numA,numB,numTotal,priceTotal) values ('"+cid+"','"+date1+"',now(),'"+numA+"','"+numB+"','"+numTotal+"','"+priceTotal+"')";
+	    mysql.query(insertSql ,function(error,obj){
+	          if(error){console.log(error);return false;}
+	          var sql2 = 'select * from com_booking where id = '+obj.insertId;
+	          mysql.query(sql2 ,function(error,obj2){
+			    if(error){console.log(error);return false;}
+			    obj2[0].date2 = (obj2[0].date2).Format("yyyy-MM-dd hh:mm:ss");
+			    res.send(obj2);   
+			  });
+	    });
     });
 };
 
