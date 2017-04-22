@@ -35,8 +35,8 @@ exports.sql_list = function (req, res) {
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
-    var sql1 = "select * from booking where bookingno like '"+key+"%' limit "+(page-1)*limit+","+limit;
-    var sql5 = "select count(*) as count from booking where bookingno like '"+key+"%'";
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
+    var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -45,6 +45,9 @@ exports.sql_list = function (req, res) {
             var totalpage = Math.ceil(total/limit);
             var isFirstPage = page == 1 ;
             var isLastPage = ((page -1) * limit + rows1.length) == total;
+            for(var i in rows1){
+            	rows1[i].date2 = (rows1[i].date2).Format("yyyy-MM-dd hh:mm:ss");
+            }
             res.render('cms/finance_d', {bookingdate:bookingdate,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
           });
     });
@@ -343,74 +346,36 @@ function sql_getrightbottom(req,res){
 exports.sql_list_m = function (req, res) {
     var _info = req.session.infor;
     req.session.infor = null;
-    var key = req.query.key;
-    var bd = req.query.bd;
 
     var myDate = new Date();
     var y = myDate.getFullYear(); 
     var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
     var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
-    var bookingno = y+m;
+    var bookingno = y+m+d;
     var bookingdate = y+"-"+m;
-    key = key ? key:bookingno;
-    bookingdate = bd ? bd:bookingdate;
-    var sql1 = "select bookingno,numtotal,type,pricetotal,paytype from booking where bookingno like '"+key+"%'";
-    mysql.query(sql1 ,function(error,obj){
-        if(error){console.log(error);return false;} 
-        //得到所选月份的所有订单,按月份来计算数据
-        var bookingnno,m,_day,num_1,num_2,num_3,num_4,num_5,num_6,num_7,num_8,num_9;
-        for(var i=1;i<32;i++){
-            if(!_day){
-                _day=i;
-                num_1="0";num_2="0";num_3="0";num_4="0";num_5="0";num_6="0";num_7="0";num_8="0";num_9="0";
-            }else{
-                _day = _day + "," +i;
-                num_1 = num_1 + ",0";
-                num_2 = num_2 + ",0";
-                num_3 = num_3 + ",0";
-                num_4 = num_4 + ",0";
-                num_5 = num_5 + ",0";
-                num_6 = num_6 + ",0";
-                num_7 = num_7 + ",0";
-                num_8 = num_8 + ",0";
-                num_9 = num_9 + ",0";
+
+    var page = parseInt(req.query.p);
+    var key = req.query.key;
+    var bd = req.query.bd;
+    key = key?key:bookingno;
+    bookingdate =  bd?bd:bookingdate;
+    page = (page && page > 0) ? page : 1;
+    var limit = (limit && limit > 0) ? limit : LIMIT;
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' limit "+(page-1)*limit+","+limit;
+    var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"%'";
+    mysql.query(sql1,function (err, rows1) {
+        if(err){console.log(err);return false;}
+          mysql.query(sql5,function (err1, rows5) {
+            if(err1){console.log(err1);return false;}
+            var total = rows5[0].count;
+            var totalpage = Math.ceil(total/limit);
+            var isFirstPage = page == 1 ;
+            var isLastPage = ((page -1) * limit + rows1.length) == total;
+            for(var i in rows1){
+            	rows1[i].date2 = (rows1[i].date2).Format("yyyy-MM-dd hh:mm:ss");
             }
-        }
-        _day = _day.split(",");
-        num_1 = num_1.split(",");
-        num_2 = num_2.split(",");
-        num_3 = num_3.split(",");
-        num_4 = num_4.split(",");
-        num_5 = num_5.split(",");
-        num_6 = num_6.split(",");
-        num_7 = num_7.split(",");
-        num_8 = num_8.split(",");
-        num_9 = num_9.split(",");
-        for(var i in obj){
-            for(var j=0;j<_day.length;j++){
-                bookingnno = obj[i].bookingno;
-                m = Number(bookingnno.substring(6,8));
-                if(m == Number(_day[j])){
-                    if(obj[i].type == "预定"){
-                        num_1[j] = Number(num_1[j]) + Number(obj[i].numtotal);
-                        num_2[j] = Number(num_2[j]) + Number(obj[i].pricetotal);
-                    }else{
-                        num_3[j] = Number(num_3[j]) + Number(obj[i].numtotal);
-                        num_4[j] = Number(num_4[j]) + Number(obj[i].pricetotal);
-                    }
-                    if(obj[i].paytype == "微信"){
-                        num_5[j] = Number(num_5[j]) + Number(obj[i].pricetotal);
-                    }else if(obj[i].paytype == "支付宝"){
-                        num_6[j] = Number(num_6[j]) + Number(obj[i].pricetotal);
-                    }else{
-                        num_7[j] = Number(num_7[j]) + Number(obj[i].pricetotal);
-                    }
-                    num_8[j] = Number(num_8[j]) + Number(obj[i].numtotal);
-                    num_9[j] = Number(num_9[j]) + Number(obj[i].pricetotal);
-                }
-            }
-        }
-        res.render('cms/finance_m', {bookingdate:bookingdate,url:req.url,num_1:num_1,num_2:num_2,num_3:num_3,num_4:num_4,num_5:num_5,num_6:num_6,num_7:num_7,num_8:num_8,num_9:num_9});
+            res.render('cms/finance_m', {bookingdate:bookingdate,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+          });
     });
 };
 
@@ -487,6 +452,28 @@ exports.sql_list_y = function (req, res) {
         res.render('cms/finance_y', {bookingdate:bookingdate,url:req.url,num_1:num_1,num_2:num_2,num_3:num_3,num_4:num_4,num_5:num_5,num_6:num_6,num_7:num_7,num_8:num_8,num_9:num_9});
     });
 };
+
+Date.prototype.Format = function(fmt) {
+	var d = this;
+	var o = {
+		"M+": d.getMonth() + 1, //月份
+		"d+": d.getDate(), //日
+		"h+": d.getHours(), //小时
+		"m+": d.getMinutes(), //分
+		"s+": d.getSeconds(), //秒
+		"q+": Math.floor((d.getMonth() + 3) / 3), //季度
+		"S": d.getMilliseconds() //毫秒
+	};
+	if(/(y+)/.test(fmt)) {
+		fmt = fmt.replace(RegExp.$1, (d.getFullYear() + "").substr(4 - RegExp.$1.length));
+	}
+	for(var k in o) {
+		if(new RegExp("(" + k + ")").test(fmt)) {
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		}
+	}
+	return fmt;
+}
 
 function sql_toExcelm(req, res){
     var key = req.param('id');

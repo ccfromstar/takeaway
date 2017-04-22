@@ -8,53 +8,29 @@
       		报表日期
       		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
       		<button type="button" class="btn btn-default btn-xs" onclick="changeDay()" >检索</button>
-      		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出日报表</button>
+      		<!--<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出日报表</button>-->
       	</div>
       	<div id="_viewl">
-      	<table class="table table-hover" id="table_list_width" >
+      	<table class="table table-hover" id="table_list" >
     		<thead>
       			<tr>
-        			<th>序号</th>
-        			<th>来源</th>
-        			<th>订单号</th>
-        			<th>客户</th>
-        			<th>联系方式</th>
-        			<th>数量</th>
-              <th>明细</th>
-        			<th>售价</th>
-        			<th>实收金额</th>
-        			<th>优惠类型</th>
-        			<th>付款状态</th>
-        			<th>订单类型</th>
-        			<th>订单状态</th>
-        			<th>配送地址</th>
-        			<th>抬头</th>
-        			<th>操作</th>
+        			<th>公司</th>
+        			<th>订餐时间</th>
+        			<th>A套餐数量</th>
+        			<th>B套餐数量</th>
+        			<th>总数量</th>
+        			<th>总价</th>
       			</tr>
     		</thead>
     		<tbody>
     		<%for(var i in record){%>
       			<tr>
-        			<td><%-record[i].id%></td>
-        			<td><%-record[i].source%></td>
-        			<td><%-record[i].bookingno%></td>
-        			<td><%-record[i].linkname%></td>
-        			<td><%-record[i].linktel%></td>
-        			<td><%-record[i].numtotal%></td>
-              <td><%-record[i].detail%></td>
-        			<td><%-record[i].pricetotalold%></td>
-        			<td><%-record[i].pricetotal%></td>
-        			<td><%-(record[i].pricetotal!=record[i].pricetotalold)?'首单优惠':''%></td>
-        			<td><%-record[i].paytype%></td>
-        			<td><%-record[i].type%></td>
-        			<td><%-record[i].status%></td>
-        			<td><%-record[i].addressname+record[i].addressdetail%></td>
-        			<td><%-record[i].invoicetitle%></td>
-        			<td>
-        			<%if(record[i].makeout == "未确认" && record[i].paytype =="货到付款"){%>
-        			<button type="button" class="btn btn-default btn-xs" onclick="setinfo(<%=record[i].id%>,'<%=record[i].bookingno%>','<%=record[i].linkname%>','<%=record[i].paytype%>','<%=record[i].pricetotal%>')" >确认收款</button>
-        			<%}%>
-        			</td>
+        			<td><%-record[i].cname%></td>
+        			<td><%-record[i].date2%></td>
+        			<td><%-record[i].numA%></td>
+        			<td><%-record[i].numB%></td>
+        			<td><%-record[i].numTotal%></td>
+        			<td><%-record[i].priceTotal%></td>
       			</tr>
     		<%}%>
     		</tbody>
@@ -66,20 +42,6 @@
   				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
   				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
 			</div>  
-			<br/><br/> 
-			<table style="margin-left:10px;">
-				<tr>
-					<td>
-						<div id="d_left">统计内容加载中</div>
-					</td>
-					<td>
-						<div id="d_right" style="padding-left:30px;">统计内容加载中</div>
-					</td>
-					<td>
-						<div id="d_right_bottmo" style="padding-left:30px;">统计内容加载中</div>
-					</td>
-				</tr>
-			</table>
       </td>
     </tr>
 </table>

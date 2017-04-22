@@ -10,7 +10,7 @@ exports.checklogin = function (req, res) {
           if(obj[0].password == password){
               req.session.user = obj[0].name;
               req.session.role = obj[0].role;
-              res.redirect("/cms/booking");
+              res.redirect("/cms/finance_d");
           }else{
             res.redirect("/cms/login");
           }
