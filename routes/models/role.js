@@ -83,7 +83,7 @@ function insertBooking(req, res) {
     var numTotal = req.param('numTotal');
     var priceTotal = req.param('priceTotal');
     var sendtype = req.param('sendtype');
-    var sql0 = "select * from com_booking where date1 = '"+date1+"' and cid = "+cid;
+    var sql0 = "select * from com_booking where date1 = '"+date1+"' and cid = "+cid + " and sendtype = '"+sendtype+"'";
     mysql.query(sql0 ,function(error,obj0){
     	if(error){console.log(error);return false;}
     	if(obj0[0]){
@@ -126,7 +126,9 @@ function queryBooking(req, res) {
     mysql.query(insertSql ,function(error,obj){
         if(error){console.log(error);return false;}
         if(obj[0]){
-        	obj[0].date2 = (obj[0].date2).Format("yyyy-MM-dd hh:mm:ss");
+        	for(var i in obj){
+        		obj[i].date2 = (obj[i].date2).Format("yyyy-MM-dd hh:mm:ss");
+        	}
         	res.json(obj);
         }else{
         	res.send("400");

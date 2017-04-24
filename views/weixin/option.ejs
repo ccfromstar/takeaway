@@ -101,7 +101,7 @@
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" 
-               onclick="window.location.reload()">关闭
+               data-dismiss="modal">关闭
             </button>
             <button type="button" class="btn btn-default" onclick="window.open('tel:4000191177');">
                联系客服
@@ -269,17 +269,17 @@ function GetDateStr(AddDayCount) {
 			},
 			success: function(data){
 				if(data=="400"){
-	           		alert("您当天已经下过订单，不能重复订餐！");
+	           		alert("您当天已经订过"+sendtype+"，不能重复订餐！");
 	           		return false;
 	        	}
-	        		$("#bo1").html($('#date1').html());
-			        $("#bo2").html($('#numTotal').html());
-			        $("#bo3").html($('#numA').val());
-			        $("#bo4").html($('#numB').val());
-			        $("#bo5").html(Number($('#numTotal').html())*Number($("#bk6").html()));
+	        		$("#bo1").html(data[0].date1);
+			        $("#bo2").html(data[0].numTotal);
+			        $("#bo3").html(data[0].numA);
+			        $("#bo4").html(data[0].numB);
+			        $("#bo5").html(data[0].priceTotal);
 			        $("#bo6").html(data[0].date2);
-			        $("#bo7").html($('#numC').val());
-			        $("#bo8").html($('#numD').val());
+			        $("#bo7").html(data[0].numC);
+			        $("#bo8").html(data[0].numD);
 		           $('#addModal').modal('show');
 	    	}
 		});

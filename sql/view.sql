@@ -64,3 +64,11 @@ ON a.role_id = b.id;
 
 alter table booking_price add CONSTRAINT FK_PRICE_BOOKING FOREIGN KEY (bookingid) REFERENCES booking (id) ON DELETE CASCADE ON UPDATE NO ACTION;
 alter table material add constraint unique_name UNIQUE(name);
+
+DROP VIEW IF EXISTS `v_com_booking`;
+CREATE VIEW v_com_booking
+AS
+SELECT a.*,b.name as cname
+FROM com_booking a
+LEFT JOIN address b
+ON a.cid = b.id;

@@ -29,11 +29,21 @@
             </table>
             <hr style="margin-top:0px !important;margin-bottom:0px !important;">
             <div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="bo1" style="margin-right:30px;"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">总数量：<span id="bo2"></span> 份</div>
-            <div style="margin-left:0px;padding-top:5px;">A套餐：<span id="bo3"></span> 份</div>
-            <div style="margin-left:0px;padding-top:5px;">B套餐：<span id="bo4"></span> 份</div>
+            <div style="margin-left:0px;padding-top:5px;">总数量：<span id="bo2"></span> </div>
+            <div class="numA_div">
+            	<div style="margin-left:0px;padding-top:5px;">A套餐：<span id="bo3"></span> </div>
+            </div>
+            <div class="numB_div">
+            	<div style="margin-left:0px;padding-top:5px;">B套餐：<span id="bo4"></span> </div>
+            </div>
+            <div class="numC_div">
+            	<div style="margin-left:0px;padding-top:5px;">C套餐：<span id="bo7"></span> </div>
+            </div>
+            <div class="numD_div">
+            	<div style="margin-left:0px;padding-top:5px;">D套餐：<span id="bo8"></span> </div>
+            </div>
             <hr style="margin-top:5px !important;margin-bottom:5px !important;">
-            <div style="margin-left:0px;padding-top:5px;">总金额：¥<span id="bo5"></span></div>
+            <div style="margin-left:0px;padding-top:5px;">总金额：<span id="bo5"></span></div>
             <div style="margin-left:0px;padding-top:5px;">下单时间：<span id="bo6"></span></div>
          </div>
          <div class="modal-footer">
@@ -156,12 +166,24 @@ function GetDateStr(AddDayCount) {
 				if(data == "400"){
 					alert("当天没有订单！");return false;
 				}
+				var bo2 = '';var bo3 = '';var bo4 = '';var bo5 = '';var bo6 = '';var bo7 = '';var bo8 = '';
+				for(var i in data){
+					bo2 = bo2 + " "+data[i].sendtype +":"+ data[i].numTotal;
+					bo3 = bo3 + " "+data[i].sendtype +":"+ data[i].numA;
+					bo4 = bo4 + " "+data[i].sendtype +":"+ data[i].numB;	
+					bo5 = bo5 + " "+data[i].sendtype +":"+ data[i].priceTotal;	
+					bo6 = bo6 + " "+data[i].sendtype +":"+ data[i].date2 +"<br/>";	
+					bo7 = bo7 + " "+data[i].sendtype +":"+ data[i].numC;
+					bo8 = bo8 + " "+data[i].sendtype +":"+ data[i].numD;
+				}
 	        		$("#bo1").html(data[0].date1);
-			        $("#bo2").html(data[0].numTotal);
-			        $("#bo3").html(data[0].numA);
-			        $("#bo4").html(data[0].numB);
-			        $("#bo5").html(data[0].priceTotal);
-			        $("#bo6").html(data[0].date2);
+			        $("#bo2").html(bo2);
+			        $("#bo3").html(bo3);
+			        $("#bo4").html(bo4);
+			        $("#bo5").html(bo5);
+			        $("#bo6").html(bo6);
+			        $("#bo7").html(bo7);
+			        $("#bo8").html(bo8);
 		           $('#addModal').modal('show');
 	    	}
 		});
