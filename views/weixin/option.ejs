@@ -23,13 +23,18 @@
 	            <div style="margin-left:0px;padding-top:5px;">单价：<span id="bk6"></span></div>
 	            <div style="margin-left:0px;padding-top:5px;">结账周期：<span id="bk7"></span></div>
 	            <div style="margin-left:0px;padding-top:5px;">合同有效期：<span id="bk8"></span></div>
-	            <div style="margin-left:0px;padding-top:5px;">配送时间：<span id="bk9"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;" class="breakfast1">早餐配送时间：<span id="bk9"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;" class="breakfast2">午餐配送时间：<span id="bk10"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;" class="breakfast3">晚餐配送时间：<span id="bk11"></span></div>
 	</div>
 	            
 	
 	<div id="menu_pdf" style="width:100%;text-align:center;margin-top:10px"></div>
 	
 	<div style="margin-left: 20px;">
+		<div style="margin-left:0px;padding-top:5px;">
+            	送餐类别：<select name="sendtype" style="width:100px" id="sendtype"></select>
+        </div>
 		<div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="date1"></span></div>
 		<div class="numA_div">
 			<div style="margin-left:0px;padding-top:5px;">A套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numA"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
@@ -124,7 +129,9 @@
         $("#bk6").html(data[0].price);
         $("#bk7").html(data[0].type);
         $("#bk8").html(data[0].deadline);
-        $("#bk9").html(data[0].sendtime);
+        $("#bk9").html(data[0].sendtime1);
+        $("#bk10").html(data[0].sendtime2);
+        $("#bk11").html(data[0].sendtime3);
         var str1 = data[0].menutype;
         if(str1.indexOf("A") == -1){
         	$('.numA_div').hide();
@@ -138,6 +145,24 @@
         if(str1.indexOf("D") == -1){
         	$('.numD_div').hide();
         }
+        var str2 = data[0].sendtype;
+        var option_h = '';
+        if(str2.indexOf("早") == -1){
+        	$('.breakfast1').hide();
+        }else{
+        	option_h += '<option value="早餐">早餐</option>';
+        }
+        if(str2.indexOf("午") == -1){
+        	$('.breakfast2').hide();
+        }else{
+        	option_h += '<option value="午餐">午餐</option>';
+        }
+        if(str2.indexOf("晚") == -1){
+        	$('.breakfast3').hide();
+        }else{
+        	option_h += '<option value="晚餐">晚餐</option>';
+        }
+ 		$('#sendtype').html(option_h);
         sessionCompany = data[0].name;
         getMenu();
         //获取送餐日期
@@ -224,13 +249,9 @@ function GetDateStr(AddDayCount) {
 	}
 	
 	function booking(){
-		var numA = $('#numA').val();
-		if(!numA){
-			alert('套餐A数量必填！');return false;
-		}
-		var numB = $('#numB').val();
-		if(!numB){
-			alert('套餐B数量必填！');return false;
+		var sendtype = $('#sendtype').val();
+		if(!sendtype){
+			alert("送餐类别！");return false;
 		}
 		$.ajax({ 
 			type:"POST" ,
@@ -243,7 +264,8 @@ function GetDateStr(AddDayCount) {
 				numC:$('#numC').val(),
 				numD:$('#numD').val(),
 				numTotal:$('#numTotal').html(),
-				priceTotal:Number($('#numTotal').html())*Number($("#bk6").html())
+				priceTotal:Number($('#numTotal').html())*Number($("#bk6").html()),
+				sendtype:sendtype
 			},
 			success: function(data){
 				if(data=="400"){
@@ -273,10 +295,11 @@ function GetDateStr(AddDayCount) {
 			},
 			success: function(data){
 				//console.log(data);
+				/*
 				if(data=="400"){
 	           		$('#info1').hide();
 	           		$('#info2').show();
-	        	}
+	        	}*/
 	    	}
 		});
 	}

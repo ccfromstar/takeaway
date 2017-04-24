@@ -82,6 +82,7 @@ function insertBooking(req, res) {
     numD = (numD == "")?0:numD;
     var numTotal = req.param('numTotal');
     var priceTotal = req.param('priceTotal');
+    var sendtype = req.param('sendtype');
     var sql0 = "select * from com_booking where date1 = '"+date1+"' and cid = "+cid;
     mysql.query(sql0 ,function(error,obj0){
     	if(error){console.log(error);return false;}
@@ -89,7 +90,7 @@ function insertBooking(req, res) {
     		res.send("400");
     		return false;
     	}
-    	var insertSql = "insert into com_booking (cid,date1,date2,numA,numB,numC,numD,numTotal,priceTotal) values ('"+cid+"','"+date1+"',now(),'"+numA+"','"+numB+"','"+numC+"','"+numD+"','"+numTotal+"','"+priceTotal+"')";
+    	var insertSql = "insert into com_booking (cid,date1,date2,numA,numB,numC,numD,numTotal,priceTotal,sendtype) values ('"+cid+"','"+date1+"',now(),'"+numA+"','"+numB+"','"+numC+"','"+numD+"','"+numTotal+"','"+priceTotal+"','"+sendtype+"')";
 	    mysql.query(insertSql ,function(error,obj){
 	          if(error){console.log(error);return false;}
 	          var sql2 = 'select * from com_booking where id = '+obj.insertId;
