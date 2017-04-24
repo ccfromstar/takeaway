@@ -19,11 +19,14 @@ function sql_insert(req, res) {
     var price = req.param('price');
     var type = req.param('type');
     var deadline = req.param('deadline');
-    var sendtime = req.param('sendtime');
+    var sendtime1 = req.param('sendtime1');
+    var sendtime2 = req.param('sendtime2');
+    var sendtime3 = req.param('sendtime3');
+    var sendtype = req.param('sendtype');
     var menutype = req.param('menutype');
     var code = addNumber(6);
 
-    var insertSql = "insert into address (name,sender,address,tel,send_address,price,type,deadline,code,sendtime,menutype) values ('"+name+"','"+sender+"','"+address+"','"+tel+"','"+send_address+"','"+price+"','"+type+"','"+deadline+"','"+code+"','"+sendtime+"','"+menutype+"')";
+    var insertSql = "insert into address (name,sender,address,tel,send_address,price,type,deadline,code,sendtime1,sendtime2,sendtime3,sendtype,menutype) values ('"+name+"','"+sender+"','"+address+"','"+tel+"','"+send_address+"','"+price+"','"+type+"','"+deadline+"','"+code+"','"+sendtime1+"','"+sendtime2+"','"+sendtime3+"','"+sendtype+"','"+menutype+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -74,7 +77,10 @@ function sql_update(req, res) {
     var price = req.param('price');
     var type = req.param('type');
     var deadline = req.param('deadline');
-    var sendtime = req.param('sendtime');
+    var sendtime1 = req.param('sendtime1');
+    var sendtime2 = req.param('sendtime2');
+    var sendtime3 = req.param('sendtime3');
+    var sendtype = req.param('sendtype');
     var menutype = req.param('menutype');
     var id = req.param('docid');
     var updateSql = "update address set name = '"+name
@@ -84,7 +90,10 @@ function sql_update(req, res) {
      +"',send_address ='"+send_address
      +"',price ='"+price
      +"',type ='"+type
-     +"',sendtime ='"+sendtime
+     +"',sendtime1 ='"+sendtime1
+     +"',sendtime2 ='"+sendtime2
+     +"',sendtime3 ='"+sendtime3
+     +"',sendtype ='"+sendtype
      +"',deadline ='"+deadline
      +"',menutype ='"+menutype
      +"'  where id = "+id;

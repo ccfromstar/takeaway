@@ -77,10 +77,22 @@
                     <td><input type="text" class="input-sm form-control" id="deadline" ></input></td>
                 </tr>
                 <tr>
-                    <td>配送时间</td>
-                    <td><input type="text" class="input-sm form-control" id="sendtime" ></input></td>
+                    <td>早餐配送时间</td>
+                    <td><input type="text" class="input-sm form-control" id="sendtime1" ></input></td>
+                    <td>午餐配送时间</td>
+                    <td><input type="text" class="input-sm form-control" id="sendtime2" ></input></td>
+                </tr>
+                <tr>
+                    <td>晚餐配送时间</td>
+                    <td><input type="text" class="input-sm form-control" id="sendtime3" ></input></td>
                     <td>套餐类别</td>
                     <td><input type="text" class="input-sm form-control" id="menutype" ></input></td>
+                </tr>
+                <tr>
+                    <td>送餐类别</td>
+                    <td><input type="text" class="input-sm form-control" id="sendtype" ></input></td>
+                    <td></td>
+                    <td></td>
                 </tr>
              </table>
              <input type="hidden" id="docid" ></input>
@@ -106,7 +118,10 @@
 		$("#price").val("");
 		$("#type").val("");
 		$("#deadline").val("");
-		$("#sendtime").val("");
+		$("#sendtime1").val("");
+		$("#sendtime2").val("");
+		$("#sendtime3").val("");
+		$("#sendtype").val("");
 		$("#menutype").val("");
 		$("#docid").val("0");
 
@@ -128,7 +143,10 @@
                $("#price").val(data[0].price);
                $("#type").val(data[0].type);
                $("#deadline").val(data[0].deadline);
-               $("#sendtime").val(data[0].sendtime);
+               $("#sendtime1").val(data[0].sendtime1);
+               $("#sendtime2").val(data[0].sendtime2);
+               $("#sendtime3").val(data[0].sendtime3);
+               $("#sendtype").val(data[0].sendtype);
                $("#menutype").val(data[0].menutype);
                $("#docid").val(id);
         }});
@@ -146,7 +164,10 @@
                 send_address:$("#send_address").val(),
                 price:$("#price").val(),
                 type:$("#type").val(),
-                sendtime:$("#sendtime").val(),
+                sendtime1:$("#sendtime1").val(),
+                sendtime2:$("#sendtime2").val(),
+                sendtime3:$("#sendtime3").val(),
+                sendtype:$("#sendtype").val(),
                 deadline:$("#deadline").val(),
                 menutype:$("#menutype").val()
                 }, success: function(data){
@@ -165,7 +186,10 @@
                 send_address:$("#send_address").val(),
                 price:$("#price").val(),
                 type:$("#type").val(),
-                sendtime:$("#sendtime").val(),
+                sendtime1:$("#sendtime1").val(),
+                sendtime2:$("#sendtime2").val(),
+                sendtime3:$("#sendtime3").val(),
+                sendtype:$("#sendtype").val(),
                 deadline:$("#deadline").val(),
                 menutype:$("#menutype").val(),
                 docid:$("#docid").val()
