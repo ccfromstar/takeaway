@@ -1,43 +1,62 @@
 <!--页面逻辑-->
 <% include header %>
 <div style="height:10px;"></div>
-<table style="width:95%;margin:auto;">
-    <tr>
-      <td style="width:40%">
-      </td>
-      <td style="vertical-align:top;padding-left:10px;">
-        <div style="padding-top:5px;font-size:14px;text-align:right;width:100%">
-         
-        </div>
-      </td>
-    </tr>
-</table>
-<div style="height:10px;"></div>
-<div style="margin-left: 20px;">
-			<div style="margin-left:0px;padding-top:5px;">公司名称：<span id="bk1" style="margin-right:30px;"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">负责人：<span id="bk2"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">负责人手机号：<span id="bk3"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">地址：<span id="bk4"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">配送地址：<span id="bk5"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">单价：<span id="bk6"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">结账周期：<span id="bk7"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">合同有效期：<span id="bk8"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">配送时间：<span id="bk9"></span></div>
+<div id="info1">
+	<table style="width:95%;margin:auto;">
+	    <tr>
+	      <td style="width:40%">
+	      </td>
+	      <td style="vertical-align:top;padding-left:10px;">
+	        <div style="padding-top:5px;font-size:14px;text-align:right;width:100%">
+	         
+	        </div>
+	      </td>
+	    </tr>
+	</table>
+	<div style="height:10px;"></div>
+	<div style="margin-left: 20px;">
+				<div style="margin-left:0px;padding-top:5px;">公司名称：<span id="bk1" style="margin-right:30px;"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">负责人：<span id="bk2"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">负责人手机号：<span id="bk3"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">地址：<span id="bk4"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">配送地址：<span id="bk5"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">单价：<span id="bk6"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">结账周期：<span id="bk7"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">合同有效期：<span id="bk8"></span></div>
+	            <div style="margin-left:0px;padding-top:5px;">配送时间：<span id="bk9"></span></div>
+	</div>
+	            
+	
+	<div id="menu_pdf" style="width:100%;text-align:center;margin-top:10px"></div>
+	
+	<div style="margin-left: 20px;">
+		<div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="date1"></span></div>
+		<div class="numA_div">
+			<div style="margin-left:0px;padding-top:5px;">A套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numA"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+		</div>
+		<div class="numB_div">
+			<div style="margin-left:0px;padding-top:5px;">B套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numB"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+		</div>
+		<div class="numC_div">
+			<div style="margin-left:0px;padding-top:5px;">C套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numC"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+		</div>
+		<div class="numD_div">
+			<div style="margin-left:0px;padding-top:5px;">D套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numD"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
+		</div>
+		<div style="margin-left:0px;padding-top:5px;">总份数：<span id="numTotal"></span> 份</div>
+	</div>
+	
+	<div style="width:100%;text-align:center;margin-top:10px">
+	    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="booking()">完成</div>  
+	</div>
 </div>
-            
-
-<div id="menu_pdf" style="width:100%;text-align:center;margin-top:10px"></div>
-
-<div style="margin-left: 20px;">
-	<div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="date1"></span></div>
-	<div style="margin-left:0px;padding-top:5px;">A套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numA"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
-	<div style="margin-left:0px;padding-top:5px;">B套餐：<input type="number" style="width:50%;display:inline;" class="input form-control" id="numB"  onkeyup="value=value.replace(/[^\d]/g,'0')" onchange="computTotal()" /> 份</div>
-	<div style="margin-left:0px;padding-top:5px;">总份数：<span id="numTotal"></span> 份</div>
+<div id="info2" style="display:none">
+	<div style="width:100%;text-align:center;margin-top:10px">
+		您今天已经订过餐了
+	    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="window.location='query'">订单查询</div>  
+	</div>
 </div>
 
-<div style="width:100%;text-align:center;margin-top:10px">
-    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="booking()">完成</div>  
-</div>
 
 <div style="margin-left: 20px;">
 	<div style="margin-left:0px;padding-top:5px;">
@@ -59,15 +78,25 @@
             <hr style="margin-top:0px !important;margin-bottom:0px !important;">
             <div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="bo1" style="margin-right:30px;"></span></div>
             <div style="margin-left:0px;padding-top:5px;">总数量：<span id="bo2"></span> 份</div>
-            <div style="margin-left:0px;padding-top:5px;">A套餐：<span id="bo3"></span> 份</div>
-            <div style="margin-left:0px;padding-top:5px;">B套餐：<span id="bo4"></span> 份</div>
+            <div class="numA_div">
+            	<div style="margin-left:0px;padding-top:5px;">A套餐：<span id="bo3"></span> 份</div>
+            </div>
+            <div class="numB_div">
+            	<div style="margin-left:0px;padding-top:5px;">B套餐：<span id="bo4"></span> 份</div>
+            </div>
+            <div class="numC_div">
+            	<div style="margin-left:0px;padding-top:5px;">C套餐：<span id="bo7"></span> 份</div>
+            </div>
+            <div class="numD_div">
+            	<div style="margin-left:0px;padding-top:5px;">D套餐：<span id="bo8"></span> 份</div>
+            </div>
             <hr style="margin-top:5px !important;margin-bottom:5px !important;">
             <div style="margin-left:0px;padding-top:5px;">总金额：¥<span id="bo5"></span></div>
             <div style="margin-left:0px;padding-top:5px;">下单时间：<span id="bo6"></span></div>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" 
-               data-dismiss="modal">关闭
+               onclick="window.location.reload()">关闭
             </button>
             <button type="button" class="btn btn-default" onclick="window.open('tel:4000191177');">
                联系客服
@@ -96,6 +125,19 @@
         $("#bk7").html(data[0].type);
         $("#bk8").html(data[0].deadline);
         $("#bk9").html(data[0].sendtime);
+        var str1 = data[0].menutype;
+        if(str1.indexOf("A") == -1){
+        	$('.numA_div').hide();
+        }
+        if(str1.indexOf("B") == -1){
+        	$('.numB_div').hide();
+        }
+        if(str1.indexOf("C") == -1){
+        	$('.numC_div').hide();
+        }
+        if(str1.indexOf("D") == -1){
+        	$('.numD_div').hide();
+        }
         sessionCompany = data[0].name;
         getMenu();
         //获取送餐日期
@@ -126,7 +168,13 @@ function GetDateStr(AddDayCount) {
   function computTotal(){
   	var numA = Number($('#numA').val());
   	var numB = Number($('#numB').val());
-  	$('#numTotal').html(numA+numB);
+  	var numC = Number($('#numC').val());
+  	var numD = Number($('#numD').val());
+  	numA = (numA == "")?0:numA;
+    numB = (numB == "")?0:numB;
+    numC = (numC == "")?0:numC;
+    numD = (numD == "")?0:numD;
+  	$('#numTotal').html(numA+numB+numC+numD);
   }
 
   function getbookingprice(id,bk1,bk2,bk3,bk8,bk4,bk5,bk6,bk7,num,price,price1){
@@ -192,6 +240,8 @@ function GetDateStr(AddDayCount) {
 				date1:$('#date1').html(),
 				numA:$('#numA').val(),
 				numB:$('#numB').val(),
+				numC:$('#numC').val(),
+				numD:$('#numD').val(),
 				numTotal:$('#numTotal').html(),
 				priceTotal:Number($('#numTotal').html())*Number($("#bk6").html())
 			},
@@ -206,11 +256,32 @@ function GetDateStr(AddDayCount) {
 			        $("#bo4").html($('#numB').val());
 			        $("#bo5").html(Number($('#numTotal').html())*Number($("#bk6").html()));
 			        $("#bo6").html(data[0].date2);
+			        $("#bo7").html($('#numC').val());
+			        $("#bo8").html($('#numD').val());
 		           $('#addModal').modal('show');
 	    	}
 		});
 	}
 	
+	function checkBooking(){
+		$.ajax({ 
+			type:"POST" ,
+			url: "/role/checkBooking",
+			data:{
+				cid:sessionID,
+				date1:GetDateStr(1)
+			},
+			success: function(data){
+				//console.log(data);
+				if(data=="400"){
+	           		$('#info1').hide();
+	           		$('#info2').show();
+	        	}
+	    	}
+		});
+	}
+	
 	getCompanyInfo();
+	checkBooking();
 </script>
 <% include footer %>

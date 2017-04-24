@@ -22,6 +22,7 @@ exports.sqldo = function (req, res) {
     else if(_sql == "insertBooking"){insertBooking(req,res);}
     else if(_sql == "queryBooking"){queryBooking(req,res);}
     else if(_sql == "queryBooking2"){queryBooking2(req,res);}
+    else if(_sql == "checkBooking"){checkBooking(req,res);}
 };
 
 function sendSMS(req,res){
@@ -73,6 +74,12 @@ function insertBooking(req, res) {
     var date1 = req.param('date1');
     var numA = req.param('numA');
     var numB = req.param('numB');
+    var numC = req.param('numC');
+    var numD = req.param('numD');
+    numA = (numA == "")?0:numA;
+    numB = (numB == "")?0:numB;
+    numC = (numC == "")?0:numC;
+    numD = (numD == "")?0:numD;
     var numTotal = req.param('numTotal');
     var priceTotal = req.param('priceTotal');
     var sql0 = "select * from com_booking where date1 = '"+date1+"' and cid = "+cid;
@@ -82,7 +89,7 @@ function insertBooking(req, res) {
     		res.send("400");
     		return false;
     	}
-    	var insertSql = "insert into com_booking (cid,date1,date2,numA,numB,numTotal,priceTotal) values ('"+cid+"','"+date1+"',now(),'"+numA+"','"+numB+"','"+numTotal+"','"+priceTotal+"')";
+    	var insertSql = "insert into com_booking (cid,date1,date2,numA,numB,numC,numD,numTotal,priceTotal) values ('"+cid+"','"+date1+"',now(),'"+numA+"','"+numB+"','"+numC+"','"+numD+"','"+numTotal+"','"+priceTotal+"')";
 	    mysql.query(insertSql ,function(error,obj){
 	          if(error){console.log(error);return false;}
 	          var sql2 = 'select * from com_booking where id = '+obj.insertId;
@@ -92,6 +99,21 @@ function insertBooking(req, res) {
 			    res.send(obj2);   
 			  });
 	    });
+    });
+};
+
+function checkBooking(req, res) {
+    var cid = req.param('cid');
+    var date1 = req.param('date1');
+    var sql0 = "select * from com_booking where date1 = '"+date1+"' and cid = "+cid;
+    console.log(sql0);
+    mysql.query(sql0 ,function(error,obj0){
+    	if(error){console.log(error);return false;}
+    	if(obj0[0]){
+    		res.send("400");
+    	}else{
+    		res.send("200");
+    	}
     });
 };
 

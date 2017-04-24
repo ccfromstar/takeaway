@@ -20,9 +20,10 @@ function sql_insert(req, res) {
     var type = req.param('type');
     var deadline = req.param('deadline');
     var sendtime = req.param('sendtime');
+    var menutype = req.param('menutype');
     var code = addNumber(6);
 
-    var insertSql = "insert into address (name,sender,address,tel,send_address,price,type,deadline,code,sendtime) values ('"+name+"','"+sender+"','"+address+"','"+tel+"','"+send_address+"','"+price+"','"+type+"','"+deadline+"','"+code+"','"+sendtime+"')";
+    var insertSql = "insert into address (name,sender,address,tel,send_address,price,type,deadline,code,sendtime,menutype) values ('"+name+"','"+sender+"','"+address+"','"+tel+"','"+send_address+"','"+price+"','"+type+"','"+deadline+"','"+code+"','"+sendtime+"','"+menutype+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -74,6 +75,7 @@ function sql_update(req, res) {
     var type = req.param('type');
     var deadline = req.param('deadline');
     var sendtime = req.param('sendtime');
+    var menutype = req.param('menutype');
     var id = req.param('docid');
     var updateSql = "update address set name = '"+name
      +"',sender ='"+sender
@@ -84,6 +86,7 @@ function sql_update(req, res) {
      +"',type ='"+type
      +"',sendtime ='"+sendtime
      +"',deadline ='"+deadline
+     +"',menutype ='"+menutype
      +"'  where id = "+id;
     mysql.query(updateSql ,function(error,obj){
           if(error){console.log(error);return false;}

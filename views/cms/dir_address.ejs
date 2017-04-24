@@ -79,8 +79,8 @@
                 <tr>
                     <td>配送时间</td>
                     <td><input type="text" class="input-sm form-control" id="sendtime" ></input></td>
-                    <td></td>
-                    <td></td>
+                    <td>套餐类别</td>
+                    <td><input type="text" class="input-sm form-control" id="menutype" ></input></td>
                 </tr>
              </table>
              <input type="hidden" id="docid" ></input>
@@ -107,6 +107,7 @@
 		$("#type").val("");
 		$("#deadline").val("");
 		$("#sendtime").val("");
+		$("#menutype").val("");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
@@ -128,6 +129,7 @@
                $("#type").val(data[0].type);
                $("#deadline").val(data[0].deadline);
                $("#sendtime").val(data[0].sendtime);
+               $("#menutype").val(data[0].menutype);
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
@@ -145,7 +147,8 @@
                 price:$("#price").val(),
                 type:$("#type").val(),
                 sendtime:$("#sendtime").val(),
-                deadline:$("#deadline").val()
+                deadline:$("#deadline").val(),
+                menutype:$("#menutype").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -164,7 +167,8 @@
                 type:$("#type").val(),
                 sendtime:$("#sendtime").val(),
                 deadline:$("#deadline").val(),
-                docid:$("#docid").val(),
+                menutype:$("#menutype").val(),
+                docid:$("#docid").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
