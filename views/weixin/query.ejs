@@ -1,58 +1,64 @@
-<% include header %>
+<% include header1 %>
+<!-- Header -->
+		<header data-am-widget="header" class="am-header am-header-default am-no-layout am-header-fixed">
+			<h1 class="am-header-title">
+    			<a href="#title-link">订单查询</a>
+  			</h1>
+		</header>
+		
+		<form class="am-form">
+		  <fieldset>
+		    <legend>日账单查询</legend>
 
+		    <div class="am-form-group">
+		      <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+				  <input type="text" class="am-form-field" id="date" placeholder="日期" readonly>
+				  <span class="am-input-group-btn am-datepicker-add-on">
+				    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+				  </span>
+			   </div>
+		    </div>
+		    
+			<button type="button" class="am-btn am-btn-default" onclick="query()">查询</button>
+			
+			<table class="am-table am-table-bordered am-table-radius am-table-striped" style="margin-top:10px;">
+			    <thead>
+			        <tr>
+			            <th>A</th>
+			            <th>B</th>
+			            <th>C</th>
+			            <th>D</th>
+			            <th>总数</th>
+			            <th>总价</th>
+			            <th>送餐类别</th>
+			        </tr>
+			    </thead>
+			    <tbody id="tbody1">
+			   
+			    </tbody>
+			</table>
+		  </fieldset>
+		</form>
+		
+		<form class="am-form">
+		  <fieldset>
+		    <legend>月账单查询</legend>
 
-<div style="width:100%;text-align:center;margin-top:10px">
-	<h1>订单查询</h1>
-	<div style="margin-bottom:10px;padding-top:5px;">日账单查询</div>
-	<input type="text" name="bookingdate" id="date" style="cursor:pointer" readonly  class="Wdate"  onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
-    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="query()">查询</div>  
-</div>
-
-<div style="width:100%;text-align:center;margin-top:10px">
-	<div style="margin-bottom:10px;padding-top:5px;">月账单查询</div>
-	<input type="text" name="bookingdate" id="date2" style="cursor:pointer" readonly  class="Wdate"  onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
-    <div style="cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;" onclick="query2()">查询</div>  
-	<div style="margin-left:0px;padding-top:5px;">当月总份数：<span id="numTotal"></span> 份</div>
-    <div style="margin-left:0px;padding-top:5px;">当月总金额：¥<span id="priceTotal"></span></div>
-</div>
-
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
-   aria-labelledby="myModalLabel" aria-hidden="true">
-   <div class="modal-dialog" >
-      <div class="modal-content">
-         <div class="modal-body">
-            <table style="width:100%;margin-left:0px;margin-bottom:5px;">
-              <tr>
-                <th style="width:100px;">订单信息</th>
-              </tr>
-            </table>
-            <hr style="margin-top:0px !important;margin-bottom:0px !important;">
-            <div style="margin-left:0px;padding-top:5px;">送餐日期：<span id="bo1" style="margin-right:30px;"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">总数量：<span id="bo2"></span> </div>
-            <div class="numA_div">
-            	<div style="margin-left:0px;padding-top:5px;">A套餐：<span id="bo3"></span> </div>
-            </div>
-            <div class="numB_div">
-            	<div style="margin-left:0px;padding-top:5px;">B套餐：<span id="bo4"></span> </div>
-            </div>
-            <div class="numC_div">
-            	<div style="margin-left:0px;padding-top:5px;">C套餐：<span id="bo7"></span> </div>
-            </div>
-            <div class="numD_div">
-            	<div style="margin-left:0px;padding-top:5px;">D套餐：<span id="bo8"></span> </div>
-            </div>
-            <hr style="margin-top:5px !important;margin-bottom:5px !important;">
-            <div style="margin-left:0px;padding-top:5px;">总金额：<span id="bo5"></span></div>
-            <div style="margin-left:0px;padding-top:5px;">下单时间：<span id="bo6"></span></div>
-         </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-default" 
-               data-dismiss="modal">关闭
-            </button>
-         </div>
-      </div><!-- /.modal-content -->
-</div><!-- /.modal -->
+		    <div class="am-form-group">
+		      <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm'}">
+				  <input type="text" class="am-form-field" id="date2" placeholder="日期" readonly>
+				  <span class="am-input-group-btn am-datepicker-add-on">
+				    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+				  </span>
+			   </div>
+		    </div>
+		    
+			<button type="button" class="am-btn am-btn-default" onclick="query2()">查询</button>
+			
+			<div style="margin-left:0px;padding-top:5px;">当月总份数：<span id="numTotal"></span> 份</div>
+    		<div style="margin-left:0px;padding-top:5px;">当月总金额：¥<span id="priceTotal"></span></div>
+		  </fieldset>
+		</form>
 
 <script type="text/javascript">
   //判断登陆状态
@@ -166,25 +172,19 @@ function GetDateStr(AddDayCount) {
 				if(data == "400"){
 					alert("当天没有订单！");return false;
 				}
-				var bo2 = '';var bo3 = '';var bo4 = '';var bo5 = '';var bo6 = '';var bo7 = '';var bo8 = '';
-				for(var i in data){
-					bo2 = bo2 + " "+data[i].sendtype +":"+ data[i].numTotal;
-					bo3 = bo3 + " "+data[i].sendtype +":"+ data[i].numA;
-					bo4 = bo4 + " "+data[i].sendtype +":"+ data[i].numB;	
-					bo5 = bo5 + " "+data[i].sendtype +":"+ data[i].priceTotal;	
-					bo6 = bo6 + " "+data[i].sendtype +":"+ data[i].date2 +"<br/>";	
-					bo7 = bo7 + " "+data[i].sendtype +":"+ data[i].numC;
-					bo8 = bo8 + " "+data[i].sendtype +":"+ data[i].numD;
-				}
-	        		$("#bo1").html(data[0].date1);
-			        $("#bo2").html(bo2);
-			        $("#bo3").html(bo3);
-			        $("#bo4").html(bo4);
-			        $("#bo5").html(bo5);
-			        $("#bo6").html(bo6);
-			        $("#bo7").html(bo7);
-			        $("#bo8").html(bo8);
-		           $('#addModal').modal('show');
+				var html = '';
+					for(var i in data){
+							html += '<tr>';
+							html += '<td>'+data[i].numA+'</td>';
+							html += '<td>'+data[i].numB+'</td>';
+							html += '<td>'+data[i].numC+'</td>';
+							html += '<td>'+data[i].numD+'</td>';
+							html += '<td>'+data[i].numTotal+'</td>';
+							html += '<td>'+data[i].priceTotal+'</td>';
+							html += '<td>'+data[i].sendtype+'</td>';
+							html += '</tr>';
+					}
+				$('#tbody1').html(html);
 	    	}
 		});
 	}
