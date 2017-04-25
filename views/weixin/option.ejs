@@ -253,36 +253,53 @@ function GetDateStr(AddDayCount) {
 		if(!sendtype){
 			alert("送餐类别！");return false;
 		}
-		$.ajax({ 
-			type:"POST" ,
-			url: "/role/insertBooking",
-			data:{
-				cid:sessionID,
-				date1:$('#date1').html(),
-				numA:$('#numA').val(),
-				numB:$('#numB').val(),
-				numC:$('#numC').val(),
-				numD:$('#numD').val(),
-				numTotal:$('#numTotal').html(),
-				priceTotal:Number($('#numTotal').html())*Number($("#bk6").html()),
-				sendtype:sendtype
-			},
-			success: function(data){
-				if(data=="400"){
-	           		alert("您当天已经订过"+sendtype+"，不能重复订餐！");
-	           		return false;
-	        	}
-	        		$("#bo1").html(data[0].date1);
-			        $("#bo2").html(data[0].numTotal);
-			        $("#bo3").html(data[0].numA);
-			        $("#bo4").html(data[0].numB);
-			        $("#bo5").html(data[0].priceTotal);
-			        $("#bo6").html(data[0].date2);
-			        $("#bo7").html(data[0].numC);
-			        $("#bo8").html(data[0].numD);
-		           $('#addModal').modal('show');
-	    	}
-		});
+		var detail = '';
+		if($('#numA').val()){
+			detail += 'A套餐'+$('#numA').val()+"份 ";
+		}
+		if($('#numB').val()){
+			detail += 'B套餐'+$('#numB').val()+"份 ";
+		}
+		if($('#numC').val()){
+			detail += 'C套餐'+$('#numC').val()+"份 ";
+		}
+		if($('#numD').val()){
+			detail += 'D套餐'+$('#numD').val()+"份 ";
+		}
+		if(confirm("您预订了"+$('#date1').html()+"的"+sendtype+$('#numTotal').html()+"份，总共"+Number($('#numTotal').html())*Number($("#bk6").html())+"元，其中"+detail+"，是否确认订餐")){
+			$.ajax({ 
+				type:"POST" ,
+				url: "/role/insertBooking",
+				data:{
+					cid:sessionID,
+					date1:$('#date1').html(),
+					numA:$('#numA').val(),
+					numB:$('#numB').val(),
+					numC:$('#numC').val(),
+					numD:$('#numD').val(),
+					numTotal:$('#numTotal').html(),
+					priceTotal:Number($('#numTotal').html())*Number($("#bk6").html()),
+					sendtype:sendtype
+				},
+				success: function(data){
+					if(data=="400"){
+		           		alert("您当天已经订过"+sendtype+"，不能重复订餐！");
+		           		return false;
+		        	}
+		        		$("#bo1").html(data[0].date1);
+				        $("#bo2").html(data[0].numTotal);
+				        $("#bo3").html(data[0].numA);
+				        $("#bo4").html(data[0].numB);
+				        $("#bo5").html(data[0].priceTotal);
+				        $("#bo6").html(data[0].date2);
+				        $("#bo7").html(data[0].numC);
+				        $("#bo8").html(data[0].numD);
+			           $('#addModal').modal('show');
+		    	}
+			});
+		}else{
+			
+		}
 	}
 	
 	function checkBooking(){
