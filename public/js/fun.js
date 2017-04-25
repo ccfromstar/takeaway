@@ -1,4 +1,4 @@
-_checkIE();
+//_checkIE();
 
 function _checkIE(){
     var browser=navigator.appName; 

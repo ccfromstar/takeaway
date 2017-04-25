@@ -1,4 +1,4 @@
-_checkIE();
+//_checkIE();
 
 var method = 1;
 var global_code = 0;
