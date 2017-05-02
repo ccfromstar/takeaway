@@ -72,6 +72,9 @@
   
   function getCompanyInfo(){
   	$.ajax({ type:"POST" , data:{id:sessionID},url: "/role/getCinfo", success: function(data){
+  		if(!data[0]){
+  			window.location = '/weixin/login';
+  		}
         $("#bk1").html(data[0].name);
         $("#bk2").html(data[0].sender);
         $("#bk3").html(data[0].tel);

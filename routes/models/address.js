@@ -31,7 +31,12 @@ function sql_insert(req, res) {
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
           req.session.infor = "新建成功！";
-          res.send("200");
+          //新增菜单
+          var sql2 = "insert into menu (name,add_id) values ('"+name+"',"+obj.insertId+")";
+          mysql.query(sql2 ,function(error,obj2){
+	          if(error){console.log(error);return false;}
+	          res.send("200");
+	      });
     });
 };
 
@@ -49,7 +54,11 @@ function sql_delete(req, res) {
     mysql.query(deleteSql ,function(error,obj){
           if(error){console.log(error);return false;}
           req.session.infor = "删除成功！";
-          res.send("200");
+          var sql2 = "delete from menu where add_id = "+id;
+          mysql.query(sql2 ,function(error,obj2){
+	          if(error){console.log(error);return false;}
+	          res.send("200");
+	      });
     });
 };
 
