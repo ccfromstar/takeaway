@@ -17,12 +17,17 @@
         			<th>公司</th>
         			<th>送餐类别</th>
         			<th>订餐时间</th>
-        			<th>A套餐数量</th>
-        			<th>B套餐数量</th>
-        			<th>C套餐数量</th>
-        			<th>D套餐数量</th>
+        			<th>A套餐</th>
+              <th>A调整</th>
+        			<th>B套餐</th>
+              <th>B调整</th>
+        			<th>C套餐</th>
+              <th>C调整</th>
+        			<th>D套餐</th>
+              <th>D调整</th>
         			<th>总数量</th>
         			<th>总价</th>
+              <th>操作</th>
       			</tr>
     		</thead>
     		<tbody>
@@ -32,11 +37,16 @@
         			<td><%-record[i].sendtype%></td>
         			<td><%-record[i].date2%></td>
         			<td><%-record[i].numA%></td>
+              <td><%-record[i].adjustA%></td>
         			<td><%-record[i].numB%></td>
+              <td><%-record[i].adjustB%></td>
         			<td><%-record[i].numC%></td>
+              <td><%-record[i].adjustC%></td>
         			<td><%-record[i].numD%></td>
+              <td><%-record[i].adjustD%></td>
         			<td><%-record[i].numTotal%></td>
         			<td><%-record[i].priceTotal%></td>
+              <td><button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=record[i].id%>)">调整数量</button></td>
       			</tr>
     		<%}%>
     		</tbody>
@@ -55,10 +65,55 @@
 	  </td>
     </tr>
   </table>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:400px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td>套餐类别</td>
+                    <td>
+                      <select id="stype">
+                        <option value = "A">A套餐</option>
+                        <option value = "B">B套餐</option>
+                        <option value = "C">C套餐</option>
+                        <option value = "D">D套餐</option>
+                      </select>
+                    </td>
+                </tr>
+            
+                <tr>
+                    <td>数量</td>
+                    <td>
+                      <input type="text" class="input-sm form-control" id="adjnum" ></input>    
+                    </td>
+                </tr>
+             </table>
+             <input type="hidden" id="docid" ></input>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
 <script>
 	var w = window.screen.width;
 	w = w - 330;
 	$("#_viewl").css("width",w);
+
+  function editDoc(id){
+    $("#docid").val(id);
+    $('#addModal').modal('show');
+  }
 
 	function toPage(i){
 		var _d = $("#bookingdate").val();
@@ -179,6 +234,20 @@
         _html += "</tbody></table>";
    		$("#d_right_bottmo").html(_html);
     	}});
+    }
+
+    function submitDoc(){
+      $.ajax({ type:"POST" , url: "/finance_d/adjust", data:{
+                  stype:$("#stype").val(),
+                  adjnum:$("#adjnum").val(),
+                  docid:$("#docid").val()
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        alert("操作成功！");
+                        window.location.reload();
+                }
+          }});
     }
 
     getleft();

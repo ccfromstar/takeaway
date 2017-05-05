@@ -15,6 +15,7 @@ exports.sqldo = function (req, res) {
     else if(_sql == "getleft_m"){sql_getleft_m(req,res);}
     else if(_sql == "getright"){sql_getright(req,res);}
     else if(_sql == "getrightbottom"){sql_getrightbottom(req,res);}
+    else if(_sql == "adjust"){adjust(req,res);}
 };
 
 exports.sql_list = function (req, res) {
@@ -107,6 +108,17 @@ function sql_setinfo(req, res) {
     mysql.query(Sql1 ,function(error,obj){
           if(error){console.log(error);return false;}
           req.session.infor = "确认收款成功！";
+          res.send("200");
+    });
+};
+
+function adjust(req, res) {
+    var stype = req.param('stype');
+    var adjnum = req.param('adjnum');
+    var id = req.param('docid');
+    var Sql1 = "update com_booking set adjust"+stype+" = "+adjnum+" where id = "+id;
+    mysql.query(Sql1 ,function(error,obj){
+          if(error){console.log(error);return false;}
           res.send("200");
     });
 };
