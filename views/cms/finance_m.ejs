@@ -21,10 +21,14 @@
         			<th>公司</th>
         			<th>送餐类别</th>
         			<th>订餐时间</th>
-        			<th>A套餐数量</th>
-        			<th>B套餐数量</th>
-        			<th>C套餐数量</th>
-        			<th>D套餐数量</th>
+        			<th>A套餐</th>
+              <th>A调整</th>
+              <th>B套餐</th>
+              <th>B调整</th>
+              <th>C套餐</th>
+              <th>C调整</th>
+              <th>D套餐</th>
+              <th>D调整</th>
         			<th>总数量</th>
         			<th>总价</th>
       			</tr>
@@ -37,9 +41,13 @@
 	        			<td><%-record[i].sendtype%></td>
 	        			<td><%-record[i].date2%></td>
 	        			<td><%-record[i].numA%></td>
-	        			<td><%-record[i].numB%></td>
-	        			<td><%-record[i].numC%></td>
-        				<td><%-record[i].numD%></td>
+              <td><%-record[i].adjustA%></td>
+              <td><%-record[i].numB%></td>
+              <td><%-record[i].adjustB%></td>
+              <td><%-record[i].numC%></td>
+              <td><%-record[i].adjustC%></td>
+              <td><%-record[i].numD%></td>
+              <td><%-record[i].adjustD%></td>
 	        			<td><%-record[i].numTotal%></td>
 	        			<td><%-record[i].priceTotal%></td>
 	      			</tr>
