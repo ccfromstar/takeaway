@@ -6,12 +6,10 @@
 	CONSTANT3 = "finance_d,finance_m,address,menu,role".split(",");
 	CONSTANTRole = "show,show,show,show,show".split(",");
 
-	if(role=="财务"){
-		CONSTANTRole[2] = "hide";CONSTANTRole[3] = "hide";CONSTANTRole[5] = "hide";CONSTANTRole[6] = "hide";
-	}else if(role=="主管"){
-		
-	}else if(role=="操作"){
-		CONSTANTRole[2] = "hide";CONSTANTRole[4] = "hide";CONSTANTRole[5] = "hide";
+	if(role=="主管"){
+		CONSTANTRole[4] = "hide";
+	}else if(role=="客服"){
+		CONSTANTRole[2] = "hide";CONSTANTRole[4] = "hide";
 	}
 
 	parms = url.split("?p=");

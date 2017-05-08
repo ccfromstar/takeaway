@@ -1,35 +1,126 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <!-- 强烈建议为 html 根元素指定 lang 属性，从而为文档设置正确的语言。这将有助于语音合成工具确定其所应该采用的发音，有助于翻译工具确定其翻译时所应遵守的规则等等。-->
+
   <head>
-    <title>外卖侠后台管理系统1.0</title>
-    <!-- IE 支持通过特定的 <meta> 标签来确定绘制当前页面所应该采用的 IE 版本。除非有强烈的特殊需求，否则最好是设置为 edge mode，从而通知 IE 采用其所支持的最新的模式。-->
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <!-- 通过明确声明字符编码，能够确保浏览器快速并容易的判断页面内容的渲染方式。这样做的好处是，可以避免在 HTML 中使用字符实体标记（character entity），从而全部与文档编码一致（一般采用 UTF-8 编码）。-->
+    <title>百颖（上海）餐饮服务有限公司管理系统 1.1</title>
     <meta charset="UTF-8">
-    <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script src="/js/jquery.min.js"></script>
-    <link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<script src="/plugin/bootstrap/js/bootstrap.min.js"></script>
-    <style type="text/css">
-      *{margin:0;padding:0;font-size:12px;font-family:宋体;color: #797979;}
+    <script src="/js/amazeui.min.js"></script>
+    <link rel="stylesheet" href="/css/amazeui.min.css" />
+    <link rel="stylesheet" href="/css/basic.css" />
+    <style>
+      .header {
+        text-align: center;
+      }
+      
+      .header h1 {
+        font-size: 150%;
+        color: #333;
+        margin-top: 30px;
+      }
+      
+      .header p {
+        font-size: 14px;
+      }
+      
+      .am-u-lg-6 {
+        width: 250px !important;
+      }
+      
+      label{
+        font-weight: 300;
+        font-size:12px;
+      }
     </style>
   </head>
 
-  <body style="background-color: #72C0B0;">
-  <form class="form-horizontal" method="post" action="/cms/logindo">
-  <table style="margin:auto;background-image:url('/img/bglogin.jpg');width:1038px;height:532px;">
-    <tr>
-      <td style="width:530px;"></td>
-      <td style="vertical-align:top;">
-        <input type="text"  style="margin-top:186px;height:33px;border:none;width:332px;" id="username" name="username">
-        <br/><input type="password" style="margin-top:32px;height:33px;border:none;width:332px;" id="password" name="password">
-        <div style="margin-top:36px;cursor:pointer;width:120px;height:37px;" onclick="document.forms[0].submit();"></div>
-      </td>
-    </tr>
-  </table>
-  </form>
+  <body>
+    <div class="header">
+      <div class="am-g">
+        <h1>百颖（上海）餐饮服务有限公司管理系统 1.1</h1>
+      </div>
+      <hr />
+    </div>
+    <div class="am-g">
+      <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <form method="post" class="am-form" action="/cms/logindo">
+          <label for="username">用户名:</label>
+          <input type="text" name="username" id="username" value="">
+          <br>
+          <label for="password">密码:</label>
+          <input type="password" name="password" id="password" value="">
+          <br>
+          <label for="remember-me">
+            <input id="remember-me" name="remember-me" type="checkbox" > 记住密码</input>
+          </label>
+          <br />
+          <div class="am-cf">
+            <input type="submit" id="login" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="am-alert am-alert-danger none errorinfo" data-am-alert></div>
+    <script type="text/javascript">
+      $(function() {
+      /*检测是否记住用户名密码*/
+      var remember = window.localStorage.getItem('remember-me');
+      if(remember){
+        $('#username').val(window.localStorage.getItem('uname'));
+        $('#password').val(window.localStorage.getItem('pwd'));
+        $('#remember-me').attr('checked','checked');
+      }
+      $('#login').click(function(e) {
+        e.preventDefault();
+        var u = $('#username').val();
+        var p = $('#password').val();
+        if (!u) {
+          $('.errorinfo').html('<p>用户名不能为空</p>').removeClass("none");
+          setTimeout(function() {
+            $('.errorinfo').addClass("none");
+          }, 2000);
+          return false;
+        }
+        if (!p) {
+          $('.errorinfo').html('<p>密码不能为空</p>').removeClass("none");
+          setTimeout(function() {
+            $('.errorinfo').addClass("none");
+          }, 2000);
+          return false;
+        }
+        if(jqchk('remember-me') == "on"){
+          window.localStorage.setItem("uname",u);
+          window.localStorage.setItem('pwd',p);
+          window.localStorage.setItem("remember-me",true);
+        }else{
+          window.localStorage.removeItem("uname");
+          window.localStorage.removeItem('pwd');
+          window.localStorage.removeItem("remember-me");
+        }
+        document.forms[0].submit();
+      });
+    });
+
+    function jqchk(name){ //jquery获取复选框值
+        var chk_value = '';
+        $('input[name="' + name + '"]:checked').each(function ()
+        {
+            if (chk_value == "")
+            {
+                chk_value = $(this).val();
+            }
+            else
+            {
+                chk_value = chk_value + "*" + $(this).val();
+            }
+        }
+        );
+        return chk_value;
+    }
+    </script>
   </body>
 </html>

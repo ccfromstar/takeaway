@@ -2,7 +2,6 @@
 <% include header %>
 <table class="tbpage">
     <tr>
-      <td class="tbleft_gury"><% include left-nav %></td>
       <td>
       		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增账户</button>
 			<table class="table table-hover" id="table_list">
@@ -42,14 +41,12 @@
       <table class="table table-hover" id="table_list">
         <thead>
             <tr>
-              <th>用户权限</th>
-              <th>查看订单</th>
-              <th>客户管理</th>
-              <th>财务管理</th>
-              <th>地址管理</th>
+              <th></th>
+              <th>日报表</th>
+              <th>月报表</th>
+              <th>企业管理</th>
               <th>菜单管理</th>
               <th>账户管理</th>
-              <th>系统设置</th>
             </tr>
         </thead>
         <tbody>
@@ -60,18 +57,6 @@
               <td>√</td>
               <td>√</td>
               <td>√</td>
-              <td>√</td>
-              <td>√</td>
-            </tr>
-            <tr>
-              <td>财务</td>
-              <td>√</td>
-              <td>X</td>
-              <td>√</td>
-              <td>x</td>
-              <td>x</td>
-              <td>x</td>
-              <td>x</td>
             </tr>
             <tr>
               <td>主管</td>
@@ -79,19 +64,15 @@
               <td>√</td>
               <td>√</td>
               <td>√</td>
-              <td>√</td>
               <td>x</td>
-              <td>√</td>
             </tr>
             <tr>
-              <td>操作</td>
+              <td>客服</td>
               <td>√</td>
               <td>√</td>
               <td>x</td>
-              <td>x</td>
-              <td>x</td>
-              <td>x</td>
               <td>√</td>
+              <td>x</td>
             </tr>
         </tbody>
       </table>
@@ -124,9 +105,8 @@
                     	<select id="role" class="input-sm selectpicker">
                     		<option value="-">请选择</option>
                             <option value="BOSS">BOSS</option>
-                            <option value="财务">财务</option>
                             <option value="主管">主管</option>
-                            <option value="操作">操作</option>
+                            <option value="客服">客服</option>
                         </select>
                     </td>
                 </tr>
