@@ -116,10 +116,21 @@ function adjust(req, res) {
     var stype = req.param('stype');
     var adjnum = req.param('adjnum');
     var id = req.param('docid');
-    var Sql1 = "update com_booking set adjust"+stype+" = "+adjnum+" where id = "+id;
-    mysql.query(Sql1 ,function(error,obj){
-          if(error){console.log(error);return false;}
-          res.send("200");
+    //更新总数量和总价
+    var sql2 = "select * from com_booking where id = "+id;
+    mysql.query(sql2 ,function(error,obj2){
+        if(error){console.log(error);return false;}
+        var cid = obj2[0].cid;
+        var sql3 = "select * from address where id = "+cid;
+        mysql.query(sql3 ,function(error,obj3){
+            if(error){console.log(error);return false;}
+            var unitp = obj3[0].price;
+            var Sql1 = "update com_booking set adjust"+stype+" = "+adjnum+",priceTotal = ("+unitp+"*(numA+numB+numC+numD+adjustA+adjustB+adjustC+adjustD)),numTotal = (numA+numB+numC+numD+adjustA+adjustB+adjustC+adjustD) where id = "+id;
+            mysql.query(Sql1 ,function(error,obj){
+                  if(error){console.log(error);return false;}
+                  res.send("200");
+            });  
+        });
     });
 };
 

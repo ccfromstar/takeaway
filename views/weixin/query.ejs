@@ -25,9 +25,13 @@
 			    <thead>
 			        <tr>
 			            <th>A</th>
+			            <th>A调整</th>
 			            <th>B</th>
+			            <th>B调整</th>
 			            <th>C</th>
+			            <th>C调整</th>
 			            <th>D</th>
+			            <th>D调整</th>
 			            <th>总数</th>
 			            <th>总价</th>
 			            <th>送餐类别</th>
@@ -179,9 +183,13 @@ function GetDateStr(AddDayCount) {
 					for(var i in data){
 							html += '<tr>';
 							html += '<td>'+data[i].numA+'</td>';
+							html += '<td>'+data[i].adjustA+'</td>';
 							html += '<td>'+data[i].numB+'</td>';
+							html += '<td>'+data[i].adjustB+'</td>';
 							html += '<td>'+data[i].numC+'</td>';
+							html += '<td>'+data[i].adjustC+'</td>';
 							html += '<td>'+data[i].numD+'</td>';
+							html += '<td>'+data[i].adjustD+'</td>';
 							html += '<td>'+data[i].numTotal+'</td>';
 							html += '<td>'+data[i].priceTotal+'</td>';
 							html += '<td>'+data[i].sendtype+'</td>';
