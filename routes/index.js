@@ -1,5 +1,6 @@
-var address, role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp;
+var address, role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline;
 address = require('./models/address.js');
+outline = require('./models/outline.js');
 role = require('./models/role.js');
 menu = require('./models/menu.js');
 user = require('./models/user.js');
@@ -582,6 +583,14 @@ exports.address = function(req, res) {
 
 exports.addressdo = function(req, res) {
 	address.sqldo(req, res);
+};
+
+exports.outline = function(req, res) {
+	outline.sql_list(req, res);
+};
+
+exports.outlinedo = function(req, res) {
+	outline.sqldo(req, res);
 };
 
 exports.role = function(req, res) {

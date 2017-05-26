@@ -96,6 +96,10 @@ module.exports = function (app, routes) {
     app.get('/cms/address',routes.address);
     app.post('/address/:sql',routes.addressdo);
 
+    app.get('/cms/outline',routes.checkLogin);
+    app.get('/cms/outline',routes.outline);
+    app.post('/outline/:sql',routes.outlinedo);
+
     app.get('/cms/role',routes.checkLogin);
     app.get('/cms/role',routes.role);
     app.post('/role/:sql',routes.roledo);
