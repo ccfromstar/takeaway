@@ -100,6 +100,10 @@ module.exports = function (app, routes) {
     app.get('/cms/outline',routes.outline);
     app.post('/outline/:sql',routes.outlinedo);
 
+    app.get('/cms/old',routes.checkLogin);
+    app.get('/cms/old',routes.old);
+    app.post('/old/:sql',routes.olddo);
+
     app.get('/cms/role',routes.checkLogin);
     app.get('/cms/role',routes.role);
     app.post('/role/:sql',routes.roledo);

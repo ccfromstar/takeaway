@@ -1,10 +1,10 @@
 <!--业务逻辑-->
 <%
 	var CONSTANT1,parms,CONSTANT2,CONSTANT3,CONSTANTRole;
-	CONSTANT1 = "日报表,月报表,企业管理,菜单管理,账户管理,外线".split(",");
-	CONSTANT2 = "group-item,group-item,group-item,group-item,group-item,group-item".split(",");
-	CONSTANT3 = "finance_d,finance_m,address,menu,role,outline".split(",");
-	CONSTANTRole = "show,show,show,show,show,show".split(",");
+	CONSTANT1 = "日报表,月报表,企业管理,菜单管理,账户管理,外线,老客户".split(",");
+	CONSTANT2 = "group-item,group-item,group-item,group-item,group-item,group-item,group-item".split(",");
+	CONSTANT3 = "finance_d,finance_m,address,menu,role,outline,old".split(",");
+	CONSTANTRole = "show,show,show,show,show,show,show".split(",");
 
 	if(role=="主管"){
 		CONSTANTRole[4] = "hide";
@@ -20,6 +20,7 @@
 	else if(parms[0]=="/cms/menu"){CONSTANT2[3] = "group-item-selected";}
 	else if(parms[0]=="/cms/role"){CONSTANT2[4] = "group-item-selected";}
 	else if(parms[0]=="/cms/outline"){CONSTANT2[5] = "group-item-selected";}
+	else if(parms[0]=="/cms/old"){CONSTANT2[6] = "group-item-selected";}
 %>
 <!--页面逻辑-->
 <%for(var i in CONSTANT1){

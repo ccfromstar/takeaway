@@ -49,11 +49,47 @@
               <td><button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=record[i].id%>)">调整数量</button></td>
       			</tr>
     		<%}%>
+        <%for(var i in record1){%>
+            <tr>
+              <td><%-record1[i].head%></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><%-record1[i].num%></td>
+              <td><%-record1[i].numTotal%></td>
+              <td></td>
+            </tr>
+        <%}%>
+        <%for(var i in record2){%>
+            <tr>
+              <td><%-record2[i].name%></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><%-record2[i].num%></td>
+              <td><%-record2[i].priceTotal%></td>
+              <td></td>
+            </tr>
+        <%}%>
     		</tbody>
     		</table>
     		</div>
     		<!--分页符-->
-			<div style='width:100%;text-align:center;margin-top:10px;'>
+			<div style='width:100%;text-align:center;margin-top:10px;display:none'>
   				<button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
   				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
   				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>

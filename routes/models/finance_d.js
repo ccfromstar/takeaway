@@ -36,8 +36,11 @@ exports.sql_list = function (req, res) {
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
-    var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
+    //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"'";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"'";
+    var sql6 = "select * from outbooking where date like '"+bd+"'";
+    var sql7 = "select * from oldbooking where date like '"+bd+"'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -49,8 +52,14 @@ exports.sql_list = function (req, res) {
             for(var i in rows1){
             	rows1[i].date2 = (rows1[i].date2).Format("yyyy-MM-dd hh:mm:ss");
             }
-            res.render('cms/finance_d', {bookingdate:bookingdate,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
-          });
+            mysql.query(sql6,function (err, rows6) {
+                if(err){console.log(err);return false;}
+                mysql.query(sql7,function (err, rows7) {
+                    if(err){console.log(err);return false;}
+                    res.render('cms/finance_d', {bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
+                });
+            });
+        });
     });
 };
 
@@ -148,15 +157,37 @@ function sql_toExcel(req, res){
     var excelname = "~"+y+m+d+hh+mm+ss+".xlsx"
     //数据源
     var sql1 = "select * from v_com_booking where date1 like '"+key+"'";
+    var sql2 = "select * from outbooking where date like '"+key+"'";
+    var sql3 = "select * from oldbooking where date like '"+key+"'";
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         for(var i in obj){
-            	obj[i].date2 = (obj[i].date2).Format("yyyy-MM-dd hh:mm:ss");
+            obj[i].date2 = (obj[i].date2).Format("yyyy-MM-dd hh:mm:ss");
         }
-        //用数据源(对象)data渲染Excel模板
-        ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
-            fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
-            res.send(excelname);
+        mysql.query(sql2 ,function(error,obj2){
+            if(error){console.log(error);return false;}
+            for(var i in obj2){
+                obj.push({
+                    cname:obj2[i].head,
+                    numTotal:obj2[i].num,
+                    priceTotal:obj2[i].numTotal
+                });
+            }
+            mysql.query(sql3 ,function(error,obj3){
+            if(error){console.log(error);return false;}
+                for(var i in obj3){
+                    obj.push({
+                        cname:obj3[i].name,
+                        numTotal:obj3[i].num,
+                        priceTotal:obj3[i].priceTotal
+                    });
+                }
+                //用数据源(对象)data渲染Excel模板
+                ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
+                    fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
+                    res.send(excelname);
+                });
+            });
         });
     });
 }
@@ -387,8 +418,10 @@ exports.sql_list_m = function (req, res) {
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
-    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' limit "+(page-1)*limit+","+limit;
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%'";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"%'";
+    var sql6 = "select * from outbooking where date like '"+bd+"%'";
+    var sql7 = "select * from oldbooking where date like '"+bd+"%'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -400,8 +433,14 @@ exports.sql_list_m = function (req, res) {
             for(var i in rows1){
             	rows1[i].date2 = (rows1[i].date2).Format("yyyy-MM-dd hh:mm:ss");
             }
-            res.render('cms/finance_m', {bookingdate:bookingdate,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
-          });
+            mysql.query(sql6,function (err, rows6) {
+                if(err){console.log(err);return false;}
+                mysql.query(sql7,function (err, rows7) {
+                    if(err){console.log(err);return false;}
+                    res.render('cms/finance_m', {bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+                });
+            });
+        });
     });
 };
 
@@ -515,15 +554,39 @@ function sql_toExcelm(req, res){
     var excelname = "~"+y+m+d+hh+mm+ss+".xlsx"
     //数据源
     var sql1 = "select * from v_com_booking where date1 like '"+key+"%'";
+    var sql2 = "select * from outbooking where date like '"+key+"%'";
+    var sql3 = "select * from oldbooking where date like '"+key+"%'";
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         for(var i in obj){
             	obj[i].date2 = (obj[i].date2).Format("yyyy-MM-dd hh:mm:ss");
         }
-        //用数据源(对象)data渲染Excel模板
-        ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
-            fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
-            res.send(excelname);
+        mysql.query(sql2 ,function(error,obj2){
+            if(error){console.log(error);return false;}
+            for(var i in obj2){
+                obj.push({
+                    date1:obj2[i].date,
+                    cname:obj2[i].head,
+                    numTotal:obj2[i].num,
+                    priceTotal:obj2[i].numTotal
+                });
+            }
+            mysql.query(sql3 ,function(error,obj3){
+            if(error){console.log(error);return false;}
+                for(var i in obj3){
+                    obj.push({
+                        date1:obj3[i].date,
+                        cname:obj3[i].name,
+                        numTotal:obj3[i].num,
+                        priceTotal:obj3[i].priceTotal
+                    });
+                }
+                //用数据源(对象)data渲染Excel模板
+                ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
+                    fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
+                    res.send(excelname);
+                });
+            });
         });
     });
 }

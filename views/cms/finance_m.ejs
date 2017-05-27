@@ -52,6 +52,42 @@
 	        			<td><%-record[i].priceTotal%></td>
 	      			</tr>
 	    		<%}%>
+          <%for(var i in record1){%>
+              <tr>
+                <td><%-record1[i].date%></td>
+                <td><%-record1[i].head%></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><%-record1[i].num%></td>
+                <td><%-record1[i].numTotal%></td>
+              </tr>
+          <%}%>
+          <%for(var i in record2){%>
+              <tr>
+                <td><%-record2[i].date%></td>
+                <td><%-record2[i].name%></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><%-record2[i].num%></td>
+                <td><%-record2[i].priceTotal%></td>
+              </tr>
+          <%}%>
     		</tbody>
     	</table>
 
