@@ -183,8 +183,11 @@ function sql_toExcel(req, res){
                     });
                 }
                 //用数据源(对象)data渲染Excel模板
-                ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
-                    fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
+                var obj_str = '[ [{"date": "' + key+'"}],';
+                obj_str += JSON.stringify(obj) + "]";
+                //console.log(obj_str);
+                ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+                    fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
                     res.send(excelname);
                 });
             });
