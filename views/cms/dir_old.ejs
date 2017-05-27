@@ -50,50 +50,38 @@
    <div class="modal-dialog" style="width:800px" >
       <div class="modal-content">
          <div class="modal-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered"> 
+                <tr>
+                    <td>企业名称</td>
+                    <td>
+                       <select id="selectcompany" class="input-sm selectpicker" onchange="setCom()">
+                            <option value="-">请选择</option>
+                            <%for(var i in rows6){%>
+                                <option value="<%=rows6[i].name%>@<%=rows6[i].price%>"><%=rows6[i].name%></option>
+                            <%}%>
+                        </select>
+                    </td>
+                    
+                </tr>
                 <tr>
                     <td>日期</td>
                     <td>
                       <input type="text" name="date" id="date" style="cursor:pointer" readonly  class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
                     </td>
+                </tr> 
+                <tr>
                     <td>数量</td>
                     <td><input type="text" class="input-sm form-control" id="num" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
-                </tr>   
-                <tr>
-                    <td>单价</td>
-                    <td><input type="text" class="input-sm form-control" id="unitPrice" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
-                    <td>负责人</td>
-                    <td><input type="text" class="input-sm form-control" id="manager" ></input></td>
-                </tr>
-                <tr>
-                    <td>企业名称</td>
-                    <td><input type="text" class="input-sm form-control" id="name" ></input></td>
-                    <td>总金额</td>
-                    <td><input type="text" class="input-sm form-control" id="priceTotal" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
-                </tr>
-                <tr>
-                    <td>公司抬头</td>
-                    <td><input type="text" class="input-sm form-control" id="head" ></input></td>
-                    <td>支付状态</td>
-                    <td><input type="text" class="input-sm form-control" id="state" ></input></td>
-                </tr>
-                <tr>
-                    <td>支付方式</td>
-                    <td>
-                       <select id="type" class="input-sm selectpicker">
-                            <option value="-">请选择</option>
-                            <option value="微信">微信</option>
-                            <option value="支付宝">支付宝</option>
-                            <option value="现金">现金</option>
-                            <option value="公司转账">公司转账</option>
-                            <option value="POS机">POS机</option>
-                        </select>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                </tr>  
              </table>
              <input type="hidden" id="docid" ></input>
+             <input type="hidden" class="input-sm form-control" id="head" ></input>
+             <input type="hidden" class="input-sm form-control" id="state" ></input>
+             <input type="hidden" class="input-sm form-control" id="type" ></input>
+             <input type="hidden" class="input-sm form-control" id="manager" ></input>
+             <input type="hidden" class="input-sm form-control" id="name" ></input>
+             <input type="hidden" class="input-sm form-control" id="unitPrice"></input>
+             <input type="hidden" class="input-sm form-control" id="priceTotal"></input>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" 
@@ -126,6 +114,13 @@
     window.location = "/cms/old?p="+i;
   }
 
+  function setCom(){
+    var d = $("#selectcompany").val();
+    var arr = d.split("@");
+    $("#name").val(arr[0]);
+    $("#unitPrice").val(arr[1]);
+  }
+
 	function editDoc(id){
         //根据id读取字段
         $.ajax({ type:"POST" , url: "/old/getinfo", data:{id:id}, success: function(data){
@@ -144,6 +139,8 @@
     }
 
 	function submitDoc(){
+    //计算总金额
+    $("#priceTotal").val(Number($("#unitPrice").val())*Number($("#num").val()));
 		if($("#docid").val()=="0"){
 			//insert
 			$.ajax({ type:"POST" , url: "/old/insert", data:{

@@ -11,6 +11,8 @@
       	<div class="menufourth">
       		报表日期
       		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly value="<%=bookingdate%>" class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
+          公司名称
+          <input type="text" id="cname" ></input> 
       		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
       		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出月报表</button>
       	</div>
@@ -101,7 +103,8 @@
 <script type="text/javascript">
 	function search(){
 		var _m = $("#bookingdate").val();
-  		window.location = "/cms/finance_m?p=1&key="+_m.replace(/-/g,"")+"&bd="+_m;
+    var cname = $("#cname").val();
+  	window.location = "/cms/finance_m?p=1&key="+_m.replace(/-/g,"")+"&bd="+_m+"&cname="+cname;
 	}
 
   function toExcel(){

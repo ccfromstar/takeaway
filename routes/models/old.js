@@ -108,7 +108,13 @@ exports.sql_list = function (req, res) {
             var totalpage = Math.ceil(total/limit);
             var isFirstPage = page == 1 ;
             var isLastPage = ((page -1) * limit + rows1.length) == total;
-                res.render('cms/dir_old', {url:req.url,address:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+            //获取企业信息
+            var sql6 = "select * from address";
+            mysql.query(sql6,function (err1, rows6) {
+              if(err1){console.log(err1);return false;}
+              //console.log(rows6);
+              res.render('cms/dir_old', {rows6:rows6,url:req.url,address:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+            });
         });
     });
 };

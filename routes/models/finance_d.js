@@ -32,15 +32,16 @@ exports.sql_list = function (req, res) {
     var page = parseInt(req.query.p);
     var key = req.query.key;
     var bd = req.query.bd;
+    var cname = req.query.cname;
     key = key?key:bookingno;
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
     //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
-    var sql1 = "select * from v_com_booking where date1 like '"+bd+"'";
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"' and cname like '%"+cname+"%'";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"'";
-    var sql6 = "select * from outbooking where date like '"+bd+"'";
-    var sql7 = "select * from oldbooking where date like '"+bd+"'";
+    var sql6 = "select * from outbooking where date like '"+bd+"' and head like '%"+cname+"%'";
+    var sql7 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -417,14 +418,15 @@ exports.sql_list_m = function (req, res) {
     var page = parseInt(req.query.p);
     var key = req.query.key;
     var bd = req.query.bd;
+    var cname = req.query.cname;
     key = key?key:bookingno;
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
-    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%'";
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' and cname like '%"+cname+"%'";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"%'";
-    var sql6 = "select * from outbooking where date like '"+bd+"%'";
-    var sql7 = "select * from oldbooking where date like '"+bd+"%'";
+    var sql6 = "select * from outbooking where date like '"+bd+"%' and head like '%"+cname+"%'";
+    var sql7 = "select * from oldbooking where date like '"+bd+"%' and name like '%"+cname+"%'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {

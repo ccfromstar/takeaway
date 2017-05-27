@@ -6,7 +6,9 @@
       <td>
       	<div class="menufourth">
       		报表日期
-      		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+      		<input type="text" name="公司名称bookingdate" id="bookingdate" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+          公司名称
+          <input type="text" id="cname" ></input> 
       		<button type="button" class="btn btn-default btn-xs" onclick="changeDay()" >检索</button>
       		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出日报表</button>
       	</div>
@@ -158,7 +160,8 @@
 
   	function changeDay(){
   		var _d = $("#bookingdate").val();
-  		window.location = "/cms/finance_d?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d;
+      var cname = $("#cname").val();
+  		window.location = "/cms/finance_d?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname;
   	}
 
   	function setinfo(id,k1,k2,k3,k4){
