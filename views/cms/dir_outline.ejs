@@ -95,8 +95,15 @@
                             <option value="POS机">POS机</option>
                         </select>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td>送餐类别</td>
+                    <td>
+                        <select id="sendtype" class="input-sm selectpicker">
+                            <option value="-">请选择</option>
+                            <option value="早餐">早餐</option>
+                            <option value="午餐">午餐</option>
+                            <option value="晚餐">晚餐</option>
+                        </select>
+                    </td>
                 </tr>
              </table>
              <input type="hidden" id="docid" ></input>
@@ -125,6 +132,7 @@
 		$("#head").val("");
 		$("#InvoiceNum").val("");
 		$("#type").val("");
+    $("#sendtype").val("");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
@@ -148,6 +156,7 @@
                $("#head").val(data[0].head);
                $("#InvoiceNum").val(data[0].InvoiceNum);
                $("#type").val(data[0].type);
+               $("#sendtype").val(data[0].sendtype);
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
@@ -167,7 +176,8 @@
                 numTotal:$("#numTotal").val(),
                 head:$("#head").val(),
                 InvoiceNum:$("#InvoiceNum").val(),
-                type:$("#type").val()
+                type:$("#type").val(),
+                sendtype:$("#sendtype").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -188,6 +198,7 @@
                 head:$("#head").val(),
                 InvoiceNum:$("#InvoiceNum").val(),
                 type:$("#type").val(),
+                sendtype:$("#sendtype").val(),
                 docid:$("#docid").val()
                 }, success: function(data){
                     if(data==200){

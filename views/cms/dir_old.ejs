@@ -73,6 +73,17 @@
                     <td>数量</td>
                     <td><input type="text" class="input-sm form-control" id="num" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
                 </tr>  
+                <tr>
+                    <td>送餐类别</td>
+                    <td>
+                        <select id="sendtype" class="input-sm selectpicker">
+                            <option value="-">请选择</option>
+                            <option value="早餐">早餐</option>
+                            <option value="午餐">午餐</option>
+                            <option value="晚餐">晚餐</option>
+                        </select>
+                    </td>
+                </tr> 
              </table>
              <input type="hidden" id="docid" ></input>
              <input type="hidden" class="input-sm form-control" id="head" ></input>
@@ -105,6 +116,7 @@
 		$("#head").val("");
 		$("#state").val("");
 		$("#type").val("");
+    $("#sendtype").val("");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
@@ -133,6 +145,7 @@
                $("#head").val(data[0].head);
                $("#state").val(data[0].state);
                $("#type").val(data[0].type);
+               $("#sendtype").val(data[0].sendtype);
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
@@ -152,7 +165,8 @@
                 priceTotal:$("#priceTotal").val(),
                 head:$("#head").val(),
                 state:$("#state").val(),
-                type:$("#type").val()
+                type:$("#type").val(),
+                sendtype:$("#sendtype").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -171,6 +185,7 @@
                 head:$("#head").val(),
                 state:$("#state").val(),
                 type:$("#type").val(),
+                sendtype:$("#sendtype").val(),
                 docid:$("#docid").val()
                 }, success: function(data){
                     if(data==200){

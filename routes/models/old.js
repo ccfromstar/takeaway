@@ -20,8 +20,9 @@ function sql_insert(req, res) {
     var head = req.param('head');
     var state = req.param('state');
     var type = req.param('type');
+    var sendtype = req.param('sendtype');
 
-    var insertSql = "insert into oldbooking (date,num,unitPrice,manager,name,priceTotal,head,state,type) values ('"+date+"','"+num+"','"+unitPrice+"','"+manager+"','"+name+"','"+priceTotal+"','"+head+"','"+state+"','"+type+"')";
+    var insertSql = "insert into oldbooking (date,num,unitPrice,manager,name,priceTotal,head,state,type,sendtype) values ('"+date+"','"+num+"','"+unitPrice+"','"+manager+"','"+name+"','"+priceTotal+"','"+head+"','"+state+"','"+type+"','"+sendtype+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -67,6 +68,7 @@ function sql_update(req, res) {
     var head = req.param('head');
     var state = req.param('state');
     var type = req.param('type');
+    var sendtype = req.param('sendtype');
     var id = req.param('docid');
     var updateSql = "update oldbooking set date = '"+date
      +"',num ='"+num
@@ -77,6 +79,7 @@ function sql_update(req, res) {
      +"',head ='"+head
      +"',state ='"+state
      +"',type ='"+type
+     +"',sendtype ='"+sendtype
      +"'  where id = "+id;
     mysql.query(updateSql ,function(error,obj){
           if(error){console.log(error);return false;}

@@ -22,8 +22,9 @@ function sql_insert(req, res) {
     var head = req.param('head');
     var InvoiceNum = req.param('InvoiceNum');
     var type = req.param('type');
+    var sendtype = req.param('sendtype');
 
-    var insertSql = "insert into outbooking (date,num,unitPrice,sendtime,sendaddress,linkname,tel,numTotal,head,InvoiceNum,type) values ('"+date+"','"+num+"','"+unitPrice+"','"+sendtime+"','"+sendaddress+"','"+linkname+"','"+tel+"','"+numTotal+"','"+head+"','"+InvoiceNum+"','"+type+"')";
+    var insertSql = "insert into outbooking (date,num,unitPrice,sendtime,sendaddress,linkname,tel,numTotal,head,InvoiceNum,type,sendtype) values ('"+date+"','"+num+"','"+unitPrice+"','"+sendtime+"','"+sendaddress+"','"+linkname+"','"+tel+"','"+numTotal+"','"+head+"','"+InvoiceNum+"','"+type+"','"+sendtype+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -71,6 +72,7 @@ function sql_update(req, res) {
     var head = req.param('head');
     var InvoiceNum = req.param('InvoiceNum');
     var type = req.param('type');
+    var sendtype = req.param('sendtype');
     var id = req.param('docid');
     var updateSql = "update outbooking set date = '"+date
      +"',num ='"+num
@@ -83,6 +85,7 @@ function sql_update(req, res) {
      +"',head ='"+head
      +"',InvoiceNum ='"+InvoiceNum
      +"',type ='"+type
+     +"',sendtype ='"+sendtype
      +"'  where id = "+id;
     mysql.query(updateSql ,function(error,obj){
           if(error){console.log(error);return false;}

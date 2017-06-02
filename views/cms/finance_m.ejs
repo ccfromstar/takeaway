@@ -13,9 +13,20 @@
       		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly value="<%=bookingdate%>" class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
           公司名称
           <input type="text" id="cname" ></input> 
+          送餐类别
+          <select id="sendtype" class="input-sm selectpicker">
+              <option value="">请选择</option>
+              <option value="早餐">早餐</option>
+              <option value="午餐">午餐</option>
+              <option value="晚餐">晚餐</option>
+          </select>
       		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
       		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出月报表</button>
       	</div>
+        <div class="menufourth">
+          总数量:<%=num_total%>
+          总金额:<%=price_total%>
+        </div>
       	<table class="table table-hover" id="table_list" >
     		<thead>
       			<tr>
@@ -58,7 +69,7 @@
               <tr>
                 <td><%-record1[i].date%></td>
                 <td><%-record1[i].head%></td>
-                <td></td>
+                <td><%-record1[i].sendtype%></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -76,7 +87,7 @@
               <tr>
                 <td><%-record2[i].date%></td>
                 <td><%-record2[i].name%></td>
-                <td></td>
+                <td><%-record2[i].sendtype%></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -104,7 +115,8 @@
 	function search(){
 		var _m = $("#bookingdate").val();
     var cname = $("#cname").val();
-  	window.location = "/cms/finance_m?p=1&key="+_m.replace(/-/g,"")+"&bd="+_m+"&cname="+cname;
+    var sendtype = $("#sendtype").val();
+  	window.location = "/cms/finance_m?p=1&key="+_m.replace(/-/g,"")+"&bd="+_m+"&cname="+cname+"&sendtype="+sendtype;
 	}
 
   function toExcel(){

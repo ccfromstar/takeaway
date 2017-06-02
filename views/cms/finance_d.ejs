@@ -9,10 +9,21 @@
       		<input type="text" name="公司名称bookingdate" id="bookingdate" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
           公司名称
           <input type="text" id="cname" ></input> 
+          送餐类别
+          <select id="sendtype" class="input-sm selectpicker">
+              <option value="">请选择</option>
+              <option value="早餐">早餐</option>
+              <option value="午餐">午餐</option>
+              <option value="晚餐">晚餐</option>
+          </select>
       		<button type="button" class="btn btn-default btn-xs" onclick="changeDay()" >检索</button>
       		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出日报表</button>
       	</div>
       	<div >
+        <div class="menufourth">
+          总数量:<%=num_total%>
+          总金额:<%=price_total%>
+        </div>
       	<table class="table table-hover" id="table_list" >
     		<thead>
       			<tr>
@@ -54,7 +65,7 @@
         <%for(var i in record1){%>
             <tr>
               <td><%-record1[i].head%></td>
-              <td></td>
+              <td><%-record1[i].sendtype%></td>
               <td></td>
               <td></td>
               <td></td>
@@ -72,7 +83,7 @@
         <%for(var i in record2){%>
             <tr>
               <td><%-record2[i].name%></td>
-              <td></td>
+              <td><%-record2[i].sendtype%></td>
               <td></td>
               <td></td>
               <td></td>
@@ -161,7 +172,8 @@
   	function changeDay(){
   		var _d = $("#bookingdate").val();
       var cname = $("#cname").val();
-  		window.location = "/cms/finance_d?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname;
+      var sendtype = $("#sendtype").val();
+  		window.location = "/cms/finance_d?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname+"&sendtype="+sendtype;
   	}
 
   	function setinfo(id,k1,k2,k3,k4){

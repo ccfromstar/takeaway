@@ -33,15 +33,18 @@ exports.sql_list = function (req, res) {
     var key = req.query.key;
     var bd = req.query.bd;
     var cname = req.query.cname;
+    var sendtype = req.query.sendtype;
     key = key?key:bookingno;
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
+    var num_total = 0;
+    var price_total = 0;
     //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
-    var sql1 = "select * from v_com_booking where date1 like '"+bd+"' and cname like '%"+cname+"%'";
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"' and cname like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"'";
-    var sql6 = "select * from outbooking where date like '"+bd+"' and head like '%"+cname+"%'";
-    var sql7 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%'";
+    var sql6 = "select * from outbooking where date like '"+bd+"' and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql7 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -57,7 +60,19 @@ exports.sql_list = function (req, res) {
                 if(err){console.log(err);return false;}
                 mysql.query(sql7,function (err, rows7) {
                     if(err){console.log(err);return false;}
-                    res.render('cms/finance_d', {bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
+                    for(var i in rows1){
+                        num_total = num_total + rows1[i].numTotal;
+                        price_total = price_total + rows1[i].priceTotal;
+                    }
+                    for(var i in rows6){
+                        num_total = num_total + rows6[i].num;
+                        price_total = price_total + rows6[i].numTotal;
+                    }
+                    for(var i in rows7){
+                        num_total = num_total + rows7[i].num;
+                        price_total = price_total + rows7[i].priceTotal;
+                    }
+                    res.render('cms/finance_d', {price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
                 });
             });
         });
@@ -419,14 +434,17 @@ exports.sql_list_m = function (req, res) {
     var key = req.query.key;
     var bd = req.query.bd;
     var cname = req.query.cname;
+    var sendtype = req.query.sendtype;
     key = key?key:bookingno;
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
-    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' and cname like '%"+cname+"%'";
+    var num_total = 0;
+    var price_total = 0;
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' and cname like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"%'";
-    var sql6 = "select * from outbooking where date like '"+bd+"%' and head like '%"+cname+"%'";
-    var sql7 = "select * from oldbooking where date like '"+bd+"%' and name like '%"+cname+"%'";
+    var sql6 = "select * from outbooking where date like '"+bd+"%' and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql7 = "select * from oldbooking where date like '"+bd+"%' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -442,7 +460,19 @@ exports.sql_list_m = function (req, res) {
                 if(err){console.log(err);return false;}
                 mysql.query(sql7,function (err, rows7) {
                     if(err){console.log(err);return false;}
-                    res.render('cms/finance_m', {bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+                    for(var i in rows1){
+                        num_total = num_total + rows1[i].numTotal;
+                        price_total = price_total + rows1[i].priceTotal;
+                    }
+                    for(var i in rows6){
+                        num_total = num_total + rows6[i].num;
+                        price_total = price_total + rows6[i].numTotal;
+                    }
+                    for(var i in rows7){
+                        num_total = num_total + rows7[i].num;
+                        price_total = price_total + rows7[i].priceTotal;
+                    }
+                    res.render('cms/finance_m', {price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
                 });
             });
         });
