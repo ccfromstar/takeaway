@@ -1,7 +1,8 @@
-var address, role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old;
+var address, role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old,gh;
 address = require('./models/address.js');
 outline = require('./models/outline.js');
 old = require('./models/old.js');
+gh = require('./models/gh.js');
 role = require('./models/role.js');
 menu = require('./models/menu.js');
 user = require('./models/user.js');
@@ -600,6 +601,14 @@ exports.old = function(req, res) {
 
 exports.olddo = function(req, res) {
 	old.sqldo(req, res);
+};
+
+exports.gh = function(req, res) {
+	gh.sql_list(req, res);
+};
+
+exports.ghdo = function(req, res) {
+	gh.sqldo(req, res);
 };
 
 exports.role = function(req, res) {
