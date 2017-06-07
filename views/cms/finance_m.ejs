@@ -21,7 +21,14 @@
               <option value="晚餐">晚餐</option>
               <option value="临时午餐">临时午餐</option>
               <option value="临时晚餐">临时晚餐</option>
+              <option value="自助午餐">自助午餐</option>
+              <option value="自助晚餐">自助晚餐</option>
+              <option value="酒会">酒会</option>
+              <option value="茶歇">茶歇</option>
           </select>
+          日期范围
+          <input type="text" name="bookingdate1" id="bookingdate1" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+          <input type="text" name="bookingdate2" id="bookingdate2" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
       		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
       		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出月报表</button>
       	</div>
@@ -118,7 +125,9 @@
 		var _m = $("#bookingdate").val();
     var cname = $("#cname").val();
     var sendtype = $("#sendtype").val();
-  	window.location = "/cms/finance_m?p=1&key="+_m.replace(/-/g,"")+"&bd="+_m+"&cname="+cname+"&sendtype="+sendtype;
+    var _m1 = $("#bookingdate1").val();
+    var _m2 = $("#bookingdate2").val();
+  	window.location = "/cms/finance_m?p=1&key="+_m.replace(/-/g,"")+"&bd="+_m+"&cname="+cname+"&sendtype="+sendtype+"&d1="+_m1+"&d2="+_m2;
 	}
 
   function toExcel(){

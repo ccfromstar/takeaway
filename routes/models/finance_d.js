@@ -441,10 +441,29 @@ exports.sql_list_m = function (req, res) {
     var limit = (limit && limit > 0) ? limit : LIMIT;
     var num_total = 0;
     var price_total = 0;
-    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' and cname like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+
+    var d1 = req.query.d1;
+    var d2 = req.query.d2;
+
+    var sql1 = "";
+    var sql2 = "";
+
+    if(d1 != ""){
+        sql1 += " and date1 >= '"+d1+"'";
+        sql2 += " and date >= '"+d1+"'";
+    }
+    if(d2 != ""){
+        sql1 += " and date1 <= '"+d2+"'";
+        sql2 += " and date <= '"+d2+"'";
+    }
+
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' "+sql1+" and cname like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"%'";
-    var sql6 = "select * from outbooking where date like '"+bd+"%' and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
-    var sql7 = "select * from oldbooking where date like '"+bd+"%' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    var sql6 = "select * from outbooking where date like '"+bd+"%' "+sql2+" and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    var sql7 = "select * from oldbooking where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    //console.log(sql1);
+    // console.log(sql6);
+    //  console.log(sql7);
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
