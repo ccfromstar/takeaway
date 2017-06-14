@@ -36,6 +36,8 @@ exports.sql_list = function (req, res) {
     var sendtype = req.query.sendtype;
     key = key?key:bookingno;
     bookingdate =  bd?bd:bookingdate;
+    cname = cname?cname:'';
+    sendtype = sendtype?sendtype:'';
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
     var num_total = 0;
@@ -78,7 +80,7 @@ exports.sql_list = function (req, res) {
                         for(var i in rows8){
                             price_total = price_total + rows8[i].priceTotal;
                         }
-                        res.render('cms/finance_d', {record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
+                        res.render('cms/finance_d', {cname:cname,sendtype:sendtype,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
                     });
                 });
             });
@@ -167,7 +169,9 @@ function adjust(req, res) {
 };
 
 function sql_toExcel(req, res){
-    var key = req.param('id');
+    var bd = req.param('id');
+    var cname = req.param('cname');
+    var sendtype = req.param('sendtype');
     //获得Excel模板的buffer对象
     var exlBuf = fs.readFileSync("./public/excelop/template/finance_d.xlsx");
     var myDate = new Date();
@@ -179,9 +183,10 @@ function sql_toExcel(req, res){
     var ss = myDate.getSeconds();
     var excelname = "~"+y+m+d+hh+mm+ss+".xlsx"
     //数据源
-    var sql1 = "select * from v_com_booking where date1 like '"+key+"'";
-    var sql2 = "select * from outbooking where date like '"+key+"'";
-    var sql3 = "select * from oldbooking where date like '"+key+"'";
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"' and cname like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql2 = "select * from outbooking where date like '"+bd+"' and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql3 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql4 = "select * from ordergh where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         for(var i in obj){
@@ -193,7 +198,8 @@ function sql_toExcel(req, res){
                 obj.push({
                     cname:obj2[i].head,
                     numTotal:obj2[i].num,
-                    priceTotal:obj2[i].numTotal
+                    priceTotal:obj2[i].numTotal,
+                    sendtype:obj2[i].sendtype
                 });
             }
             mysql.query(sql3 ,function(error,obj3){
@@ -202,16 +208,28 @@ function sql_toExcel(req, res){
                     obj.push({
                         cname:obj3[i].name,
                         numTotal:obj3[i].num,
-                        priceTotal:obj3[i].priceTotal
+                        priceTotal:obj3[i].priceTotal,
+                        sendtype:obj3[i].sendtype
                     });
                 }
-                //用数据源(对象)data渲染Excel模板
-                var obj_str = '[ [{"date": "' + key+'"}],';
-                obj_str += JSON.stringify(obj) + "]";
-                //console.log(obj_str);
-                ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
-                    fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
-                    res.send(excelname);
+                mysql.query(sql4 ,function(error,obj4){
+                    if(error){console.log(error);return false;}
+                    for(var i in obj4){
+                        obj.push({
+                            cname:obj4[i].name,
+                            numTotal:'-',
+                            priceTotal:obj4[i].priceTotal,
+                            sendtype:obj4[i].sendtype
+                        });
+                    }
+                    //用数据源(对象)data渲染Excel模板
+                    var obj_str = '[ [{"date": "' + bd+'"}],';
+                    obj_str += JSON.stringify(obj) + "]";
+                    //console.log(obj_str);
+                    ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+                        fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+                        res.send(excelname);
+                    });
                 });
             });
         });
@@ -442,6 +460,8 @@ exports.sql_list_m = function (req, res) {
     var bd = req.query.bd;
     var cname = req.query.cname;
     var sendtype = req.query.sendtype;
+    cname = cname?cname:'';
+    sendtype = sendtype?sendtype:'';
     key = key?key:bookingno;
     bookingdate =  bd?bd:bookingdate;
     page = (page && page > 0) ? page : 1;
@@ -451,6 +471,9 @@ exports.sql_list_m = function (req, res) {
 
     var d1 = req.query.d1;
     var d2 = req.query.d2;
+
+    d1 = d1?d1:'';
+    d2 = d2?d2:'';
 
     var sql1 = "";
     var sql2 = "";
@@ -502,7 +525,7 @@ exports.sql_list_m = function (req, res) {
                         for(var i in rows8){
                             price_total = price_total + rows8[i].priceTotal;
                         }
-                        res.render('cms/finance_m', {record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+                        res.render('cms/finance_m', {cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
                     });
                 });
             });
@@ -607,7 +630,22 @@ Date.prototype.Format = function(fmt) {
 }
 
 function sql_toExcelm(req, res){
-    var key = req.param('id');
+    var bd = req.param('id');
+    var cname = req.param('cname');
+    var sendtype = req.param('sendtype');
+    var d1 = req.param('_m1');
+    var d2 = req.param('_m2');
+    var sql11 = "";
+    var sql22 = "";
+
+    if(d1 != ""){
+        sql11 += " and date1 >= '"+d1+"'";
+        sql22 += " and date >= '"+d1+"'";
+    }
+    if(d2 != ""){
+        sql11 += " and date1 <= '"+d2+"'";
+        sql22 += " and date <= '"+d2+"'";
+    }
     //获得Excel模板的buffer对象
     var exlBuf = fs.readFileSync("./public/excelop/template/finance_m.xlsx");
     var myDate = new Date();
@@ -619,9 +657,13 @@ function sql_toExcelm(req, res){
     var ss = myDate.getSeconds();
     var excelname = "~"+y+m+d+hh+mm+ss+".xlsx"
     //数据源
-    var sql1 = "select * from v_com_booking where date1 like '"+key+"%'";
-    var sql2 = "select * from outbooking where date like '"+key+"%'";
-    var sql3 = "select * from oldbooking where date like '"+key+"%'";
+
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' "+sql11+" and cname like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    var sql2 = "select * from outbooking where date like '"+bd+"%' "+sql22+" and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    var sql3 = "select * from oldbooking where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    var sql4 = "select * from ordergh where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
+
+    //console.log(sql3);
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         for(var i in obj){
@@ -634,7 +676,8 @@ function sql_toExcelm(req, res){
                     date1:obj2[i].date,
                     cname:obj2[i].head,
                     numTotal:obj2[i].num,
-                    priceTotal:obj2[i].numTotal
+                    priceTotal:obj2[i].numTotal,
+                    sendtype:obj2[i].sendtype
                 });
             }
             mysql.query(sql3 ,function(error,obj3){
@@ -644,13 +687,26 @@ function sql_toExcelm(req, res){
                         date1:obj3[i].date,
                         cname:obj3[i].name,
                         numTotal:obj3[i].num,
-                        priceTotal:obj3[i].priceTotal
+                        priceTotal:obj3[i].priceTotal,
+                        sendtype:obj3[i].sendtype
                     });
                 }
-                //用数据源(对象)data渲染Excel模板
-                ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
-                    fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
-                    res.send(excelname);
+                mysql.query(sql4 ,function(error,obj4){
+                    if(error){console.log(error);return false;}  
+                    for(var i in obj4){
+                        obj.push({
+                            date1:obj4[i].date,
+                            cname:obj4[i].name,
+                            numTotal:'-',
+                            priceTotal:obj4[i].priceTotal,
+                            sendtype:obj4[i].sendtype
+                        });
+                    }
+                    //用数据源(对象)data渲染Excel模板
+                    ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
+                        fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
+                        res.send(excelname);
+                    });
                 });
             });
         });

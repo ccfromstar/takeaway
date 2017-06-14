@@ -12,7 +12,7 @@
       		报表日期
       		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly value="<%=bookingdate%>" class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
           公司名称
-          <input type="text" id="cname" ></input> 
+          <input type="text" id="cname" value="<%=cname%>" ></input> 
           送餐类别
           <select id="sendtype" class="input-sm selectpicker">
               <option value="">请选择</option>
@@ -27,8 +27,8 @@
               <option value="茶歇">茶歇</option>
           </select>
           日期范围
-          <input type="text" name="bookingdate1" id="bookingdate1" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
-          <input type="text" name="bookingdate2" id="bookingdate2" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+          <input type="text" name="bookingdate1" id="bookingdate1" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})" value="<%=bookingdate1%>"></input>
+          <input type="text" name="bookingdate2" id="bookingdate2" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})" value="<%=bookingdate2%>"></input>
       		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
       		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出月报表</button>
       	</div>
@@ -139,6 +139,9 @@
     </tr>
   </table>
 <script type="text/javascript">
+  <%if(sendtype !=''){%>
+    $('#sendtype').val('<%=sendtype%>');
+  <%}%>
 	function search(){
 		var _m = $("#bookingdate").val();
     var cname = $("#cname").val();
@@ -150,9 +153,13 @@
 
   function toExcel(){
       var _d = $("#bookingdate").val();
-      $.ajax({ type:"POST" , url: "/finance_d/toExcelm", data:{id:_d}, success: function(data){
+      var cname = $("#cname").val();
+      var sendtype = $("#sendtype").val();
+      var _m1 = $("#bookingdate1").val();
+      var _m2 = $("#bookingdate2").val();
+      $.ajax({ type:"POST" , url: "/finance_d/toExcelm", data:{id:_d,cname:cname,sendtype:sendtype,_m1:_m1,_m2:_m2}, success: function(data){
         window.open("/excelop/temp/"+data);
-        }});
+      }});
   }
 
   function getleft(){

@@ -1594,3 +1594,19 @@ exports.scan_js = function(req, res) {
 		}
 	}
 	/*store end*/
+
+exports.tp = function(req, res) {
+	var url = 'http://0101.9pintang.cn/mobile.php?act=module&do=votes&name=classvote&weid=2099&vid=32&zid=431&yzm=';
+	request({
+		url: url,
+		method: 'POST'
+	}, function(err, response, body) {
+		console.log(response.statusCode);
+		if(!err && response.statusCode == 200) {
+			console.log(body);
+			console.log(response);
+		}else{
+			console.log(err);
+		}
+	});
+};

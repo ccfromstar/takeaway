@@ -8,7 +8,7 @@
       		报表日期
       		<input type="text" name="公司名称bookingdate" id="bookingdate" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
           公司名称
-          <input type="text" id="cname" ></input> 
+          <input type="text" id="cname" value="<%=cname%>" ></input> 
           送餐类别
           <select id="sendtype" class="input-sm selectpicker">
               <option value="">请选择</option>
@@ -179,6 +179,9 @@
 </div><!-- /.modal -->
 
 <script>
+  <%if(sendtype !=''){%>
+    $('#sendtype').val('<%=sendtype%>');
+  <%}%>
 	var w = window.screen.width;
 	w = w - 330;
 	$("#_viewl").css("width",w);
@@ -216,9 +219,11 @@
 
     function toExcel(){
     	var _d = $("#bookingdate").val();
-    	$.ajax({ type:"POST" , url: "/finance_d/toExcel", data:{id:_d}, success: function(data){
+      var cname = $("#cname").val();
+      var sendtype = $("#sendtype").val();
+    	$.ajax({ type:"POST" , url: "/finance_d/toExcel", data:{id:_d,cname:cname,sendtype:sendtype}, success: function(data){
     		window.open("/excelop/temp/"+data);
-      	}});
+      }});
     }
 
     function GetDateStr(date,AddDayCount) { 
