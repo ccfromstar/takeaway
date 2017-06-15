@@ -111,6 +111,7 @@
 			<th>单价</th>
 			<th>单位</th>
 			<th>总价</th>
+			<th>操作</th>
 		</tr>
 		<tbody id="content">
 		</tbody>
@@ -297,6 +298,7 @@
 						html += "<td>" + data[i].unitPrice + "元</td>";
 						html += "<td>" + data[i].unit + "</td>";
 						html += "<td>" + data[i].total + "元</td>";
+						html += "<td><button class='btn btn-xs' onclick='delputh(" + data[i].id + ")'>删除</button></td>";
 						html += "</tr>";
 						totalout += data[i].total;
 					}
@@ -305,6 +307,25 @@
 					$('#totalout').html(totalout.toFixed(2));
 				}
 			});
+		}
+
+		function delputh(id){
+			var _con = confirm("是否确认删除?");
+			if(_con) {
+				$.ajax({
+					type: "POST",
+					url: "/erp/delOrdh1",
+					data: {
+						id: id
+					},
+					success: function(data) {
+						if(data == 200) {
+							//alert('删除成功！');
+							window.location.reload();
+						}
+					}
+				});
+			}
 		}
 		/*删除出库*/
 		function del(id, name, category, unitPrice, num) {

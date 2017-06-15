@@ -18,6 +18,8 @@ exports.sqldo = function(req, res) {
 		delOrd(req, res);
 	} else if(_sql == "delOrdh") {
 		delOrdh(req, res);
+	} else if(_sql == "delOrdh1") {
+		delOrdh1(req, res);
 	} else if(_sql == "getPutIn") {
 		getPutIn(req, res);
 	} else if(_sql == "insertPutin") {
@@ -473,6 +475,25 @@ function delOrdh(req, res) {
 	var id = req.param('id');
 	var sql1 = "insert into putin_log select * from putin where id = " + id;
 	var sql2 = "delete from putin where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		mysql.query(sql2, function(error, row) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			res.send('200');
+		});
+	});
+};
+
+function delOrdh1(req, res) {
+	var id = req.param('id');
+	var sql1 = "insert into putout_log select * from putout where id = " + id;
+	var sql2 = "delete from putout where id = " + id;
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
