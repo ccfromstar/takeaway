@@ -1,6 +1,37 @@
 <% include header %>
 <!--入库-->
 <h1>1.未入库采购清单列表</h1>
+<h1>3.查询(可选日期、门店和分类)</h1>
+<table class="form">
+	<tr>
+		<td>
+			<input type="text" id="k_date_s" style="cursor:pointer" readonly  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" ></input>
+		</td>
+		<td>
+			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
+			<datalist id="list3">
+					<%for(var i in obj4){%>
+						<option value="<%=obj4[i].name%>">
+							<%=obj4[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+
+			<input type="text" id="k_category" list="list4" value="所有" />
+			<datalist id="list4">
+					<%for(var i in obj3){%>
+						<option value="<%=obj3[i].name%>">
+							<%=obj3[i].name%>
+						</option>
+					<%}%>
+				</datalist>
+		</td>
+		<td>
+			<button class="btn btn-xs" onclick="getStockDate()">筛选</button>
+			<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
+		</td>
+	</tr>
+</table>
 <div class="div_auto_stock">
 	<table class="table table-hover table-bordered">
 		<tr>
@@ -63,6 +94,7 @@
 			<th>总价</th>
 			<th>单价</th>
 			<th>差价</th>
+			<th>操作</th>
 		</tr>
 		<tbody id="content">
 		</tbody>
@@ -129,6 +161,7 @@
 						html += "<td>" + data[i].total + "元</td>";
 						html += "<td>" + data[i].unitPrice + "元</td>";
 						html += "<td>" + data[i].difference + "元</td>";
+						html += "<td><button class='btn btn-xs' onclick='delputh(" + data[i].id + ")'>删除</button></td>";
 						html += "</tr>";
 						totalout += data[i].total;
 					}
@@ -239,6 +272,11 @@
 			$.ajax({
 				type: "POST",
 				url: "/erp/getUninOrd",
+				data: {
+					k_store: $("#k_store").val(),
+					k_category: $("#k_category").val(),
+					k_date: $("#k_date_s").val()
+				},
 				success: function(data) {
 					var html = "";
 					for(var i in data) {
@@ -293,6 +331,24 @@
 				$.ajax({
 					type: "POST",
 					url: "/erp/delOrd",
+					data: {
+						id: id
+					},
+					success: function(data) {
+						if(data == 200) {
+							//alert('删除成功！');
+							window.location.reload();
+						}
+					}
+				});
+			}
+		}
+		function delputh(id){
+			var _con = confirm("是否确认删除?");
+			if(_con) {
+				$.ajax({
+					type: "POST",
+					url: "/erp/delOrdh",
 					data: {
 						id: id
 					},

@@ -16,6 +16,8 @@ exports.sqldo = function(req, res) {
 		insertOrd(req, res);
 	} else if(_sql == "delOrd") {
 		delOrd(req, res);
+	} else if(_sql == "delOrdh") {
+		delOrdh(req, res);
 	} else if(_sql == "getPutIn") {
 		getPutIn(req, res);
 	} else if(_sql == "insertPutin") {
@@ -464,6 +466,25 @@ function delOrd(req, res) {
 			return false;
 		}
 		res.send('200');
+	});
+};
+
+function delOrdh(req, res) {
+	var id = req.param('id');
+	var sql1 = "insert into putin_log select * from putin where id = " + id;
+	var sql2 = "delete from putin where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		mysql.query(sql2, function(error, row) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			res.send('200');
+		});
 	});
 };
 
