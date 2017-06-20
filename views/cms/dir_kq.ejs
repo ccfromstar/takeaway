@@ -1,0 +1,168 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td>
+      		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增</button>
+			<table class="table table-hover" id="table_list">
+    		<thead>
+      			<tr>
+        			<th>序号</th>
+        			<th>日期</th>
+              <th>平台</th>
+        			<th>总金额</th>
+        			<th>操作</th>
+      			</tr>
+    		</thead>
+    		<tbody>
+    		<%for(var i in address){%>
+      			<tr>
+        			<td><%-address[i].id%></td>
+              <td><%-address[i].date%></td>
+              <td><%=address[i].name%></td>
+        			<td><%=address[i].priceTotal%></td>
+        			<td>
+        				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=address[i].id%>)">编辑</button>
+        				<button type="button" class="btn btn-default btn-xs" onclick="delinfo(<%=address[i].id%>)">删除</button>
+        			</td>
+      			</tr>
+    		<%}%>
+    		</tbody>
+    		</table>
+    		<!--分页符-->
+			<div style='width:100%;text-align:center'>
+  				<button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+  				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+  				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+			</div>  
+			<br/><br/>  	
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:800px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table class="table table-bordered"> 
+                <tr>
+                    <td>日期</td>
+                    <td>
+                      <input type="text" name="date" id="date" style="cursor:pointer" readonly  class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+                    </td>
+                </tr> 
+                <tr>
+                    <td>平台</td>
+                    <td>
+                        <select id="name" class="input-sm selectpicker">
+                            <option value="-">请选择</option>
+                            <option value="美团">美团</option>
+                            <option value="饿了么">饿了么</option>
+                            <option value="百度">百度</option>
+                        </select>
+                    </td>
+                </tr> 
+                <tr>
+                    <td>总金额</td>
+                    <td><input type="text" class="input-sm form-control" id="priceTotal" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
+                </tr> 
+             </table>
+             <input type="hidden" id="docid" ></input>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+	function newDoc(){
+		$("#date").val("");
+		$("#name").val("");
+    $("#priceTotal").val("");
+		$("#docid").val("0");
+
+		$('#addModal').modal('show');
+	}
+
+  function toPage(i){
+    window.location = "/cms/kq?p="+i;
+  }
+
+  function setCom(){
+    var d = $("#selectcompany").val();
+    var arr = d.split("@");
+    $("#name").val(arr[0]);
+    $("#unitPrice").val(arr[1]);
+  }
+
+	function editDoc(id){
+        //根据id读取字段
+        $.ajax({ type:"POST" , url: "/kq/getinfo", data:{id:id}, success: function(data){
+               $("#date").val(data[0].date); 
+               $("#name").val(data[0].name);
+               $("#priceTotal").val(data[0].priceTotal);
+               $("#docid").val(id);
+        }});
+        $('#addModal').modal('show');
+    }
+
+	function submitDoc(){
+		if($("#docid").val()=="0"){
+			//insert
+			$.ajax({ type:"POST" , url: "/kq/insert", data:{
+                date:$("#date").val(),
+                name:$("#name").val(),
+                priceTotal:$("#priceTotal").val()
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}else{
+			//update
+			$.ajax({ type:"POST" , url: "/kq/update", data:{
+                date:$("#date").val(),
+                name:$("#name").val(),
+                priceTotal:$("#priceTotal").val(),
+                docid:$("#docid").val()
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}
+    }
+
+    function delinfo(id){
+    	$.confirm({
+    		title: '请确认',
+    		content: '是否确认删除？',
+    		confirm: function(){
+        		$.ajax({ type:"POST" , url: "/kq/delinfo", data:{id:id}, success: function(data){
+        			if(data==200){
+              			window.location.reload();     
+        			}
+      			}});	
+    		}
+		});
+    }
+
+<%if(info){%>
+    $.alert({title: '提示信息',content: '<%=info%>'});
+<%}%>
+</script>
+<% include footer %>

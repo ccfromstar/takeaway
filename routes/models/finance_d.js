@@ -48,6 +48,7 @@ exports.sql_list = function (req, res) {
     var sql6 = "select * from outbooking where date like '"+bd+"' and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql7 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql8 = "select * from ordergh where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql9 = "select * from orderb2b where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -65,22 +66,28 @@ exports.sql_list = function (req, res) {
                     if(err){console.log(err);return false;}
                     mysql.query(sql8,function (err, rows8) {
                         if(err){console.log(err);return false;}
-                        for(var i in rows1){
-                            num_total = num_total + rows1[i].numTotal;
-                            price_total = price_total + rows1[i].priceTotal;
-                        }
-                        for(var i in rows6){
-                            num_total = num_total + rows6[i].num;
-                            price_total = price_total + rows6[i].numTotal;
-                        }
-                        for(var i in rows7){
-                            num_total = num_total + rows7[i].num;
-                            price_total = price_total + rows7[i].priceTotal;
-                        }
-                        for(var i in rows8){
-                            price_total = price_total + rows8[i].priceTotal;
-                        }
-                        res.render('cms/finance_d', {cname:cname,sendtype:sendtype,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
+                        mysql.query(sql9,function (err, rows9) {
+                            if(err){console.log(err);return false;}
+                            for(var i in rows1){
+                                num_total = num_total + rows1[i].numTotal;
+                                price_total = price_total + rows1[i].priceTotal;
+                            }
+                            for(var i in rows6){
+                                num_total = num_total + rows6[i].num;
+                                price_total = price_total + rows6[i].numTotal;
+                            }
+                            for(var i in rows7){
+                                num_total = num_total + rows7[i].num;
+                                price_total = price_total + rows7[i].priceTotal;
+                            }
+                            for(var i in rows8){
+                                price_total = price_total + rows8[i].priceTotal;
+                            }
+                            for(var i in rows9){
+                                price_total = price_total + rows9[i].priceTotal;
+                            }
+                            res.render('cms/finance_d', {record4:rows9,cname:cname,sendtype:sendtype,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
+                        });
                     });
                 });
             });
@@ -187,6 +194,7 @@ function sql_toExcel(req, res){
     var sql2 = "select * from outbooking where date like '"+bd+"' and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql3 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql4 = "select * from ordergh where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql5 = "select * from orderb2b where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         for(var i in obj){
@@ -222,13 +230,24 @@ function sql_toExcel(req, res){
                             sendtype:obj4[i].sendtype
                         });
                     }
-                    //用数据源(对象)data渲染Excel模板
-                    var obj_str = '[ [{"date": "' + bd+'"}],';
-                    obj_str += JSON.stringify(obj) + "]";
-                    //console.log(obj_str);
-                    ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
-                        fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
-                        res.send(excelname);
+                    mysql.query(sql5 ,function(error,obj5){
+                        if(error){console.log(error);return false;}
+                        for(var i in obj5){
+                            obj.push({
+                                cname:obj5[i].name,
+                                numTotal:'-',
+                                priceTotal:obj5[i].priceTotal,
+                                sendtype:obj5[i].sendtype
+                            });
+                        }
+                        //用数据源(对象)data渲染Excel模板
+                        var obj_str = '[ [{"date": "' + bd+'"}],';
+                        obj_str += JSON.stringify(obj) + "]";
+                        //console.log(obj_str);
+                        ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+                            fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+                            res.send(excelname);
+                        });
                     });
                 });
             });
@@ -492,7 +511,7 @@ exports.sql_list_m = function (req, res) {
     var sql6 = "select * from outbooking where date like '"+bd+"%' "+sql2+" and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql7 = "select * from oldbooking where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql8 = "select * from ordergh where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
-
+    var sql9 = "select * from orderb2b where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -510,22 +529,28 @@ exports.sql_list_m = function (req, res) {
                     if(err){console.log(err);return false;}
                     mysql.query(sql8,function (err, rows8) {
                         if(err){console.log(err);return false;}
-                        for(var i in rows1){
-                            num_total = num_total + rows1[i].numTotal;
-                            price_total = price_total + rows1[i].priceTotal;
-                        }
-                        for(var i in rows6){
-                            num_total = num_total + rows6[i].num;
-                            price_total = price_total + rows6[i].numTotal;
-                        }
-                        for(var i in rows7){
-                            num_total = num_total + rows7[i].num;
-                            price_total = price_total + rows7[i].priceTotal;
-                        }
-                        for(var i in rows8){
-                            price_total = price_total + rows8[i].priceTotal;
-                        }
-                        res.render('cms/finance_m', {cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+                        mysql.query(sql9,function (err, rows9) {
+                            if(err){console.log(err);return false;}
+                            for(var i in rows1){
+                                num_total = num_total + rows1[i].numTotal;
+                                price_total = price_total + rows1[i].priceTotal;
+                            }
+                            for(var i in rows6){
+                                num_total = num_total + rows6[i].num;
+                                price_total = price_total + rows6[i].numTotal;
+                            }
+                            for(var i in rows7){
+                                num_total = num_total + rows7[i].num;
+                                price_total = price_total + rows7[i].priceTotal;
+                            }
+                            for(var i in rows8){
+                                price_total = price_total + rows8[i].priceTotal;
+                            }
+                            for(var i in rows9){
+                                price_total = price_total + rows9[i].priceTotal;
+                            }
+                            res.render('cms/finance_m', {record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+                        });
                     });
                 });
             });
@@ -662,6 +687,7 @@ function sql_toExcelm(req, res){
     var sql2 = "select * from outbooking where date like '"+bd+"%' "+sql22+" and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql3 = "select * from oldbooking where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql4 = "select * from ordergh where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
+    var sql5 = "select * from orderb2b where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
 
     //console.log(sql3);
     mysql.query(sql1 ,function(error,obj){
@@ -702,10 +728,22 @@ function sql_toExcelm(req, res){
                             sendtype:obj4[i].sendtype
                         });
                     }
-                    //用数据源(对象)data渲染Excel模板
-                    ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
-                        fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
-                        res.send(excelname);
+                    mysql.query(sql5 ,function(error,obj5){
+                        if(error){console.log(error);return false;}  
+                        for(var i in obj5){
+                            obj.push({
+                                date1:obj5[i].date,
+                                cname:obj5[i].name,
+                                numTotal:'-',
+                                priceTotal:obj5[i].priceTotal,
+                                sendtype:obj5[i].sendtype
+                            });
+                        }
+                        //用数据源(对象)data渲染Excel模板
+                        ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
+                            fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
+                            res.send(excelname);
+                        });
                     });
                 });
             });
