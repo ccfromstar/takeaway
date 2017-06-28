@@ -790,12 +790,24 @@ function getPutoutbyMonth(req, res) {
 	var k_date = req.param('k_date');
 	var k_name = req.param('k_name');
 	var k_hasInvoice = req.param('k_hasInvoice');
+	var k_cate_id = req.param('k_cate_id');
+
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
-	var sql1 = "select * from c_putout where store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%' and date like '" + k_date + "%' order by id desc";
+
+	//k_cate_id = k_cate_id?k_cate_id:'';
+
+	//console.log(k_cate_id);
+
+	var change1 = '';
+	if(k_cate_id != ''){
+		change1 = " no like '"+k_cate_id+"%' and ";
+	}
+
+	var sql1 = "select * from c_putout where  "+change1+"  store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%' and date like '" + k_date + "%' order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_putout where store like '%"+k_store+"%' and name like '%" + k_name + "%' and date like '" + k_date + "%' order by id desc";
+		sql1 = "select * from c_putout where  "+change1+"  store like '%"+k_store+"%' and name like '%" + k_name + "%' and date like '" + k_date + "%' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
