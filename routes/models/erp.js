@@ -84,6 +84,8 @@ exports.sqldo = function(req, res) {
 		toExcelRB(req,res);
 	} else if(_sql == "moveStock"){
 		moveStock(req,res);
+	}else if(_sql == "UpdateDoc"){
+		UpdateDoc(req,res);
 	}
 	
 };
@@ -1062,3 +1064,16 @@ function setFileName1(bn) {
 	var ss = myDate.getSeconds();
 	return bn + "____" + hh + mm + ss + ".xlsx";
 }
+
+function UpdateDoc(req, res) {
+	var id = req.param('id');
+	var num = req.param('num');
+	var sql1 = "update stock set num = "+num+" where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
