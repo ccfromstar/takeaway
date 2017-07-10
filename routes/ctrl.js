@@ -149,6 +149,7 @@ module.exports = function (app, routes) {
     app.get('/erp/putout',routes.erp_putout);
     app.get('/erp/byday',routes.erp_byday);
     app.get('/erp/bymonth',routes.erp_bymonth);
+    app.get('/erp/log',routes.erp_log);
 
     app.post('/service/:sql',routes.servicedo);
 

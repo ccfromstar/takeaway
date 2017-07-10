@@ -1068,12 +1068,17 @@ function setFileName1(bn) {
 function UpdateDoc(req, res) {
 	var id = req.param('id');
 	var num = req.param('num');
+	var old_num = req.param('old_num');
+	var name = req.param('name');
+	
 	var sql1 = "update stock set num = "+num+" where id = " + id;
+	var sql2 = "insert into stock_log(sid,num,old_num,name,createAt) values('"+id+"','"+num+"','"+old_num+"','"+name+"',now())"
+	//console.log(sql2);
 	mysql.query(sql1, function(error, row) {
-		if(error) {
-			console.log(error);
-			return false;
-		}
-		res.send('200');
+		if(error) {console.log(error);return false;}
+		mysql.query(sql2, function(error, row2) {
+			if(error) {console.log(error);return false;}
+			res.send('200');
+		});
 	});
 };

@@ -1479,6 +1479,19 @@ exports.erp_role = function(req, res) {
 	});
 };
 
+exports.erp_log = function(req, res) {
+	var sql1 = "select * from v_stock_log order by id desc";
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.render('erp/log', {
+			obj: obj
+		});
+	});
+};
+
 exports.erp_home = function(req, res) {
 	res.render('erp/home', {});
 };

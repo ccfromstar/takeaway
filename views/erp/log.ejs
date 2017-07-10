@@ -1,0 +1,36 @@
+<% include header %>
+<div class="div_auto">
+	<table class="table table-hover table-bordered">
+		<tr>
+			<th>库存内容</th>
+			<th>旧数量</th>
+			<th>新数量</th>
+			<th>调整人</th>
+			<th>调整时间</th>
+		</tr>
+		<tbody id="content">
+		
+		<%for(var i in obj){%>
+		<tr>
+			<td>
+				<%=obj[i].store%>的<%=obj[i].category%>分类的<%=obj[i].cname%>
+			</td>
+			<td>
+				<%=obj[i].old_num%>
+			</td>
+			<td>
+				<%=obj[i].num%>
+			</td>
+			<td>
+				<%=obj[i].name%>
+			</td>
+			<td>
+				<%=obj[i].createAt%>
+			</td>
+		</tr>
+
+		<%}%>
+		</tbody>
+	</table>
+</div>
+<% include footer %>

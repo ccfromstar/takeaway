@@ -72,3 +72,11 @@ SELECT a.*,b.name as cname
 FROM com_booking a
 LEFT JOIN address b
 ON a.cid = b.id;
+
+DROP VIEW IF EXISTS `v_stock_log`;
+CREATE VIEW v_stock_log
+AS
+SELECT a.*,b.name as cname,store,category
+FROM stock_log a
+LEFT JOIN stock b
+ON a.sid = b.id;
