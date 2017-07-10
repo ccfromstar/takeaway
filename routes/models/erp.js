@@ -86,6 +86,8 @@ exports.sqldo = function(req, res) {
 		moveStock(req,res);
 	}else if(_sql == "UpdateDoc"){
 		UpdateDoc(req,res);
+	}else if(_sql == "UpdateDate"){
+		UpdateDate(req,res);
 	}
 	
 };
@@ -1082,3 +1084,15 @@ function UpdateDoc(req, res) {
 		});
 	});
 };
+
+function UpdateDate(req, res) {
+	var id = req.param('id');
+	var num = req.param('num');
+	
+	var sql1 = "update stock set date = '"+num+"' where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {console.log(error);return false;}
+		res.send('200');
+	});
+};
+

@@ -60,6 +60,7 @@
 			<th>单价</th>
 			<th>单位</th>
 			<th>库存数</th>
+			<th>产品日期</th>
 			<th>操作</th>
 		</tr>
 		<tbody id="contentStock">
@@ -178,6 +179,9 @@
 				success: function(data) {
 					var html = "";
 					for(var i in data) {
+						//var h1 = "<input type='text' id='cc_"+data[i].id+"'>";
+						var h1 = "<input type='text' id='cc_"+data[i].id+"' style='cursor:pointer' readonly  class='Wdate' onfocus='WdatePicker({doubleCalendar:false,dateFmt:\"yyyy-MM-dd\"})'' value='"+ data[i].date +"'></input>";
+						var h2 = "<button type='button' class='btn btn-default btn-xs' onclick='UpdateDoc("+data[i].id+")'>调整</button>";
 						html += "<tr>";
 						html += "<td>" + data[i].store + "</td>";
 						html += "<td>" + data[i].category + "</td>";
@@ -185,6 +189,7 @@
 						html += "<td>" + data[i].unitPrice + "元</td>";
 						html += "<td>" + data[i].unit + "</td>";
 						html += "<td>" + data[i].num + "</td>";
+						html += "<td>" + h1 + h2 + "</td>";
 						html += "<td><button class='btn btn-xs' onclick='output(" + data[i].id + "," + data[i].num + ",\"" + data[i].name + "\"," + data[i].unitPrice + ",\"" + data[i].category + "\",\"" + data[i].store + "\")'>出库</button></td>";
 						html += "</tr>";
 					}
@@ -327,6 +332,23 @@
 				});
 			}
 		}
+
+		function UpdateDoc(id){
+			var num = $('#cc_'+id).val();
+			//console.log(num);
+	    	$.confirm({
+	    		title: '请确认',
+	    		content: '是否确认修改？',
+	    		confirm: function(){
+	        		$.ajax({ type:"POST" , url: "/erp/UpdateDate", data:{id:id,num:num}, success: function(data){
+	        			if(data==200){
+	              			window.location.reload();     
+	        			}
+	      			}});	
+	    		}
+			});
+	    }
+
 		/*删除出库*/
 		function del(id, name, category, unitPrice, num) {
 			var _con = confirm("是否确认删除?");
