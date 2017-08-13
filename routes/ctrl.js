@@ -112,6 +112,10 @@ module.exports = function (app, routes) {
     app.get('/cms/kq',routes.kq);
     app.post('/kq/:sql',routes.kqdo);
 
+    app.get('/cms/fedmenu',routes.checkLogin);
+    app.get('/cms/fedmenu',routes.fedmenu);
+    app.post('/fedmenu/:sql',routes.fedmenudo);
+
     app.get('/cms/role',routes.checkLogin);
     app.get('/cms/role',routes.role);
     app.post('/role/:sql',routes.roledo);
