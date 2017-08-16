@@ -26,7 +26,7 @@
                 function(res){
                     WeixinJSBridge.log(res.err_msg);
                     //alert("支付成功!");
-                    window.location='/weixin/option';
+                    window.location='/fedex/option';
                     //alert(res.err_code+res.err_desc+res.err_msg);
                     //alert(res.err_msg);
                     if( res.err_msg =="get_brand_wcpay_request:ok"){
@@ -34,7 +34,7 @@
                     }else{
                         alert("支付失败!");
                     }
-                    window.location='/weixin/option';
+                    window.location='/fedex/option';
                 }
             );
         }

@@ -284,9 +284,33 @@ exports.f_login = function(req, res) {
 }
 
 exports.f_booking = function(req, res) {
-	res.render('fedex/booking', {
-		
-	});
+	//获取code
+	var code = req.query.code;
+	console.log("code:" + code);
+	if(code) {
+		var appId = "wxe2a20ae8d978330b";
+		var appSecret = "5160fed55fa7f8cffe2677213b270608";
+		var url = "https://api.weixin.qq.com/sns/oauth2/access_token?grant_type=authorization_code&appid=" + appId + "&secret=" + appSecret + "&code=" + code;
+		console.log(url);
+		request({
+			url: url,
+			timeout: 3000
+		}, function(err, response, body) {
+			if(err) {
+				console.log("err:" + err);
+			}
+			if(!err && response.statusCode == 200) {
+				var openid = JSON.parse(body).openid;
+				console.log("body:" + body);
+				console.log("openid:" + openid);
+				req.session.openid = openid;
+				res.render('fedex/booking', {});
+			}
+		});
+	}else{
+		res.render('fedex/booking', {});
+	}	
+	
 }
 
 exports.w_reg = function(req, res) {

@@ -450,6 +450,7 @@ function createFbooking(req, res) {
     var f2 = req.param('f2');
     var f3 = req.param('f3');
     var myDate = new Date(); //日期对象
+    //console.log(f1);console.log(f2);console.log(f3);
     myDate.setDate(myDate.getDate()+2);
     var y = myDate.getFullYear(); 
     var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
@@ -473,7 +474,8 @@ function createFbooking(req, res) {
         if(f1 != ''){
           var arr4 = f1.split("@");var arr5 = f2.split("@");var arr6 = f3.split("@");
           for(var i=0;i<arr4.length;i++){
-            var sql3 = "insert into fedbooking_price(bno,name,price,num) values('"+bookingno+"','"+arr4[i]+"','"+arr5[i]+"','"+arr6[i]+"')";
+            var sql3 = "insert into fedbooking_price(bno,name,price,num) values('"+bookingno+"','"+arr4[i]+"','"+arr6[i]+"','"+arr5[i]+"')";
+            //console.log(sql3);
             mysql.query(sql3 ,function(error,obj2){});
           }
         }
