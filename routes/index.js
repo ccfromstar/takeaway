@@ -1074,7 +1074,8 @@ exports.jsapipay = function(req, res) {
 			var _paySignjs = paysignjs('wxe2a20ae8d978330b', 'ibuaiVcKdpRxkhJA', 'prepay_id=' + tmp1[0], 'MD5', '1414411784');
 			res.render('jsapipay', {
 				prepay_id: tmp1[0],
-				_paySignjs: _paySignjs
+				_paySignjs: _paySignjs,
+				bookingNo:bookingNo
 			});
 			//res.render('jsapipay',{rows:body});
 			//res.redirect(tmp3[0]);

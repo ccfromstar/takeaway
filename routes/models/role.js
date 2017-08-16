@@ -30,6 +30,7 @@ exports.sqldo = function (req, res) {
     else if(_sql == "createFbooking"){createFbooking(req,res);}
     else if(_sql == "getfbookinglist"){getfbookinglist(req,res);}
     else if(_sql == "cancelFbooking"){cancelFbooking(req,res);}
+    else if(_sql == "setFBookState"){setFBookState(req,res);}
 };
 
 function getClientIp(req) {
@@ -232,6 +233,15 @@ function cancelFbooking(req, res) {
           res.send("200");
     });
 };
+
+function setFBookState(req,res){
+    var bno = req.param('bno');
+    var deleteSql = "update fedbooking set state = '已支付' where bookingno = '"+bno+"'";
+    mysql.query(deleteSql ,function(error,obj){
+          if(error){console.log(error);return false;}
+          res.send("200");
+    });
+}
 
 function sql_select(req, res) {
     var id = req.param('id');
