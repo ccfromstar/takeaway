@@ -32,12 +32,23 @@ exports.sqldo = function (req, res) {
     else if(_sql == "cancelFbooking"){cancelFbooking(req,res);}
 };
 
+function getClientIp(req) {
+        return req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+    };
+
 function sendSMS(req,res){
     var account = settings.dx_account;
     var password = settings.dx_password;
-	
-    var mobile = req.param('mobile');
     var code = req.param('code');
+    var mobile = req.param('mobile');
+    if(code.length != 6){
+      console.log("ip:"+getClientIp(req)+"|code:"+code+"|mobile:"+mobile);
+      return false;
+    }
+    
     var url = "http://106.wx96.com/webservice/sms.php?method=Submit&account="+account+"&password="+password+"&mobile="+mobile+"&content=您的动态码是："+code+"。请不要把动态码泄露给其他人。";
     console.log(url);
     request(url,function(err,response,body){

@@ -92,5 +92,9 @@
         }
     });
   }
+
+  function pay(){
+    window.location = '/jsapipay?bookingNo=' + '<%=obj1[0].bookingno%>' + '&total_fee=' + ('<%=obj1[0].numTotal%>' * 100);
+  }
 </script>
 <% include footer %>
