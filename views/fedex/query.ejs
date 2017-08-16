@@ -1,0 +1,224 @@
+<% include header1 %>
+<!-- Header -->
+		<header data-am-widget="header" style="background:#AF311A;" class="am-header am-header-default am-no-layout am-header-fixed">
+			<h1 class="am-header-title">
+    			<a href="#title-link">订单查询</a>
+  			</h1>
+		</header>
+		
+		<form class="am-form">
+		  <fieldset>
+		    <legend>日账单查询</legend>
+
+		    <div class="am-form-group">
+		      <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+				  <input type="text" class="am-form-field" id="date" placeholder="日期" readonly>
+				  <span class="am-input-group-btn am-datepicker-add-on">
+				    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+				  </span>
+			   </div>
+		    </div>
+		    
+			<button type="button" class="am-btn am-btn-default" onclick="query()">查询</button>
+			
+			<table class="am-table am-table-bordered am-table-radius am-table-striped" style="margin-top:10px;">
+			    <thead>
+			        <tr>
+			            <th>A</th>
+			            <th>A调整</th>
+			            <th>B</th>
+			            <th>B调整</th>
+			            <th>C</th>
+			            <th>C调整</th>
+			            <th>D</th>
+			            <th>D调整</th>
+			            <th>总数</th>
+			            <th>总价</th>
+			            <th>送餐类别</th>
+			        </tr>
+			    </thead>
+			    <tbody id="tbody1">
+			   
+			    </tbody>
+			</table>
+		  </fieldset>
+		</form>
+		
+		<form class="am-form">
+		  <fieldset>
+		    <legend>月账单查询</legend>
+
+		    <div class="am-form-group">
+		      <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm'}">
+				  <input type="text" class="am-form-field" id="date2" placeholder="日期" readonly>
+				  <span class="am-input-group-btn am-datepicker-add-on">
+				    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+				  </span>
+			   </div>
+		    </div>
+		    
+			<button type="button" class="am-btn am-btn-default" onclick="query2()">查询</button>
+			
+			<div style="margin-left:0px;padding-top:5px;">当月总份数：<span id="numTotal"></span> 份</div>
+    		<div style="margin-left:0px;padding-top:5px;">当月总金额：¥<span id="priceTotal"></span></div>
+		  </fieldset>
+		</form>
+
+<script type="text/javascript">
+  //判断登陆状态
+  var sessionID = window.localStorage.getItem("sessionID");
+  if(!sessionID){
+  	window.location = '/weixin/login';
+  }
+
+  
+  var sessionCompany = '';
+  
+  function getCompanyInfo(){
+  	$.ajax({ type:"POST" , data:{id:sessionID},url: "/role/getCinfo", success: function(data){
+  		if(!data[0]){
+  			window.location = '/weixin/login';
+  		}
+        $("#bk1").html(data[0].name);
+        $("#bk2").html(data[0].sender);
+        $("#bk3").html(data[0].tel);
+        $("#bk4").html(data[0].address);
+        $("#bk5").html(data[0].send_address);
+        $("#bk6").html(data[0].price);
+        $("#bk7").html(data[0].type);
+        $("#bk8").html(data[0].deadline);
+        $("#bk9").html(data[0].sendtime);
+        sessionCompany = data[0].name;
+        getMenu();
+        //获取送餐日期
+        $('#date1').html(GetDateStr(1));
+    }});
+  }
+  
+function GetDateStr(AddDayCount) { 
+	var myDate = new Date(); 
+	myDate.setDate(myDate.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+	var y = myDate.getFullYear();
+	var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
+	var d = (((myDate.getDate()) + "").length == 1) ? "0" + (myDate.getDate()) : (myDate.getDate());
+	return y+"-"+m+"-"+d; 
+} 
+  
+  function getMenu(){
+  	$.ajax({ type:"POST" , data:{companyName:sessionCompany},url: "/role/getMenu", success: function(data){
+  	   console.log(data);
+       $('#menu_pdf').html("<div onclick='window.open(\"/pic/"+data[0].imgname+"\");' style='cursor:pointer;margin:20px auto;text-align:center;color:#FFFFFF;font-size:16px;background:#AF311A;width:50%;height:40px;border-radius:10px;line-height:40px;' >菜单</div>");
+    }});
+  }
+
+  function toPage(i){
+    window.location = "/weixin/option?p="+i;
+  }
+  
+  function computTotal(){
+  	var numA = Number($('#numA').val());
+  	var numB = Number($('#numB').val());
+  	$('#numTotal').html(numA+numB);
+  }
+
+  function getbookingprice(id,bk1,bk2,bk3,bk8,bk4,bk5,bk6,bk7,num,price,price1){
+    $.ajax({ type:"POST" , url: "/customer/getbookingdetail",data:{id:id},  success: function(data){
+        var _html = "<table style='margin-top:5px;width:100%;'>";
+        var j = 0;
+        //_html += "<thead><tr><th>序号</th><th>品名</th><th>售价</th><th>优惠价</th><th>数量</th><th>小计</th><th>优惠备注</th></tr></thead> <tbody>"
+        for(var i in data){
+            j += 1;
+            var ap = "";
+            ap = (data[i].remark=="")?"-":data[i].aheadprice;
+            _html += "<tr>";
+            _html += "<td style='text-align:left;padding-top:5px;width:100px'>"+data[i].name+"</td>";
+            _html += "<td style='text-align:left;padding-top:5px;'> x "+data[i].num+"</td>";
+            _html += "<td style='text-align:right;color:#DB551B;padding-top:5px;'> ¥"+data[i].pricetotal+"</td>";
+            _html += "</tr>";
+        }
+        //_html += "<tr><td colspan='4'>合计</td><td style='color:#DB551B'>"+num+"</td><td style='color:#DB551B'>"+price+"</td><td>实付金额：<span style='color:#DB551B'>"+price1+"</span></td></tr>";
+        _html += "</table>";
+        _html += "<div style='color:#DB551B;padding-top:5px;'>合计："+num+" 份</div>";
+        _html += "<div style='color:#DB551B;padding-top:5px;'>实付金额：¥"+price1+"</div>";
+        $("#bookingdetail").html(_html);
+        $("#bk1").html(bk1);
+        $("#bk2").html(bk2);
+        $("#bk3").html(bk3);
+        $("#bk4").html(bk4);
+        $("#bk5").html(bk5);
+        $("#bk6").html(bk6);
+        $("#bk7").html(bk7);
+        $("#bk8").html(bk8);
+        $('#addModal').modal('show');
+    }});
+ }
+
+	function logout() {
+	    $.ajax({ type:"POST" , url: "/role/unbind", success: function(data){
+	        if(data==200){
+	           window.location = "/weixin/login";
+	        }else{
+	          alert("登出出错！");return false;
+	        }
+	    }});
+	}
+	
+	function pay(bookingno,pricetotal) {
+	  window.location='/jsapipay?bookingNo='+bookingno+'&total_fee='+(pricetotal*100);
+	}
+	
+	function query(){
+		$.ajax({ 
+			type:"POST" ,
+			url: "/role/queryBooking",
+			data:{
+				cid:sessionID,
+				date:$('#date').val()
+			},
+			success: function(data){
+				if(data == "400"){
+					alert("当天没有订单！");return false;
+				}
+				var html = '';
+					for(var i in data){
+							html += '<tr>';
+							html += '<td>'+data[i].numA+'</td>';
+							html += '<td>'+data[i].adjustA+'</td>';
+							html += '<td>'+data[i].numB+'</td>';
+							html += '<td>'+data[i].adjustB+'</td>';
+							html += '<td>'+data[i].numC+'</td>';
+							html += '<td>'+data[i].adjustC+'</td>';
+							html += '<td>'+data[i].numD+'</td>';
+							html += '<td>'+data[i].adjustD+'</td>';
+							html += '<td>'+data[i].numTotal+'</td>';
+							html += '<td>'+data[i].priceTotal+'</td>';
+							html += '<td>'+data[i].sendtype+'</td>';
+							html += '</tr>';
+					}
+				$('#tbody1').html(html);
+	    	}
+		});
+	}
+	
+	function query2(){
+		$.ajax({ 
+			type:"POST" ,
+			url: "/role/queryBooking2",
+			data:{
+				cid:sessionID,
+				date:$('#date2').val()
+			},
+			success: function(data){
+				//console.log(data);
+				if(!data[0].numTotal){
+					alert('当月没有订单！');
+				}
+				$('#numTotal').html(data[0].numTotal);
+				$('#priceTotal').html(data[0].priceTotal);
+	    	}
+		});
+	}
+	
+	getCompanyInfo();
+</script>
+<% include footer %>

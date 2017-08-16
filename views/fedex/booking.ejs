@@ -1,0 +1,244 @@
+<!--业务逻辑-->
+
+<style>
+	.form-control{display: inline !important;}
+</style>
+<!--页面逻辑-->
+<% include header1 %>
+<header data-am-widget="header" class="am-header am-header-default am-no-layout am-header-fixed">
+            <h1 class="am-header-title">
+            <a href="#title-link">开始订餐</a>
+        </h1>
+        </header>
+<div id="page1">
+    <form class="am-form">
+        <fieldset>
+            <legend>选择日期</legend>
+
+            <div class="am-form-group">
+              <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+                  <input type="text" class="am-form-field" id="date" placeholder="日期" readonly>
+                  <span class="am-input-group-btn am-datepicker-add-on">
+                    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+                  </span>
+               </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>选择类别</legend>
+
+            <div class="am-form-group">
+              <select id="type" data-am-selected>
+                            <option value="-">请选择</option>
+                            <option value="早餐">早餐</option>
+                            <option value="午餐">午餐</option>
+                            <option value="晚餐">晚餐</option>
+                            <option value="夜宵">夜宵</option>
+              </select>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div class="am-form-group">
+                <button type="button" class="am-btn am-btn-default" onclick="step1()">下一步</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div id="page2" style="display:none">
+<ul class="am-list" id="mlist">
+</ul>
+    <fieldset>
+        <div class="am-form-group">
+            <button type="button" class="am-btn am-btn-default" onclick="step2()">上一步</button>
+            <button type="button" class="am-btn am-btn-success" onclick="step3()">生成订单</button>
+        </div>
+    </fieldset>
+</div>
+<input type="hidden" id="userid" />
+<!-- Footer -->
+        <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default " id="">
+            <ul class="am-navbar-nav am-cf am-avg-sm-4">
+                <li class="am-active">
+                    <a href="/fedex/booking">
+                        <span class="am-icon-bitbucket"></span>
+                        <span class="am-navbar-label">开始订餐</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/fedex/option">
+                        <span class="am-icon-user"></span>
+                        <span class="am-navbar-label">我的订单</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+<script type="text/javascript">
+  //check login state
+  var sessionID = window.localStorage.getItem("sessionID");
+  if(!sessionID){
+    window.location = '/fedex/login';
+  }
+  $('#userid').val(sessionID);
+
+  var num_menu = 0;
+  var add_menu = 0;
+
+  function step1(){
+    var date = $('#date').val();
+    var type = $('#type').val();
+    if(date == ''){
+        alert('请选择日期');return false;
+    }
+    if(type == '-'){
+        alert('请选择类别');return false;
+    }
+    /*load menu list*/
+    $.ajax({ type:"POST" , url: "/role/getfmenu", data:{
+        date:date,
+        type:type
+        }, success: function(data){
+            /*load add menu list*/
+            $.ajax({ type:"POST" , url: "/role/getffmenu"
+                , success: function(data1){
+                    /*load list*/
+
+                    var mlist = '';
+                    for(var i in data){
+                        mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px"><span id="fname'+i+'">'+data[i].name+'</span> ￥<span id="fprice'+i+'">'+data[i].price+'</span></a><span class="am-list-date">';
+                        mlist += '<img src="/img/minus.png" style="height:25px;margin-right:10px" onclick="minus('+i+','+data[i].price+')" />';
+                        mlist += '<span id="num'+i+'">0</span>';
+                        mlist += '<img src="/img/plus.png" style="height:25px;margin-left:10px" onclick="plus('+i+','+data[i].price+')" />';
+                        mlist += '</span></li>';
+                        num_menu += 1;
+                    }
+                    for(var i in data1){
+                        mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px"><span id="ffname'+i+'">'+data1[i].name+'</span> ￥<span id="ffprice'+i+'">'+data1[i].price+'</span></a><span class="am-list-date">';
+                        mlist += '<img src="/img/minus.png" style="height:25px;margin-right:10px" onclick="minusF('+i+','+data1[i].price+')" />';
+                        mlist += '<span id="numF'+i+'">0</span>';
+                        mlist += '<img src="/img/plus.png" style="height:25px;margin-left:10px" onclick="plusF('+i+','+data1[i].price+')" />';
+                        mlist += '</span></li>';
+                        add_menu += 1;
+                    }
+                    mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px">合计</a><span class="am-list-date" style="margin-right:10px"> ￥<span id="numTotal">0</span></span></li>';
+                    $('#mlist').html(mlist);
+                    $('#page1').hide();
+                    $('#page2').show();
+                }
+            });
+        }
+    });
+  }
+
+    function step2(){
+        $('#page1').show();
+        $('#page2').hide();
+    }
+
+function plus(i,p){
+    var num = Number($('#num'+i).html());
+    num += 1;
+    $('#num'+i).html(num);
+    var numTotal = Number($('#numTotal').html());
+    numTotal = numTotal + p;
+    $('#numTotal').html(numTotal);
+}
+
+function minus(i,p){
+    var num = Number($('#num'+i).html());
+    num -= 1;
+    if(num < 0){
+        return false;
+    }
+    $('#num'+i).html(num);
+    var numTotal = Number($('#numTotal').html());
+    numTotal = numTotal - p;
+    $('#numTotal').html(numTotal);
+}
+
+function plusF(i,p){
+    var num = Number($('#numF'+i).html());
+    num += 1;
+    $('#numF'+i).html(num);
+    var numTotal = Number($('#numTotal').html());
+    numTotal = numTotal + p;
+    $('#numTotal').html(numTotal);
+}
+
+function minusF(i,p){
+    var num = Number($('#numF'+i).html());
+    num -= 1;
+    if(num < 0){
+        return false;
+    }
+    $('#numF'+i).html(num);
+    var numTotal = Number($('#numTotal').html());
+    numTotal = numTotal - p;
+    $('#numTotal').html(numTotal);
+}
+
+function step3(){
+    var numTotal = $('#numTotal').html();
+    if(numTotal == 0){
+        alert("您还没有点餐！");
+        return false;
+    }
+    /*computer booking price detail*/
+    var l1 = '',l2 = '',l3 = '';
+    var f1 = '',f2 = '',f3 = ''; 
+    for(var i=0;i<num_menu;i++){
+        var fname = $('#fname'+i).html();
+        var fnum = Number($('#num'+i).html());
+        var fprice = Number($('#fprice'+i).html());
+        if(fnum != 0){
+            if(l1 == ''){
+                l1 = fname;
+                l2 = fnum;
+                l3 = fprice;
+            }else{
+                l1 = l1 + "@" + fname;
+                l2 = l2 + "@" + fnum;
+                l3 = l3 + "@" + fprice;
+            }
+        }
+    }
+
+    for(var i=0;i<add_menu;i++){
+        var fname = $('#ffname'+i).html();
+        var fnum = Number($('#numF'+i).html());
+        var fprice = Number($('#ffprice'+i).html());
+        if(fnum != 0){
+            if(f1 == ''){
+                f1 = fname;
+                f2 = fnum;
+                f3 = fprice;
+            }else{
+                f1 = f1 + "@" + fname;
+                f2 = f2 + "@" + fnum;
+                f3 = f3 + "@" + fprice;
+            }
+        }
+    }
+
+    $.ajax({ type:"POST" , url: "/role/createFbooking", data:{
+        date:$("#date").val(),
+        type:$("#type").val(),
+        userid:$("#userid").val(),
+        l1:l1,
+        l2:l2,
+        l3:l3,
+        f1:f1,
+        f2:f2,
+        f3:f3,
+        numTotal:numTotal
+        }, success: function(data){
+            if(data == '200'){
+                alert('下单成功！');
+                window.location = '/fedex/option';
+            }
+        }
+    });
+}
+</script>
+<% include footer %>

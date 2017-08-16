@@ -1,0 +1,35 @@
+<!--业务逻辑-->
+<!--页面逻辑-->
+<% include header %>
+<input type="text" class="address" placeholder="请输入您的详细地址" oninput="_getaddress()">
+<div class="result"></div>
+<div id="map"></div>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script>
+	function _getaddress(){
+		var _address = $(".address").val();
+		$.ajax({ type:"POST" , url: "/weixin/getAddressByAPI", data:{address:_address},success: function(data){
+			data = JSON.parse(data);
+			console.log(data);
+			var h = "<dd>";
+    		for(var i in data.data){
+    			h += "<dt onclick='loadMap("+data.data[i].location.lat+","+data.data[i].location.lng+")'>"+data.data[i].title+"</dt>";
+    			h += "<dl onclick='loadMap("+data.data[i].location.lat+","+data.data[i].location.lng+")'>"+data.data[i].address+"</dl>";
+    		}
+    		h += "</dd>";
+    		$(".result").html(h);
+      	}});
+	}
+
+	function loadMap(x,y){
+		var map = new qq.maps.Map(document.getElementById("map"),{
+	        //加载地图经纬度信息
+	        center: new qq.maps.LatLng(x,y),
+	        zoom: 15,                       //设置缩放级别
+	        draggable: false,               //设置是否可以拖拽
+	        scrollwheel: false,             //设置是否可以滚动
+	        disableDoubleClickZoom: true    //设置是否可以双击放大
+	    });
+	}
+</script>
+<% include footer %>

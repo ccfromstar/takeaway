@@ -2,6 +2,7 @@ var mysql,LIMIT;
     mysql = require('./db');
     LIMIT = 10;
 var request = require("request");  
+var settings = require('../setting');
 
 exports.sqldo = function (req, res) {
     var _sql = req.params.sql;
@@ -23,20 +24,29 @@ exports.sqldo = function (req, res) {
     else if(_sql == "queryBooking"){queryBooking(req,res);}
     else if(_sql == "queryBooking2"){queryBooking2(req,res);}
     else if(_sql == "checkBooking"){checkBooking(req,res);}
+    else if(_sql == "chekfeduserlogin"){chekfeduserlogin(req,res);}
+    else if(_sql == "getfmenu"){getfmenu(req,res);}
+    else if(_sql == "getffmenu"){getffmenu(req,res);}
+    else if(_sql == "createFbooking"){createFbooking(req,res);}
+    else if(_sql == "getfbookinglist"){getfbookinglist(req,res);}
+    else if(_sql == "cancelFbooking"){cancelFbooking(req,res);}
 };
 
 function sendSMS(req,res){
-	/*
+    var account = settings.dx_account;
+    var password = settings.dx_password;
+	
     var mobile = req.param('mobile');
     var code = req.param('code');
-    var url = "http://121.199.16.178/webservice/sms.php?method=Submit&account=&password=&mobile="+mobile+"&content=您的动态码是："+code+"。请不要把动态码泄露给其他人。";
+    var url = "http://106.wx96.com/webservice/sms.php?method=Submit&account="+account+"&password="+password+"&mobile="+mobile+"&content=您的动态码是："+code+"。请不要把动态码泄露给其他人。";
+    console.log(url);
     request(url,function(err,response,body){
         if(!err && response.statusCode == 200){
               console.log(body);
               res.send("200");
         }
-    }); */
-   console.log('接口已屏蔽');
+    }); 
+   //console.log('接口已屏蔽');
 }
 
 function updateUser(req,res){
@@ -180,7 +190,7 @@ function regwxUser(req, res) {
           if(obj1[0]){
             res.send("300");
           }else{
-            var sql2 = "insert into user (username,name,password,openid) values ('"+username+"','"+name+"','"+password+"','"+req.session.openid+"')";
+            var sql2 = "insert into user (username,name,password,openid) values ('"+username+"','"+name+"','"+password+"','')";
             mysql.query(sql2 ,function(error2,obj2){
               if(error2){console.log(error2);return false;}
                 req.session.cuser = name;
@@ -199,6 +209,15 @@ function sql_delete(req, res) {
     mysql.query(deleteSql ,function(error,obj){
           if(error){console.log(error);return false;}
           req.session.infor = "删除成功！";
+          res.send("200");
+    });
+};
+
+function cancelFbooking(req, res) {
+    var id = req.param('id');
+    var deleteSql = "update fedbooking set state = '已取消' where bookingno = '"+id+"'";
+    mysql.query(deleteSql ,function(error,obj){
+          if(error){console.log(error);return false;}
           res.send("200");
     });
 };
@@ -299,6 +318,24 @@ function getMenu(req, res) {
     });
 };
 
+function getfmenu(req,res){
+   var date = req.param('date');
+   var type = req.param('type');
+   var sql = "select * from fedmenu where date ='"+date+"' and type='"+type+"'";
+   mysql.query(sql ,function(error,obj){
+          if(error){console.log(error);return false;}
+          res.send(obj);
+   });
+}
+
+function getffmenu(req,res){
+   var sql = "select * from fedfixedmenu";
+   mysql.query(sql ,function(error,obj){
+          if(error){console.log(error);return false;}
+          res.send(obj);
+   });
+}
+
 function chekwxuserlogin (req, res) {
   var username = req.param('username');
   var password = req.param('password');
@@ -340,6 +377,47 @@ function chekwxuserlogin (req, res) {
   });
 }
 
+function chekfeduserlogin (req, res) {
+  var username = req.param('username');
+  var password = req.param('password');
+  var method = Number(req.param('method'));
+    var Sql = "select * from user where username = '"+username+"'";
+    mysql.query(Sql ,function(error,obj){
+      if(error){console.log(error);return false;}
+      if(obj[0]){
+        if(method == 1){
+          if(obj[0].code == password){
+            console.log(obj[0].id);
+            res.send(obj[0].id+"");
+          }else{
+              res.send("200");
+          }
+        }else{
+            req.session.cuser = obj[0].name;
+            req.session.cid =  obj[0].id;
+            req.session.ctel =  obj[0].username;
+            req.session.favorable = obj[0].favorable;
+            //bind openid
+            var sql2 = "select openid from user where id = "+obj[0].id;             
+            mysql.query(sql2 ,function(error,obj2){
+                if(obj2[0].openid){
+                  res.send("500");
+                }else{
+                  var sql1 = "update user set openid = '"+req.session.openid+"' where id = "+obj[0].id;
+                  mysql.query(sql1 ,function(error,obj1){
+                    if(error){console.log(error);return false;}
+                    res.send("200");
+                  });
+                }
+            });
+        }
+      }else{
+        res.send("300");
+      }
+      
+  });
+}
+
 function unbind (req, res) {
   //unbind openid
   var sql1 = "update user set openid = Null where openid = '"+req.session.openid + "'";
@@ -347,6 +425,58 @@ function unbind (req, res) {
       if(error){console.log(error);return false;}
       res.send("200");
   });       
+}
+
+function createFbooking(req, res) {
+    var date = req.param('date');
+    var type = req.param('type');
+    var userid = req.param('userid');
+    var numTotal = req.param('numTotal');
+    var l1 = req.param('l1');
+    var l2 = req.param('l2');
+    var l3 = req.param('l3');
+    var f1 = req.param('f1');
+    var f2 = req.param('f2');
+    var f3 = req.param('f3');
+    var myDate = new Date(); //日期对象
+    myDate.setDate(myDate.getDate()+2);
+    var y = myDate.getFullYear(); 
+    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+
+    var hh = (((myDate.getHours())+"").length==1)?"0"+(myDate.getHours()):(myDate.getHours());
+    var mm = (((myDate.getMinutes())+"").length==1)?"0"+(myDate.getMinutes()):(myDate.getMinutes());
+    var ss = (((myDate.getSeconds())+"").length==1)?"0"+(myDate.getSeconds()):(myDate.getSeconds());
+
+    var bookingno = y + m + d + hh + mm + ss;
+    var insertSql = "insert into fedbooking(userid,bookingno,date,type,state,createAt,numTotal) values('"+userid+"','"+bookingno+"','"+date+"','"+type+"','未付款',now(),'"+numTotal+"')";
+    mysql.query(insertSql ,function(error,obj){
+        if(error){console.log(error);return false;}
+        if(l1 != ''){
+          var arr1 = l1.split("@");var arr2 = l2.split("@");var arr3 = l3.split("@");
+          for(var i=0;i<arr1.length;i++){
+            var sql2 = "insert into fedbooking_price(bno,name,price,num) values('"+bookingno+"','"+arr1[i]+"','"+arr3[i]+"','"+arr2[i]+"')";
+            mysql.query(sql2 ,function(error,obj2){});
+          }
+        }
+        if(f1 != ''){
+          var arr4 = f1.split("@");var arr5 = f2.split("@");var arr6 = f3.split("@");
+          for(var i=0;i<arr4.length;i++){
+            var sql3 = "insert into fedbooking_price(bno,name,price,num) values('"+bookingno+"','"+arr4[i]+"','"+arr5[i]+"','"+arr6[i]+"')";
+            mysql.query(sql3 ,function(error,obj2){});
+          }
+        }
+        res.send("200");
+    });
+};
+
+function getfbookinglist(req,res){
+   var userid = req.param('userid');
+   var sql = "select * from fedbooking where userid ='"+userid+"' order by createAt desc";
+   mysql.query(sql ,function(error,obj){
+          if(error){console.log(error);return false;}
+          res.send(obj);
+   });
 }
 
 Date.prototype.Format = function(fmt) {

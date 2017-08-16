@@ -1,0 +1,73 @@
+<% include header %>
+<table style="margin:auto;width:100%;">
+        <tr>
+            <td style="vertical-align:top;">
+            <div>
+    <%for(var i in menu_s){
+    	
+    	 if(url.indexOf("jktc") > 0){
+			if(i>3){
+				break;
+			}	
+		}else{
+			if(i<4){
+				continue;
+			}	
+		}
+    	%>
+                    <div style="margin:auto;width:100%;overflow:hidden" id="detaildiv<%=i%>">
+                        <div id="detail<%=i%>">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <img src="http://www.4000191177.com/pic/<%=menu_s[i].imgname%>" style="width:100%" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align:top;">
+                                    <!--<div style="height:10px;"></div>-->
+                                    <table style= "margin:auto;width:95%;">
+                                        <tr>
+                                            <td style="padding-top:5px;vertical-align:top;"><b style="font-size:22px !important;"><%=menu_s[i].name%></b></td>
+                                            <td style="padding-top:5px;text-align:right;padding-right:5px;">
+                                                <div class="price1" style="color:#AF311A;font-weight:bold">订餐价 ¥<%=menu_s[i].price%></div>
+                                                <div class="price2" style="color:#AF311A;font-weight:bold">优惠价 ¥<%=menu_s[i].aheadprice%></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><%=menu_s[i].maincourse%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="padding-top:5px;"><%=menu_s[i].jardiniere%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="padding-top:5px;"><%=menu_s[i].staplefood%></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+                        <table style= "margin:auto;width:95%;">
+                            <tr>
+                                <td style="padding-top:5px;">
+                                    
+                                </td>
+                                <td style="padding-top:5px;text-align:right;padding-right:5px;">
+                                    
+                                    <span class="start_booking" onclick="window.location='/weixin/bookingreg'">注册</span>
+                                    <span class="start_booking"> | </span>
+                                    <span class="start_booking" onclick="window.location='/weixin/bookinglogin'">登陆</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
+                        </table>    
+                    </div>
+    <%}%>
+            </div>
+            </td>
+        </tr>
+    </table>
+

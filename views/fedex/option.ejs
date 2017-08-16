@@ -1,0 +1,56 @@
+<!--页面逻辑-->
+<% include header1 %>
+<header data-am-widget="header" class="am-header am-header-default am-no-layout am-header-fixed">
+    <h1 class="am-header-title">
+        <a href="#title-link">我的订单</a>
+    </h1>
+</header>
+<ul class="am-list" id="mlist">
+</ul>
+<!-- Footer -->
+        <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default " id="">
+            <ul class="am-navbar-nav am-cf am-avg-sm-4">
+                <li class="am-active">
+                    <a href="/fedex/booking">
+                        <span class="am-icon-bitbucket"></span>
+                        <span class="am-navbar-label">开始订餐</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/fedex/option">
+                        <span class="am-icon-user"></span>
+                        <span class="am-navbar-label">我的订单</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+<input type="hidden" id="userid" />
+<script type="text/javascript">
+  //check login state
+  var sessionID = window.localStorage.getItem("sessionID");
+  if(!sessionID){
+    window.location = '/fedex/login';
+  }
+  $('#userid').val(sessionID);
+
+  $(document).ready(function(){
+    $.ajax({ type:"POST" , url: "/role/getfbookinglist",data:{
+        	userid:window.localStorage.getItem("sessionID")
+        },success: function(data){
+                    /*load list*/
+                    var mlist = '';
+                    for(var i in data){
+                        mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px">'+data[i].bookingno+' '+data[i].state+'</a><span class="am-list-date" style="top:6px !important">';
+                        	mlist += '<button type="button" class="am-btn am-btn-success" onclick="openDoc('+data[i].bookingno+')">打开</button>';
+                        mlist += '</span></li>';
+                    }
+                    $('#mlist').html(mlist);
+        }
+    });
+  });
+
+  function openDoc(n){
+  	window.location = '/fedex/read?id='+n;
+  }
+</script>
+<% include footer %>

@@ -31,8 +31,14 @@ module.exports = function (app, routes) {
     app.get('/weixin/orderaddress',routes.w_orderaddress);
     app.get('/weixin/list',routes.w_list);
     app.post('/weixin/getAddressByAPI',routes.getAddressByAPI);
-    
     app.get('/weixin/export',routes.w_export);
+
+    //fedex
+    app.get('/fedex/booking',routes.f_booking);
+    app.get('/fedex/login',routes.f_login);
+    app.get('/fedex/bookingreg',routes.booking_f_reg);
+    app.get('/fedex/option',routes.f_option);
+    app.get('/fedex/read',routes.f_read);
     
     //store门店
     app.get('/store/list',routes.s_list);

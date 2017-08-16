@@ -277,6 +277,18 @@ exports.w_login = function(req, res) {
 	});
 }
 
+exports.f_login = function(req, res) {
+	res.render('fedex/login', {
+		
+	});
+}
+
+exports.f_booking = function(req, res) {
+	res.render('fedex/booking', {
+		
+	});
+}
+
 exports.w_reg = function(req, res) {
 	res.render('weixin/reg', {
 		openid: req.session.openid
@@ -295,10 +307,39 @@ exports.booking_w_reg = function(req, res) {
 	});
 }
 
+exports.booking_f_reg = function(req, res) {
+	res.render('fedex/bookingreg', {
+		
+	});
+}
+
 exports.w_option = function(req, res) {
 	res.render('weixin/option', {
 		
 	});
+};
+
+exports.f_option = function(req, res) {
+	res.render('fedex/option', {
+		
+	});
+};
+
+exports.f_read = function(req, res) {
+	var id = req.query.id;
+	var sql1 = "select * from fedbooking where bookingno = '"+id+"'";
+	var sql2 = "select * from fedbooking_price where bno = '"+id+"'";
+	mysql.query(sql1 ,function(error,obj1){
+        if(error){console.log(error);return false;}
+        obj1[0].createAt = (obj1[0].createAt).Format("yyyy-MM-dd hh:mm:ss")
+        mysql.query(sql2 ,function(error,obj2){
+          if(error){console.log(error);return false;}
+          	res.render('fedex/read', {
+				obj1:obj1,
+				obj2:obj2
+			});
+    	});  
+    });
 };
 
 exports.w_query = function(req, res) {

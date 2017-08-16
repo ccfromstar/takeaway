@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>日报表导出</title>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="/css/amazeui.min.css" />
+		<script src="/js/jquery.min.js"></script>
+		<script src="/js/amazeui.min.js"></script>
+		<style>
+			.am-alert{
+				position: fixed;
+				top:0;
+				left:0;
+				z-index:9999;
+				margin-top:0 !important;
+				width:100%;
+			}
+			.none{
+				display: none;
+			}
+		</style>
+	</head>
+	<body class="am-with-fixed-navbar">
+		<!-- Header -->
+		<header data-am-widget="header" class="am-header am-header-default am-no-layout am-header-fixed">
+			<h1 class="am-header-title">
+    			<a href="#title-link">日报表导出</a>
+  			</h1>
+		</header>
+		<form class="am-form">
+		  <fieldset>
+		    <legend>导出</legend>
+
+		    <div class="am-form-group">
+		      <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+				  <input type="text" class="am-form-field" id="date" placeholder="日期" readonly>
+				  <span class="am-input-group-btn am-datepicker-add-on">
+				    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+				  </span>
+			   </div>
+		    </div>
+
+				<button type="button" class="am-btn am-btn-default" onclick="sumbitDoc()">导出</button>
+		  </fieldset>
+		</form>
+		<div id="result"></div>
+		<div class="am-alert am-alert-success none successinfo" data-am-alert>
+		</div>
+		<script>
+			function sumbitDoc(){
+				$.ajax({
+					type: "POST",
+					url: "/erp/toExcelRB",
+					data: {
+						d:$('#date').val()
+					},
+					success: function(data) {
+						//alert(data);
+						window.open("/excelop/temp/" + data);
+						$('#result').html('<a href="/excelop/temp/'+data+'">'+data+'</a>');
+					}
+				});
+			}
+
+		</script>
+	</body>
+</html>

@@ -9,7 +9,7 @@ $(document).ready(function(){
         login_sendSMS();
     });
 
-    $('select').select2();
+    //$('select').select2();
 });
 
 function _checkIE(){
