@@ -30,19 +30,19 @@
                     //alert(res.err_code+res.err_desc+res.err_msg);
                     //alert(res.err_msg);
                     if( res.err_msg =="get_brand_wcpay_request:ok"){
+                        alert("支付成功!");
                         $.ajax({ type:"POST" , url: "/role/setFBookState", data:{
                             bno:'<%=bookingNo%>'
                             }, success: function(data){
                                 if(data == '200'){
-                                    alert("支付成功!");
                                     window.location = '/fedex/option';
                                 }
                             }
                         });
                     }else{
                         alert("支付失败!");
+                        window.location='/fedex/option';
                     }
-                    window.location='/fedex/option';
                 }
             );
         }

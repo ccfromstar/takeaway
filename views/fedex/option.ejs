@@ -40,7 +40,7 @@
                     /*load list*/
                     var mlist = '';
                     for(var i in data){
-                        mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px">'+data[i].bookingno+' '+data[i].state+'</a><span class="am-list-date" style="top:6px !important">';
+                        mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px">'+data[i].date+' '+data[i].type+' '+data[i].state+' ￥'+data[i].numTotal+'</a><span class="am-list-date" style="top:6px !important">';
                         	mlist += '<button type="button" class="am-btn am-btn-success" onclick="openDoc('+data[i].bookingno+')">打开</button>';
                         mlist += '</span></li>';
                     }
