@@ -144,7 +144,7 @@
        			alert("手机号已注册，不能重复注册！");
        		}else if(data == "200"){
        			alert("注册成功！");
-       			window.localStorage.setItem("sessionID",$("#name").val());
+       			window.localStorage.setItem("sessionID",$("#username").val());
        			window.location = "/fedex/booking";
        		}
     	}});
