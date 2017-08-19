@@ -1,10 +1,11 @@
-var address, role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old,gh,kq,fedmenu;
+var address, role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old,gh,kq,fedmenu,fedreport;
 address = require('./models/address.js');
 outline = require('./models/outline.js');
 old = require('./models/old.js');
 gh = require('./models/gh.js');
 kq = require('./models/kq.js');
 fedmenu = require('./models/fedmenu.js');
+fedreport = require('./models/fedreport.js');
 role = require('./models/role.js');
 menu = require('./models/menu.js');
 user = require('./models/user.js');
@@ -684,6 +685,14 @@ exports.kq = function(req, res) {
 
 exports.kqdo = function(req, res) {
 	kq.sqldo(req, res);
+};
+
+exports.fedreport = function(req, res) {
+	fedreport.sql_list(req, res);
+};
+
+exports.fedreportdo = function(req, res) {
+	fedreport.sqldo(req, res);
 };
 
 exports.fedmenu = function(req, res) {

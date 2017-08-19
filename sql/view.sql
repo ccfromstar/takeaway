@@ -80,3 +80,11 @@ SELECT a.*,b.name as cname,store,category
 FROM stock_log a
 LEFT JOIN stock b
 ON a.sid = b.id;
+
+DROP VIEW IF EXISTS `v_fedbooking`;
+CREATE VIEW v_fedbooking
+AS
+SELECT a.*,b.date,b.type,b.state
+FROM fedbooking_price a
+LEFT JOIN fedbooking b
+ON a.bno = b.bookingno;

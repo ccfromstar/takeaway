@@ -221,6 +221,8 @@ function step3(){
         }
     }
 
+    console.log(f1);console.log(f2);console.log(f3);
+
     $.ajax({ type:"POST" , url: "/role/createFbooking", data:{
         date:$("#date").val(),
         type:$("#type").val(),
