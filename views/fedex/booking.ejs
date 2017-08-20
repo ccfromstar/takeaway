@@ -7,7 +7,7 @@
 <% include header1 %>
 <header data-am-widget="header" class="am-header am-header-default am-no-layout am-header-fixed">
             <h1 class="am-header-title">
-            <a href="#title-link">开始订餐</a>
+            <a href="#title-link">订餐</a>
         </h1>
         </header>
 <div id="page1">
@@ -16,12 +16,7 @@
             <legend>选择日期</legend>
 
             <div class="am-form-group">
-              <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
-                  <input type="text" class="am-form-field" id="date" placeholder="日期" readonly>
-                  <span class="am-input-group-btn am-datepicker-add-on">
-                    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
-                  </span>
-               </div>
+             <input type="text" class="am-form-field" id="date" placeholder="日期" data-am-datepicker="{format: 'yyyy-mm-dd'}" readonly required />
             </div>
         </fieldset>
 
@@ -41,7 +36,7 @@
 
         <fieldset>
             <div class="am-form-group">
-                <button type="button" class="am-btn am-btn-default" onclick="step1()">下一步</button>
+                <button id="btn_step1" type="button" class="am-btn am-btn-default" onclick="step1()">下一步</button>
             </div>
         </fieldset>
     </form>
@@ -63,7 +58,7 @@
                 <li class="am-active">
                     <a href="/fedex/booking">
                         <span class="am-icon-bitbucket"></span>
-                        <span class="am-navbar-label">开始订餐</span>
+                        <span class="am-navbar-label">订餐</span>
                     </a>
                 </li>
                 <li>
@@ -82,6 +77,14 @@
   }
   $('#userid').val(sessionID);
 
+  var t1 = setInterval(function(){
+        if($('#date').val() != '' && $('#type').val() != '-'){
+            $('#btn_step1').removeClass('am-btn-default').addClass('am-btn-success');
+        }else{
+            $('#btn_step1').removeClass('am-btn-success').addClass('am-btn-default');
+        }
+  },1000);
+
   var num_menu = 0;
   var add_menu = 0;
 
@@ -93,6 +96,15 @@
     }
     if(type == '-'){
         alert('请选择类别');return false;
+    }
+    var myDate = new Date();
+    myDate.setDate(myDate.getDate()+1);
+    var y = myDate.getFullYear(); 
+    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+    var dmy = y+'-'+m+'-'+d;
+    if(date < dmy){
+        alert('送餐日期不正确');return false;
     }
     /*load menu list*/
     $.ajax({ type:"POST" , url: "/role/getfmenu", data:{
@@ -142,7 +154,7 @@ function plus(i,p){
     $('#num'+i).html(num);
     var numTotal = Number($('#numTotal').html());
     numTotal = numTotal + p;
-    $('#numTotal').html(numTotal);
+    $('#numTotal').html(numTotal.toFixed(2));
 }
 
 function minus(i,p){
@@ -154,7 +166,7 @@ function minus(i,p){
     $('#num'+i).html(num);
     var numTotal = Number($('#numTotal').html());
     numTotal = numTotal - p;
-    $('#numTotal').html(numTotal);
+    $('#numTotal').html(numTotal.toFixed(2));
 }
 
 function plusF(i,p){
@@ -163,7 +175,7 @@ function plusF(i,p){
     $('#numF'+i).html(num);
     var numTotal = Number($('#numTotal').html());
     numTotal = numTotal + p;
-    $('#numTotal').html(numTotal);
+    $('#numTotal').html(numTotal.toFixed(2));
 }
 
 function minusF(i,p){
@@ -175,7 +187,7 @@ function minusF(i,p){
     $('#numF'+i).html(num);
     var numTotal = Number($('#numTotal').html());
     numTotal = numTotal - p;
-    $('#numTotal').html(numTotal);
+    $('#numTotal').html(numTotal.toFixed(2));
 }
 
 function step3(){

@@ -22,13 +22,14 @@
 				<p class="errorinfo" id="error1"></p>
 			</td>
 		</tr>
+		<!--
 		<tr>
 			<td colspan="2">
 				<p>登陆密码</p>
 				<input type="password" class="input form-control" id="password" onblur="checkPwd(this.value)"></input>
 				<p class="errorinfo" id="error2"></p>
 			</td>
-		</tr>
+		</tr>-->
 		<tr>
 			<td colspan="2">
 				<p>手机号码</p>
@@ -117,9 +118,7 @@
 		if($("#name").val()==""){
 	        alert("姓名必填！");return false;
 	    }
-	    if($("#password").val()==""){
-	        alert("登陆密码必填！");return false;
-	    }
+	    
 	    if($("#username").val()==""){
 	        alert("手机号码必填！");return false;
 	    }
@@ -139,7 +138,7 @@
 	    $("#wait_div").show();
 	    $("#reg_div").hide();
 
-		$.ajax({ type:"POST" , url: "/role/regwxUser",data:{name:$("#name").val(),password:$("#password").val(),username:$("#username").val()},  success: function(data){
+		$.ajax({ type:"POST" , url: "/role/regwxUser",data:{name:$("#name").val(),password:'111111',username:$("#username").val()},  success: function(data){
        		if(data == "300"){
        			alert("手机号已注册，不能重复注册！");
        		}else if(data == "200"){

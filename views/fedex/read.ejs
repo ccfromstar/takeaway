@@ -55,6 +55,14 @@
         </div>
     </fieldset>
 <%}%>
+<%if(obj1[0].state == '已支付'){%>
+    <fieldset>
+        <div class="am-form-group">
+            <span style="color:#ff0000">支付已完成，请在餐厅自助设备上输入订单号后取票，凭小票取餐<br/>
+            友情提示：取票后切勿遗失小票，遗失不补</span>
+        </div>
+    </fieldset>
+<%}%>
 <!-- Footer -->
         <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default " id="">
             <ul class="am-navbar-nav am-cf am-avg-sm-4">
