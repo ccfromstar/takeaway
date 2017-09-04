@@ -22,14 +22,13 @@
 				<p class="errorinfo" id="error1"></p>
 			</td>
 		</tr>
-		<!--
 		<tr>
 			<td colspan="2">
-				<p>登陆密码</p>
-				<input type="password" class="input form-control" id="password" onblur="checkPwd(this.value)"></input>
+				<p>企业代号</p>
+				<input type="text" class="input form-control" id="password" ></input>
 				<p class="errorinfo" id="error2"></p>
 			</td>
-		</tr>-->
+		</tr>
 		<tr>
 			<td colspan="2">
 				<p>手机号码</p>
@@ -134,11 +133,15 @@
 	    	alert("有错误信息不能提交！");return false;
 	    }
 
+	    if($("#password").val()!="机场"){
+	    	alert("企业代码错误！");return false;
+	    }
+
 	    /*提交过程，不能再次点击*/
 	    $("#wait_div").show();
 	    $("#reg_div").hide();
 
-		$.ajax({ type:"POST" , url: "/role/regwxUser",data:{name:$("#name").val(),password:'111111',username:$("#username").val()},  success: function(data){
+		$.ajax({ type:"POST" , url: "/role/regwxUser",data:{name:$("#name").val(),password:$("#password").val(),username:$("#username").val()},  success: function(data){
        		if(data == "300"){
        			alert("手机号已注册，不能重复注册！");
        		}else if(data == "200"){
