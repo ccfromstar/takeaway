@@ -51,7 +51,9 @@
 <input type="hidden" id="userid" />
 <script type="text/javascript">
   
-
+if("<%=obj1[0].state%>" == "已取餐"){
+    alert("该二维码已取餐，不能重复使用！");
+}
  
 </script>
 <% include footer %>

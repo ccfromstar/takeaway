@@ -371,15 +371,19 @@ exports.f_get = function(req, res) {
 	var id = req.query.id;
 	var sql1 = "select * from fedbooking where bookingno = '"+id+"'";
 	var sql2 = "select * from fedbooking_price where bno = '"+id+"'";
+	var sql3 = "update fedbooking set state = '已取餐' where bookingno = '"+id+"'";
 	mysql.query(sql1 ,function(error,obj1){
         if(error){console.log(error);return false;}
         obj1[0].createAt = (obj1[0].createAt).Format("yyyy-MM-dd hh:mm:ss")
         mysql.query(sql2 ,function(error,obj2){
           if(error){console.log(error);return false;}
-          	res.render('fedex/get', {
-				obj1:obj1,
-				obj2:obj2
-			});
+          	mysql.query(sql3 ,function(error,obj3){
+	          if(error){console.log(error);return false;}
+	          	res.render('fedex/get', {
+					obj1:obj1,
+					obj2:obj2
+				});
+	    	}); 
     	});  
     });
 };
