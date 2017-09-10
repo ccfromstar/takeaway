@@ -30,6 +30,7 @@ exports.sqldo = function (req, res) {
     else if(_sql == "createFbooking"){createFbooking(req,res);}
     else if(_sql == "getfbookinglist"){getfbookinglist(req,res);}
     else if(_sql == "cancelFbooking"){cancelFbooking(req,res);}
+    else if(_sql == "cancelFPbooking"){cancelFPbooking(req,res);}
     else if(_sql == "setFBookState"){setFBookState(req,res);}
 };
 
@@ -228,6 +229,15 @@ function sql_delete(req, res) {
 function cancelFbooking(req, res) {
     var id = req.param('id');
     var deleteSql = "update fedbooking set state = '已取消' where bookingno = '"+id+"'";
+    mysql.query(deleteSql ,function(error,obj){
+          if(error){console.log(error);return false;}
+          res.send("200");
+    });
+};
+
+function cancelFPbooking(req, res) {
+    var id = req.param('id');
+    var deleteSql = "update fedbooking set state = '已支付取消' where bookingno = '"+id+"'";
     mysql.query(deleteSql ,function(error,obj){
           if(error){console.log(error);return false;}
           res.send("200");

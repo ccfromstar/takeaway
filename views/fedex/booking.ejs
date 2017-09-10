@@ -106,6 +106,12 @@
     if(date < dmy){
         alert('送餐日期不正确');return false;
     }
+    var d = new Date();
+    /*如果送餐日期是第二天，如果超过18:00就不能下单了*/
+    if((date == dmy) && (d.getHours() > 17)){
+        alert('已超过18点，不能预订第二天');return false;
+    }
+
     /*load menu list*/
     $.ajax({ type:"POST" , url: "/role/getfmenu", data:{
         date:date,

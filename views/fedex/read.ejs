@@ -61,6 +61,10 @@
             <span style="color:#ff0000">支付已完成，请在餐厅出示下方二维码取餐<br/></span>
         </div>
         <div id="code"></div>
+        <br/>
+        <div class="am-form-group">
+            <button type="button" class="am-btn am-btn-default" onclick="cancelpay()">取消订单</button>
+        </div>
     </fieldset>
 <%}%>
 <!-- Footer -->
@@ -106,6 +110,30 @@
             }
         }
     });
+  }
+
+  function cancelpay(){
+    /*如果是午餐，前一天23点之前可以取消*/
+    var myDate = new Date();
+    var y = myDate.getFullYear(); 
+    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+    var dym = y+'-'+m+'-'+d;
+    if("<%=obj1[0].type%>" == "午餐"){
+        if((dym < "<%=obj1[0].date%>") && (myDate.getHours() < 23)){
+            $.ajax({ type:"POST" , url: "/role/cancelFPbooking", data:{
+                id:'<%=obj1[0].bookingno%>'
+                }, success: function(data){
+                    if(data == '200'){
+                        alert('取消成功！');
+                        window.location = '/fedex/option';
+                    }
+                }
+            });
+        }else{
+            alert('已过了取消时间，不能取消');
+        }
+    }
   }
 
   function pay(){
