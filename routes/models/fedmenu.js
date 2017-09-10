@@ -77,8 +77,8 @@ exports.sql_list = function (req, res) {
     var page = parseInt(req.query.p);
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
-    //var sql1 = "select * from fedmenu order by date desc limit "+(page-1)*limit+","+limit;
-    var sql1 = "select * from fedmenu order by date desc";
+    var sql1 = "select * from fedmenu order by date desc,id desc limit "+(page-1)*limit+","+limit;
+    //var sql1 = "select * from fedmenu order by date desc";
     var sql5 = "select count(*) as count from fedmenu";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}

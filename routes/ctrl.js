@@ -39,6 +39,7 @@ module.exports = function (app, routes) {
     app.get('/fedex/bookingreg',routes.booking_f_reg);
     app.get('/fedex/option',routes.f_option);
     app.get('/fedex/read',routes.f_read);
+    app.get('/fedex/get',routes.f_get);
     
     //store门店
     app.get('/store/list',routes.s_list);

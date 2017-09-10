@@ -1,0 +1,57 @@
+<!--页面逻辑-->
+<% include header1 %>
+<header data-am-widget="header" class="am-header am-header-default am-no-layout am-header-fixed">
+    <h1 class="am-header-title">
+        <a href="#title-link">订单详情</a>
+    </h1>
+</header>
+<table class="am-table am-table-bordered">
+    <tr>
+        <td>订单号</td>
+        <td><%=obj1[0].bookingno%></td>
+    </tr>
+    <tr>
+        <td>送餐日期</td>
+        <td><%=obj1[0].date%></td>
+    </tr>
+    <tr>
+        <td>送餐类别</td>
+        <td><%=obj1[0].type%></td>
+    </tr>
+    <tr>
+        <td>订单状态</td>
+        <td><%=obj1[0].state%></td>
+    </tr>
+    <tr>
+        <td>下单日期</td>
+        <td><%=obj1[0].createAt%></td>
+    </tr>
+    <tr>
+        <td>总金额</td>
+        <td><%=obj1[0].numTotal%></td>
+    </tr>
+</table>
+<table class="am-table am-table-bordered">
+    <tr>
+        <td>菜名</td>
+        <td>单价</td>
+        <td>数量</td>
+        <td>合计</td>
+    </tr>
+<%for(var i in obj2){%>
+    <tr>
+        <td><%=obj2[i].name%></td>
+        <td><%=obj2[i].price%></td>
+        <td><%=obj2[i].num%></td>
+        <td><%=Number(obj2[i].price)*Number(obj2[i].num)%></td>
+    </tr>
+<%}%>
+</table>
+
+<input type="hidden" id="userid" />
+<script type="text/javascript">
+  
+
+ 
+</script>
+<% include footer %>

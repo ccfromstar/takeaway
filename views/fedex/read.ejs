@@ -58,9 +58,9 @@
 <%if(obj1[0].state == '已支付'){%>
     <fieldset>
         <div class="am-form-group">
-            <span style="color:#ff0000">支付已完成，请在餐厅自助设备上输入订单号后取票，凭小票取餐<br/>
-            友情提示：取票后切勿遗失小票，遗失不补</span>
+            <span style="color:#ff0000">支付已完成，请在餐厅出示下方二维码取餐<br/></span>
         </div>
+        <div id="code"></div>
     </fieldset>
 <%}%>
 <!-- Footer -->
@@ -88,6 +88,13 @@
     window.location = '/fedex/login';
   }
   $('#userid').val(sessionID);
+
+  $("#code").qrcode({
+        render: "table", //table方式
+        width: 150, //宽度
+        height: 150, //高度
+        text: "http://www.4000191177.com/fedex/get?id=<%=obj1[0].bookingno%>" //任意内容
+  });
 
   function cancel(){
     $.ajax({ type:"POST" , url: "/role/cancelFbooking", data:{
