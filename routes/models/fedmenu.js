@@ -15,8 +15,9 @@ function sql_insert(req, res) {
     var type = req.param('type');
     var name = req.param('name');
     var price = req.param('price');
+    var remark = req.param('remark');
 
-    var insertSql = "insert into fedmenu (date,type,name,price) values ('"+date+"','"+type+"','"+name+"','"+price+"')";
+    var insertSql = "insert into fedmenu (date,type,name,price,remark) values ('"+date+"','"+type+"','"+name+"','"+price+"','"+remark+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -57,11 +58,13 @@ function sql_update(req, res) {
     var type = req.param('type');
     var name = req.param('name');
     var price = req.param('price');
+    var remark = req.param('remark');
     var id = req.param('docid');
     var updateSql = "update fedmenu set date = '"+date
      +"',type ='"+type
      +"',name ='"+name
      +"',price ='"+price
+     +"',remark ='"+remark
      +"'  where id = "+id;
     mysql.query(updateSql ,function(error,obj){
           if(error){console.log(error);return false;}

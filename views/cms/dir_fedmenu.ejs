@@ -8,6 +8,7 @@
     		<thead>
       			<tr>
         			<th>序号</th>
+              <th>公司</th>
         			<th>日期</th>
               <th>分类</th>
         			<th>菜名</th>
@@ -19,6 +20,7 @@
     		<%for(var i in address){%>
       			<tr>
         			<td><%-address[i].id%></td>
+              <td><%=address[i].company_name%></td>
         			<td><%=address[i].date%></td>
               <td><%=address[i].type%></td>
               <td><%=address[i].name%></td>
@@ -60,6 +62,14 @@
                     </td>
                 </tr> 
                 <tr>
+                    <td>公司</td>
+                    <td>
+                      <select id="company_name" class="input-sm selectpicker">
+                            <option value="机场">机场</option>
+                      </select>
+                    </td>
+                </tr>
+                <tr>
                     <td>分类</td>
                     <td>
                       <select id="type" class="input-sm selectpicker">
@@ -74,6 +84,10 @@
                  <tr>
                     <td>菜名</td>
                     <td><input type="text" class="input-sm form-control" id="name" ></input></td>
+                </tr>
+                <tr>
+                    <td>详细介绍</td>
+                    <td><input type="text" class="input-sm form-control" id="remark" ></input></td>
                 </tr>
                 <tr>
                     <td>价格</td>
@@ -99,6 +113,7 @@
 		$("#date").val("");
 		$("#type").val("");
     $("#name").val("");
+    $("#remark").val("");
     $("#price").val("0");
 		$("#docid").val("0");
 
@@ -123,6 +138,7 @@
                $("#type").val(data[0].type); 
                $("#name").val(data[0].name);
                $("#price").val(data[0].price);
+               $("#remark").val(data[0].remark);
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
@@ -136,7 +152,8 @@
                 date:$("#date").val(),
                 type:$("#type").val(),
                 name:$("#name").val(),
-                price:$("#price").val()
+                price:$("#price").val(),
+                remark:$("#remark").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -150,6 +167,7 @@
                 type:$("#type").val(),
                 name:$("#name").val(),
                 price:$("#price").val(),
+                remark:$("#remark").val(),
                 docid:$("#docid").val()
                 }, success: function(data){
                     if(data==200){

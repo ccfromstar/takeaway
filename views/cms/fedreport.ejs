@@ -8,6 +8,10 @@
       		报表日期
       		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>~
           <input type="text" name="bookingdate1" id="bookingdate1" style="cursor:pointer" readonly  class="Wdate" value="<%=bookingdate1%>" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
+          公司
+          <select id="company_name" class="input-sm selectpicker">
+                            <option value="机场">机场</option>
+                      </select>
           菜名
           <input type="text" id="cname" value="<%=cname%>" ></input> 
           送餐类别
@@ -29,6 +33,7 @@
       	<table class="table table-hover" id="table_list" >
     		<thead>
       			<tr>
+              <th>公司</th>
         			<th>菜名</th>
         			<th>送餐类别</th>
         			<th>订餐时间</th>
@@ -39,6 +44,7 @@
     		<tbody>
     		<%for(var i in record){%>
       			<tr>
+              <td>机场</td>
         			<td><%-record[i].name%></td>
         			<td><%-record[i].type%></td>
         			<td><%-record[i].date%></td>
