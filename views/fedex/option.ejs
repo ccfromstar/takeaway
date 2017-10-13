@@ -7,7 +7,7 @@
 </header>
 <ul class="am-list" id="mlist">
 </ul>
-<button type="button" class="am-btn am-btn-success" onclick="logout()">注销</button>
+<button type="button" class="am-btn am-btn-success"  onclick="logout()">注销</button>
 <!-- Footer -->
         <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default " id="">
             <ul class="am-navbar-nav am-cf am-avg-sm-4">
@@ -47,7 +47,7 @@
                           mlist += '</span></li>';
                         }else if(data[i].state == '未付款'){
                           mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px">'+data[i].date+' '+data[i].type+' '+data[i].state+' ￥'+data[i].numTotal+'</a><span class="am-list-date" style="top:6px !important">';
-                          mlist += '<button type="button" class="am-btn am-btn-success" onclick="openDoc('+data[i].bookingno+')">支付</button>';
+                          mlist += '<button type="button" class="am-btn am-btn-secondary" onclick="openDoc('+data[i].bookingno+')">支付</button>';
                           mlist += '</span></li>';
                         }else if(data[i].state == '已取消' || data[i].state == '已取餐' || data[i].state == '已支付取消'){
                           mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px">'+data[i].date+' '+data[i].type+' '+data[i].state+' ￥'+data[i].numTotal+'</a><span class="am-list-date" style="top:6px !important">';

@@ -65,6 +65,7 @@
                     <td>公司</td>
                     <td>
                       <select id="company_name" class="input-sm selectpicker">
+                            <option value="fedex2017">fedex2017</option>
                             <option value="机场">机场</option>
                       </select>
                     </td>
@@ -139,6 +140,7 @@
                $("#name").val(data[0].name);
                $("#price").val(data[0].price);
                $("#remark").val(data[0].remark);
+               $("#company_name").val(data[0].company_name);
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');

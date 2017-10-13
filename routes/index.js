@@ -720,6 +720,14 @@ exports.fedreportdo = function(req, res) {
 	fedreport.sqldo(req, res);
 };
 
+exports.fedreport1 = function(req, res) {
+	fedreport.sql_list1(req, res);
+};
+
+exports.fedreportdo1 = function(req, res) {
+	fedreport.sqldo1(req, res);
+};
+
 exports.fedmenu = function(req, res) {
 	fedmenu.sql_list(req, res);
 };

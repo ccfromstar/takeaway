@@ -46,7 +46,7 @@ exports.sql_list = function (req, res) {
     var num_total = 0;
     var price_total = 0;
     //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
-    var sql1 = "select * from v_fedbooking where state='已支付' and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
+    var sql1 = "select * from v_fedbooking where state='已支付'  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
     var sql5 = "select count(*) as count from v_fedbooking where date like '"+bd+"'";
   
     mysql.query(sql1,function (err, rows1) {
@@ -62,6 +62,54 @@ exports.sql_list = function (req, res) {
               price_total = price_total + (rows1[i].price)*(rows1[i].num);
             }
             res.render('cms/fedreport', {cname:cname,sendtype:sendtype,price_total:price_total,num_total:num_total,bookingdate:bookingdate,bookingdate1:bookingdate1,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});     
+        });
+    });
+};
+
+exports.sql_list1 = function (req, res) {
+    var _info = req.session.infor;
+    req.session.infor = null;
+
+    var myDate = new Date();
+    var y = myDate.getFullYear(); 
+    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+    var bookingno = y+m+d;
+    var bookingdate = y+"-"+m+"-"+d;
+    var bookingdate1 = y+"-"+m+"-"+d;
+
+    var page = parseInt(req.query.p);
+    var key = req.query.key;
+    var bd = req.query.bd;
+    var bd1 = req.query.bd1;
+    var cname = req.query.cname;
+    var sendtype = req.query.sendtype;
+    key = key?key:bookingno;
+    bookingdate =  bd?bd:bookingdate;
+    bookingdate1 =  bd1?bd1:bookingdate1;
+    cname = cname?cname:'';
+    sendtype = sendtype?sendtype:'';
+    page = (page && page > 0) ? page : 1;
+    var limit = (limit && limit > 0) ? limit : LIMIT;
+    var num_total = 0;
+    var price_total = 0;
+    //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
+    var sql1 = "select * from v_fedbooking where state='已支付取消'  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
+    var sql5 = "select count(*) as count from v_fedbooking where date like '"+bd+"'";
+  
+    mysql.query(sql1,function (err, rows1) {
+        if(err){console.log(err);return false;}
+          mysql.query(sql5,function (err1, rows5) {
+            if(err1){console.log(err1);return false;}
+            var total = rows5[0].count;
+            var totalpage = Math.ceil(total/limit);
+            var isFirstPage = page == 1 ;
+            var isLastPage = ((page -1) * limit + rows1.length) == total;
+            for(var i in rows1){
+              num_total = num_total + rows1[i].num;
+              price_total = price_total + (rows1[i].price)*(rows1[i].num);
+            }
+            res.render('cms/fedreport1', {cname:cname,sendtype:sendtype,price_total:price_total,num_total:num_total,bookingdate:bookingdate,bookingdate1:bookingdate1,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});     
         });
     });
 };

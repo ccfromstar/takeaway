@@ -23,7 +23,6 @@
               <option value="夜宵">夜宵</option>
           </select>
       		<button type="button" class="btn btn-default btn-xs" onclick="changeDay()" >检索</button>
-      		<button type="button" class="btn btn-default btn-xs" onclick="toExcel()" >导出日报表</button>
       	</div>
       	<div >
         <div class="menufourth">
@@ -33,7 +32,7 @@
       	<table class="table table-hover" id="table_list" >
     		<thead>
       			<tr>
-              <th>公司</th>
+              <th>订单号</th>
         			<th>菜名</th>
         			<th>送餐类别</th>
         			<th>订餐时间</th>
@@ -44,7 +43,7 @@
     		<tbody>
     		<%for(var i in record){%>
       			<tr>
-              <td>fedex2017</td>
+              <td><%-record[i].bno%></td>
         			<td><%-record[i].name%></td>
         			<td><%-record[i].type%></td>
         			<td><%-record[i].date%></td>
@@ -123,7 +122,7 @@
 
 	function toPage(i){
 		var _d = $("#bookingdate").val();
-    	window.location = "/cms/fedreport?p="+i+"&key="+_d.replace(/-/g,"")+"&bd="+_d;
+    	window.location = "/cms/fedreport1?p="+i+"&key="+_d.replace(/-/g,"")+"&bd="+_d;
   	}
 
   	function changeDay(){
@@ -131,7 +130,7 @@
       var _d1 = $("#bookingdate1").val();
       var cname = $("#cname").val();
       var sendtype = $("#sendtype").val();
-  		window.location = "/cms/fedreport?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname+"&sendtype="+sendtype+"&bd1="+_d1;
+  		window.location = "/cms/fedreport1?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname+"&sendtype="+sendtype+"&bd1="+_d1;
   	}
 
   	function setinfo(id,k1,k2,k3,k4){
@@ -139,7 +138,7 @@
     		title: '确认收款',
     		content: '订单号：'+k1+'<br/>客户名称：'+k2+'<br/>付款方式：'+k3+'<br/>应付金额：'+k4+'<br/>是否确认收款？',
     		confirm: function(){
-        		$.ajax({ type:"POST" , url: "/fedreport/setinfo", data:{id:id}, success: function(data){
+        		$.ajax({ type:"POST" , url: "/fedreport1/setinfo", data:{id:id}, success: function(data){
         			if(data==200){
               			window.location = window.location.href;     
         			}
