@@ -247,6 +247,7 @@ function cancelFPbooking(req, res) {
 function setFBookState(req,res){
     var bno = req.param('bno');
     var deleteSql = "update fedbooking set state = '已支付' where bookingno = '"+bno+"'";
+    console.log(deleteSql);
     mysql.query(deleteSql ,function(error,obj){
           if(error){console.log(error);return false;}
           res.send("200");

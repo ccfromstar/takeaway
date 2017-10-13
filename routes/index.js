@@ -169,6 +169,7 @@ function check(timestamp, nonce, signature, token) {
 };
 
 exports.index = function(req, res) {
+	/*
 	var sql1 = "select name,imgname,price,aheadprice from menu order by sortid asc limit 0,6";
 	var sql2 = "select id,name,b_starttime,i_starttime,b_endtime,i_endtime,sender,tel from address";
 	mysql.query(sql1, function(error1, obj1) {
@@ -186,6 +187,9 @@ exports.index = function(req, res) {
 				obj1: obj1
 			});
 		});
+	});*/
+	res.render('front/index', {
+		
 	});
 };
 

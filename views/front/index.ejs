@@ -33,32 +33,7 @@
 </div>
 <div id="funplane" style="display:none;width:100%;margin-top:50px;text-align:center">
     <table id="table_menu_index" style="margin:auto;">
-    <%for(var i in obj1){
-      var name_right = '（周三）';
-        if(i==0 || i==1){
-            name_right = '（周一，四）';
-        }else if(i==2 || i==3){
-            name_right = '（周二，五）';
-        }
-        %>
-    <%if(i==0 || i == 3){%>
-    <tr>
-    <%}%>
-      <td>
-      <div id="fp<%=i%>" style="background-image:url('/pic/<%=obj1[i].imgname%>');margin:10px;width: 340px;height:285px;border:1px solid #DDDDDD;" >
-        <div id="divObj<%=i%>" style="width:340px;height:0px;overflow:hidden;background-image:url('/img/black.png');cursor:pointer;" onclick="showbooking()">
-            <div style="font-size:24px;color:#ffffff;font-weight:bold;margin-top:80px;"><%=obj1[i].name%><%=name_right%></div>
-            <!--<div style="font-size:16px;color:#ffffff;margin-top:10px;">每份25元</div>
-            <div style="font-size:16px;color:#ffffff;margin-top:3px;">30份起送</div>
-            <div style="font-size:12px;color:#ffffff;font-weight:bold;margin-top:5px;">企业预订电话：4000191177</div>-->
-            <!--<div style="font-size:26px;color:#ffffff;margin-top:10px;">尝鲜价 ¥<%=obj1[i].aheadprice%> <span style="font-size:26px;color:#ffffff;">¥<%=obj1[i].price%><hr style="height:3px;border:none;border-top:3px solid red;width:45px;margin-top:-20px;margin-left:220px;" /></span></div>-->
-        </div>
-      </div>
-      </td>
-    <%if(i==2 || i == 5){%>
-    </tr>
-    <%}%>  
-    <%}%>
+   
     </table>
 </div>
 
@@ -99,27 +74,7 @@
 <div style="width:100%;height:100%;text-align:center;margin-top:60px;background-image:url('/img/mapbg.jpg')">
 	<div style="font-size:36px;padding-top:30px;color:#D4D4D4">深耕上海，放眼全国</div>
   	<div style="font-size:22px;color:#D4D4D4">一键下单，极速送达</div>
-    <!--
-    <div style="padding-top:40px;">
-    <table style="margin:auto;display:none">
-      <tr>
-        <td>
-          <select id="address_s" class="input-sm selectpicker" style="width:185px;">
-            <option value="-">选择您的送餐地址</option>
-            <%for(var i in address_s){%>
-              <option value="<%=address_s[i].id%>"><%=address_s[i].name%></option>
-            <%}%>
-          </select>
-        </td>
-        <td>
-          <img src="/img/search.png" onclick="search_address();" style="height:29px;margin-left:5px;cursor:pointer;" />
-          <div style="width:70px;color:#FFFFFF;font-size:12px;background:#40BAD7;margin-left:5px;height:30px;padding-top:6px;cursor:pointer;" onclick="search_address();">开始预订</div>
-        </td>
-      </tr>
-    </table>
-    </div>
-  	<div style="font-size:16px;padding-top:10px;color:#40BAD7;display:none">查看所有配送地点</div>-->
-
+    
   	<img src="/img/map.png" style="width:80%;padding-bottom:50px;margin-top:5px;" />
 </div>
 
