@@ -131,6 +131,10 @@ module.exports = function (app, routes) {
     app.get('/cms/fedreport1',routes.fedreport1);
     app.post('/fedreport/:sql',routes.fedreportdo1);
 
+    app.get('/cms/user',routes.checkLogin);
+    app.get('/cms/user',routes.user);
+    app.post('/user/:sql',routes.userdo);
+
     app.get('/cms/role',routes.checkLogin);
     app.get('/cms/role',routes.role);
     app.post('/role/:sql',routes.roledo);

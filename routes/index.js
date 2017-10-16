@@ -1,4 +1,4 @@
-var address, role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old,gh,kq,fedmenu,fedreport;
+var address,role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old,gh,kq,fedmenu,fedreport;
 address = require('./models/address.js');
 outline = require('./models/outline.js');
 old = require('./models/old.js');
@@ -718,6 +718,14 @@ exports.fedreport = function(req, res) {
 
 exports.fedreportdo = function(req, res) {
 	fedreport.sqldo(req, res);
+};
+
+exports.user = function(req, res) {
+	user.sql_list(req, res);
+};
+
+exports.userdo = function(req, res) {
+	user.sqldo(req, res);
 };
 
 exports.fedreport1 = function(req, res) {
