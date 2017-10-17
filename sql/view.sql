@@ -92,7 +92,9 @@ ON a.bno = b.bookingno;
 DROP VIEW IF EXISTS `v_user_fedbooking`;
 CREATE VIEW v_user_fedbooking
 AS
-SELECT a.*,b.name
+SELECT a.*,b.name,c.name as cname
 FROM fedbooking a
 LEFT JOIN user b
-ON a.userid = b.username;
+ON a.userid = b.username
+LEFT JOIN fedbooking_price c
+ON a.bookingno = c.bno;

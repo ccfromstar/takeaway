@@ -46,7 +46,7 @@ exports.sql_list = function (req, res) {
     var num_total = 0;
     var price_total = 0;
     //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
-    var sql1 = "select * from v_fedbooking where state='已支付'  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
+    var sql1 = "select * from v_fedbooking where (state='已支付' or state='已取餐')  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
     var sql5 = "select count(*) as count from v_fedbooking where date like '"+bd+"'";
   
     mysql.query(sql1,function (err, rows1) {
