@@ -782,9 +782,7 @@ exports.uploaddo = function(req, res) {
 };
 
 exports.booking = function(req, res) {
-	res.render('cms/booking', {
-		url: getUrl(req)
-	});
+	booking.sql_list(req, res);
 };
 
 exports.immediate = function(req, res) {

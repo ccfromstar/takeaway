@@ -2,85 +2,202 @@
 <% include header %>
 <table class="tbpage">
     <tr>
-      <td style="width:50%;">
-      	<iframe frameborder=0 src="/cms/booking_left" style="width:100%;height:600px;"></iframe>	
-      </td>
-      <td style="width:50%;padding-left:5px;padding-right:10px;">
-      		<div class="menutop">订单详情</div>
-      		<table class="table table-bordered" style="margin-top:5px;">
+      <td>
+        <p>总订单数：<%=numTotal%> </p>
+        <table class="table table-hover" id="table_list" >
+            <thead>
                 <tr>
-                    <td class="tleftname">订单号</td>
-                    <td id="bk1"></td>
-                    <td class="tleftname">订单状态</td>
-                    <td id="bk2"></td>
-                </tr>   
-                <tr>
-                    <td class="tleftname">客户</td>
-                    <td id="bk3"></td>
-                    <td class="tleftname">手机号</td>
-                    <td id="bk4"></td>
-                </tr> 
-                <tr>
-                    <td class="tleftname">配送地点</td>
-                    <td id="bk5"></td>
-                    <td class="tleftname">送达时间</td>
-                    <td id="bk6"></td>
-                </tr> 
-                 <tr>
-                    <td class="tleftname">配送员</td>
-                    <td id="bk9"></td>
-                    <td class="tleftname">配送员电话</td>
-                    <td id="bk10"></td>
-                </tr> 
-                <tr>
-                    <td colspan="4" id="bookingdetail">&nbsp;</td>
+                    <th>订单日期</th>
+                    <th>订单编号</th>
+                    <th>联系电话</th>
+                    <th>订单金额</th>
                 </tr>
+            </thead>
+            <tbody>
+            <%for(var i in record){%>
                 <tr>
-                    <td class="tleftname">支付状态</td>
-                    <td id="bk7"></td>
-                    <td class="tleftname">开票信息</td>
-                    <td id="bk8"></td>
-                </tr> 
-             </table>
+                    <td><%-record[i].date%></td>
+                    <td><%-record[i].bookingno%></td>
+                    <td><%-record[i].userid%></td>
+                    <td><%-record[i].numTotal%></td>
+                </tr>
+            <%}%>
+            </tbody>
+            </table>
+            </div>
+            <!--分页符-->
+            <div style='width:100%;text-align:center;margin-top:10px;display:none'>
+                <button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+                当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+                <button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+            </div>  
       </td>
     </tr>
 </table>
 <!--table footer -->
-    </td>
+      </td>
     </tr>
   </table>
-<script type="text/javascript">
-	function setInfo(id,bk1,bk2,bk3,bk4,bk5,bk6,bk7,bk8,num,price,price1,bk9,bk10){
-	  $("#bk1").html(bk1);
-	  $("#bk2").html(bk2);
-	  $("#bk3").html(bk3);
-	  $("#bk4").html(bk4);
-	  $("#bk5").html(bk5);
-	  $("#bk6").html(bk6);
-	  $("#bk7").html(bk7);
-	  $("#bk8").html(bk8);
-      $("#bk9").html(bk9);
-      $("#bk10").html(bk10);
-	  $.ajax({ type:"POST" , url: "/customer/getbookingdetail",data:{id:id},  success: function(data){
-        var _html = "<table class='table table-hover' id='table_list'>";
-        var j = 0;
-        _html += "<thead><tr><th>序号</th><th>品名</th><th>售价</th><th>优惠价</th><th>数量</th><th>小计</th><th>优惠备注</th></tr></thead> <tbody>"
-        for(var i in data){
-            j += 1;
-            _html += "<tr>";
-            _html += "<td>"+j+"</td>";
-            _html += "<td>"+data[i].name+"</td>";
-            _html += "<td>"+data[i].price+"</td>";
-            _html += "<td>"+data[i].aheadprice+"</td>";
-            _html += "<td>"+data[i].num+"</td>";
-            _html += "<td>"+data[i].pricetotal+"</td>";
-            _html += "<td>"+data[i].remark+"</td>";
-            _html += "</tr>";
-        }
-        _html += "<tr><td colspan='4'>合计</td><td>"+num+"</td><td>"+price+"</td><td>实付金额："+price1+"</td></tr>";
-        _html += "</tbody></table>";
-        $("#bookingdetail").html(_html);
+
+<
+<script>
+ 
+    var w = window.screen.width;
+    w = w - 330;
+    $("#_viewl").css("width",w);
+
+  function editDoc(id){
+    $("#docid").val(id);
+    $('#addModal').modal('show');
+  }
+
+    function toPage(i){
+        var _d = $("#bookingdate").val();
+        window.location = "/cms/fedreport?p="+i+"&key="+_d.replace(/-/g,"")+"&bd="+_d;
+    }
+
+    function changeDay(){
+        var _d = $("#bookingdate").val();
+      var _d1 = $("#bookingdate1").val();
+      var cname = $("#cname").val();
+      var sendtype = $("#sendtype").val();
+        window.location = "/cms/fedreport?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname+"&sendtype="+sendtype+"&bd1="+_d1;
+    }
+
+    function setinfo(id,k1,k2,k3,k4){
+        $.confirm({
+            title: '确认收款',
+            content: '订单号：'+k1+'<br/>客户名称：'+k2+'<br/>付款方式：'+k3+'<br/>应付金额：'+k4+'<br/>是否确认收款？',
+            confirm: function(){
+                $.ajax({ type:"POST" , url: "/fedreport/setinfo", data:{id:id}, success: function(data){
+                    if(data==200){
+                        window.location = window.location.href;     
+                    }
+                }});    
+            }
+        });
+    }
+
+    function toExcel(){
+        var _d = $("#bookingdate").val();
+      var _d1 = $("#bookingdate1").val();
+      var cname = $("#cname").val();
+      var sendtype = $("#sendtype").val();
+        $.ajax({ type:"POST" , url: "/fedreport/toExcel", data:{id:_d,id1:_d1,cname:cname,sendtype:sendtype}, success: function(data){
+            window.open("/excelop/temp/"+data);
       }});
-	}
+    }
+
+    function GetDateStr(date,AddDayCount) { 
+      var myDate = new Date(date); 
+      myDate.setDate(myDate.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+      var y = myDate.getFullYear(); 
+      var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+      var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+      return y+"-"+m+"-"+d; 
+    }
+
+    function getleft(){
+        var _d = $("#bookingdate").val();
+      var _tomorrow = GetDateStr(_d,1);
+      var _yesterday = GetDateStr(_d,-1);
+        $.ajax({ type:"POST" , url: "/fedreport/getleft", data:{id:_d.replace(/-/g,""),_yesterday:_yesterday.replace(/-/g,"")}, success: function(data){
+        var _html = "<div style='padding-left:10px;margin-bottom:10px;'>日菜品明细统计表(按送达日期)</div>";
+        _html += "<table class='table table-hover' id='table_list'>";
+        var n = data.name.length;
+        var ydt = 0;var jdt = 0;var ttt = 0;var ydy = 0;
+        _html += "<thead><tr><td></td><td colspan='3'>"+_d+"</td><td>"+_tomorrow+"</td></tr>";
+        _html += "<tr><th>品名</th><th>提前预订数量</th><th>即点数量</th><th>总数</th><th>提前预订数量</th></tr></thead><tbody>";
+        for(var i=0;i<n;i++){
+            _html += "<tr>";
+            _html += "<td>"+data.name[i]+"</td>";
+            _html += "<td>"+data.ydy[i]+"</td>";
+            _html += "<td>"+data.jd[i]+"</td>";
+            _html += "<td>"+data.total[i]+"</td>";
+            _html += "<td>"+data.yd[i]+"</td>";
+            _html += "</tr>";
+            ydy = ydy + Number(data.ydy[i]);
+            ydt = ydt + Number(data.yd[i]);
+            jdt = jdt + Number(data.jd[i]);
+            ttt = ttt + Number(data.total[i]);
+        }
+        _html += "<tr>";
+        _html += "<td>合计</td>";
+        _html += "<td>"+ydy+"</td>";
+        _html += "<td>"+jdt+"</td>";
+        _html += "<td>"+ttt+"</td>";
+        _html += "<td>"+ydt+"</td>";
+        _html += "</tr>";
+        _html += "</tbody></table>";
+        $("#d_left").html(_html);
+        }});
+    }
+
+    function getright(){
+        var _d = $("#bookingdate").val();
+      var _tomorrow = GetDateStr(_d,1);
+        $.ajax({ type:"POST" , url: "/fedreport/getright", data:{id:_d,_tomorrow:_tomorrow}, success: function(data){
+        var _html = "<div style='padding-left:10px;margin-bottom:10px;'>日付款方式统计表(按送达日期)</div>";
+        _html += "<table class='table table-hover' id='table_list'>";
+        var n = data.name.length;
+        var ydt = 0;var ydtmt = 0;
+        _html += "<thead><tr><td></td><td>"+_d+"</td><td>"+_tomorrow+"</td></tr>";
+        _html += "<thead><tr><th>支付方式</th><th>金额</th><th>金额</th></tr></thead><tbody>"
+        for(var i=0;i<n;i++){
+            _html += "<tr>";
+            _html += "<td>"+data.name[i]+"</td>";
+            _html += "<td>"+data.yd[i]+"</td>";
+            _html += "<td>"+data.ydtm[i]+"</td>";
+            _html += "</tr>";
+            ydt = ydt + Number(data.yd[i]);
+            ydtmt = ydtmt + Number(data.ydtm[i]);
+        }
+        _html += "<tr>";
+        _html += "<td>合计</td>";
+        _html += "<td>"+ydt+"</td>";
+        _html += "<td>"+ydtmt+"</td>";
+        _html += "</tr>";
+        _html += "</tbody></table>";
+        $("#d_right").html(_html);
+        }});
+    }
+
+    function getrightbottom(){
+        var _d = $("#bookingdate").val();
+      var _d = $("#bookingdate").val();
+        $.ajax({ type:"POST" , url: "/fedreport/getrightbottom", data:{id:_d}, success: function(data){
+        var _html = "<div style='padding-left:10px;margin-bottom:10px;'>"+_d+"日收款统计信息</div>";
+        _html += "<table class='table table-hover' id='table_list'>";
+        _html += "<thead><tr><th>应收金额</th><th>实收金额</th></tr></thead><tbody>"
+            _html += "<tr>";
+            _html += "<td>"+data.ys+"</td>";
+            _html += "<td>"+data.ss+"</td>";
+            _html += "</tr>";
+        _html += "</tbody></table>";
+        $("#d_right_bottmo").html(_html);
+        }});
+    }
+
+    function submitDoc(){
+      $.ajax({ type:"POST" , url: "/fedreport/adjust", data:{
+                  stype:$("#stype").val(),
+                  adjnum:$("#adjnum").val(),
+                  docid:$("#docid").val()
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        alert("操作成功！");
+                        window.location.reload();
+                }
+          }});
+    }
+
+    getleft();
+    getright();
+    getrightbottom();
+
+    <%if(info){%>
+        $.alert({title: '提示信息',content: '<%=info%>'});
+    <%}%>
 </script>
 <% include footer %>

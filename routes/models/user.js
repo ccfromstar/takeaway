@@ -32,7 +32,7 @@ exports.sql_list = function (req, res) {
     var limit = (limit && limit > 0) ? limit : LIMIT;
    
     var sql1 = "select * from user where password='fedex2017'";
-    var sql5 = "select count(*) as count from user";
+    var sql5 = "select count(*) as count from user where password='fedex2017'";
   
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
@@ -43,7 +43,7 @@ exports.sql_list = function (req, res) {
             var isFirstPage = page == 1 ;
             var isLastPage = ((page -1) * limit + rows1.length) == total;
             
-            res.render('cms/user', {url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});     
+            res.render('cms/user', {numTotal:rows5[0].count,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});     
         });
     });
 };
