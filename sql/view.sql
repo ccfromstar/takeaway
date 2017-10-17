@@ -88,3 +88,11 @@ SELECT a.*,b.date,b.type,b.state
 FROM fedbooking_price a
 LEFT JOIN fedbooking b
 ON a.bno = b.bookingno;
+
+DROP VIEW IF EXISTS `v_user_fedbooking`;
+CREATE VIEW v_user_fedbooking
+AS
+SELECT a.*,b.name
+FROM fedbooking a
+LEFT JOIN user b
+ON a.userid = b.username;
