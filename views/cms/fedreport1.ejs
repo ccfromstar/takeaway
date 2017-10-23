@@ -40,6 +40,7 @@
         			<th>订餐时间</th>
         			<th>数量</th>
         			<th>总价</th>
+              <th>操作</th>
       			</tr>
     		</thead>
     		<tbody>
@@ -51,6 +52,7 @@
         			<td><%-record[i].date%></td>
         			<td><%-record[i].num%></td>
               <td><%-(Number(record[i].num)*Number(record[i].price))%></td>
+              <td><button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=record[i].bno%>)">已退款</button></td>
       			</tr>
     		<%}%>
     		</tbody>
@@ -118,9 +120,13 @@
 	$("#_viewl").css("width",w);
 
   function editDoc(id){
-    $("#docid").val(id);
-    $('#addModal').modal('show');
-  }
+        //根据id读取字段
+        $.ajax({ type:"POST" , url: "/fedreport/setReturn", data:{id:id}, success: function(data){
+               alert("退款设置成功！");
+               window.location.reload();
+        }});
+    }
+
 
 	function toPage(i){
 		var _d = $("#bookingdate").val();

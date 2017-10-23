@@ -16,7 +16,18 @@ exports.sqldo = function (req, res) {
     else if(_sql == "getright"){sql_getright(req,res);}
     else if(_sql == "getrightbottom"){sql_getrightbottom(req,res);}
     else if(_sql == "adjust"){adjust(req,res);}
+    else if(_sql == "setReturn"){setReturn(req,res);}
+
 };
+
+function setReturn(req, res) {
+    var id = req.param('id');
+    var deleteSql = "update fedbooking set state = '已退款' where bookingno = '"+id+"'";
+    mysql.query(deleteSql ,function(error,obj){
+        if(error){console.log(error);return false;}
+        res.send("200");
+    });
+}
 
 exports.sql_list = function (req, res) {
     var _info = req.session.infor;

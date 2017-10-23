@@ -127,6 +127,13 @@
         alert('已超过18点，不能预订第二天');return false;
     }
 
+    /*周六周日不可订*/
+    var myDate1 = new Date(date);
+    var week = myDate1.getDay();
+    if(week == 0 || week == 6){
+        alert('周末不可预定');return false;
+    }  
+
     /*load menu list*/
     $.ajax({ type:"POST" , url: "/role/getfmenu", data:{
         date:date,

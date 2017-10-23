@@ -472,7 +472,7 @@ function createFbooking(req, res) {
     var f3 = req.param('f3');
     var myDate = new Date(); //日期对象
     //console.log(f1);console.log(f2);console.log(f3);
-    myDate.setDate(myDate.getDate()+2);
+    //myDate.setDate(myDate.getDate()+2);
     var y = myDate.getFullYear(); 
     var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
     var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
@@ -481,7 +481,16 @@ function createFbooking(req, res) {
     var mm = (((myDate.getMinutes())+"").length==1)?"0"+(myDate.getMinutes()):(myDate.getMinutes());
     var ss = (((myDate.getSeconds())+"").length==1)?"0"+(myDate.getSeconds()):(myDate.getSeconds());
 
-    var bookingno = y + m + d + hh + mm + ss;
+    var bookingno = "" + y + m + d + hh + mm + ss;
+
+    console.log(y);
+    console.log(m);
+    console.log(d);
+    console.log(hh);
+    console.log(mm);
+    console.log(ss);
+
+    console.log('bookingno:'+bookingno);
     var insertSql = "insert into fedbooking(userid,bookingno,date,type,state,createAt,numTotal) values('"+userid+"','"+bookingno+"','"+date+"','"+type+"','未付款',now(),'"+numTotal+"')";
     mysql.query(insertSql ,function(error,obj){
         if(error){console.log(error);return false;}
