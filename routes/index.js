@@ -357,7 +357,7 @@ exports.f_option = function(req, res) {
 exports.f_read = function(req, res) {
 	var id = req.query.id;
 	var sql1 = "select * from fedbooking where bookingno = '"+id+"'";
-	var sql2 = "select * from fedbooking_price where bno = '"+id+"'";
+	var sql2 = "select * from fedbooking_price where num != 0 and bno = '"+id+"'";
 	mysql.query(sql1 ,function(error,obj1){
         if(error){console.log(error);return false;}
         obj1[0].createAt = (obj1[0].createAt).Format("yyyy-MM-dd hh:mm:ss")
@@ -374,7 +374,7 @@ exports.f_read = function(req, res) {
 exports.f_get = function(req, res) {
 	var id = req.query.id;
 	var sql1 = "select * from fedbooking where bookingno = '"+id+"'";
-	var sql2 = "select * from fedbooking_price where bno = '"+id+"'";
+	var sql2 = "select * from fedbooking_price where num != 0 and bno = '"+id+"'";
 	var sql3 = "update fedbooking set state = '已取餐' where bookingno = '"+id+"'";
 	mysql.query(sql1 ,function(error,obj1){
         if(error){console.log(error);return false;}
