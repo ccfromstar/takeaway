@@ -123,6 +123,10 @@ module.exports = function (app, routes) {
     app.get('/cms/fedmenu',routes.fedmenu);
     app.post('/fedmenu/:sql',routes.fedmenudo);
 
+    app.get('/cms/fixedmenu',routes.checkLogin);
+    app.get('/cms/fixedmenu',routes.fixedmenu);
+    app.post('/fixedmenu/:sql',routes.fixedmenudo);
+
     app.get('/cms/fedreport',routes.checkLogin);
     app.get('/cms/fedreport',routes.fedreport);
     app.post('/fedreport/:sql',routes.fedreportdo);
