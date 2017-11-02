@@ -154,7 +154,7 @@
                         num_menu += 1;
                     }
                     for(var i in data1){
-                        mlist += '<li class="am-g am-list-item-dated"><a href="##" onclick="showModel(\''+data1[i].name+'\')" class="am-list-item-hd " style="margin-left:10px"><span id="ffname'+i+'">'+data1[i].name+'</span> ￥<span id="ffprice'+i+'">'+data1[i].price+'</span></a><span class="am-list-date">';
+                        mlist += '<li class="am-g am-list-item-dated"><a href="##" onclick="showModel(\''+data1[i].imgname+'\')" class="am-list-item-hd " style="margin-left:10px"><span id="ffname'+i+'">'+data1[i].name+'</span> ￥<span id="ffprice'+i+'">'+data1[i].price+'</span></a><span class="am-list-date">';
                         mlist += '<img src="/img/minus.png" style="height:25px;margin-right:10px" onclick="minusF('+i+','+data1[i].price+')" />';
                         mlist += '<span id="numF'+i+'">0</span>';
                         mlist += '<img src="/img/plus.png" style="height:25px;margin-left:10px" onclick="plusF('+i+','+data1[i].price+')" />';
@@ -178,7 +178,7 @@
 
 
 function showModel(str){
-    $('#infos').html("<img src='/pic/"+str+".jpg' style='width:250px' />");
+    $('#infos').html("<img src='/pic/"+str+"' style='width:250px' />");
     $('#doc-modal-1').css('display', 'inline').css('opacity','1');
 }
 
