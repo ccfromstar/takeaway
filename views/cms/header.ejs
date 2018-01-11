@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>ERP管理系统 1.2</title>
+<title>ERP管理系统 v1.2</title>
 
 <script src="/js/jquery.min.js"></script>
 <link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -24,32 +24,126 @@
 <script src="/plugin/select2/dist/js/select2.min.js"></script>
 
 <script type="text/javascript" src="/plugin/My97DatePicker/WdatePicker.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.5.4/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.5.4/themes/icon.css">
+<script type="text/javascript" src="/jquery-easyui-1.5.4/jquery.easyui.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $("#munes").tree({  
+        onClick:function(node){  
+            switch(node.text){
+                case '分析报表':
+                  window.location = 'finance_total';break;
+                case '查询报表':
+                  window.location = 'finance_m';break;
+                case '企业管理':
+                  window.location = 'address';break;
+                case '财务录入':
+                  window.location = 'fina';break;
+                case '菜单管理':
+                  window.location = 'menu';break;
+                case '团膳录入':
+                  window.location = 'old';break;
+                case '线外录入':
+                  window.location = 'outline';break;
+            }  
+        }  
+    });  
+
+    $('#addModal').modal({backdrop: 'static', keyboard: true,show:false});
+  });
+</script>
+<style type="text/css">
+  .modal-backdrop{
+    display:none;
+  }
+</style>
 </head>
 <body>
-<!--业务逻辑-->
-<%
-  var CONSTANT1,parms;
-  CONSTANT1 = "/cms/finance_total,/cms/finance_d,/cms/finance_m,/cms/fedmenu,/cms/fedreport,/cms/fedreport1,/cms/user,/cms/booking,/cms/fixedmenu";
-  parms = url.split("?p=");
-%>
-	<div id="con_header" >
-      <div class="divlogo"></div> 
-      <div class="title_h">
-        <p class="title_h1">SH-Baiying Catering</p>
-      </div> 
-      <div class="h_right_exit" onclick="toLocation('/cms/login');">退出</div>
-      <div class="h_right">当前用户：<%=user%></div>  
-      <div class="clearboth"></div>
-  </div>
-
-  <table class="tbhome">
-    <tr>
-      <td class="tbleft"><% include left %></td>
-      <%if(CONSTANT1.indexOf(parms[0])!=-1 && parms[0] !="/cms/fina"){%>
-        <td style="width:150px">
-      <%}else{%>
+  <div class="easyui-layout" style="width:100%;min-height:768px;">
+    <div data-options="region:'north'" style="height:50px;overflow: hidden;">
+      <div id="con_header" >
+          <div class="divlogo"></div> 
+          <div class="title_h">
+            <p class="title_h1">百颖（上海）餐饮服务有限公司ERP管理系统 v1.2</p>
+          </div> 
+          <div class="h_right_exit" onclick="toLocation('/cms/login');">退出</div>
+          <div class="h_right">当前用户：<%=user%></div>  
+          <div class="clearboth"></div>
+      </div>
+    </div>
+    <div data-options="region:'south',split:true" style="height:50px;"></div>
+    <div data-options="region:'west',split:true" title="目录" style="width:170px;">
+      <div title="TreeMenu" data-options="iconCls:'icon-search'" style="padding:10px;">
+      <ul id="munes" class="easyui-tree">
+        <li>
+          <span>中央厨房团膳</span>
+          <ul>
+            <li>
+              <span>报表管理</span>
+              <ul>
+                <li>分析报表</li>
+                <li>查询报表</li>
+              </ul>
+            </li>
+            <li>
+              <span>企业管理</span>
+            </li>
+            <li>
+              <span>财务录入</span>
+            </li>
+            <li>
+              <span>菜单管理</span>
+            </li>
+            <li>
+              <span>团膳录入</span>
+            </li>
+            <li>
+              <span>线外录入</span>
+            </li>
+            <li>
+              <span>微信订餐</span>
+              <ul>
+                <li>网上订餐菜单</li>
+                <li>网上订餐报表</li>
+                <li>已支付取消</li>
+                <li>新注册用户</li>
+                <li>未取餐用户</li>
+                <li>固定菜单</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+           <span>工商银行</span>
+           <ul>
+              <li>报表管理</li>
+              <li>数据录入</li>
+              <li>成本录入</li>
+           </ul>
+        </li>
+        <li>
+           <span>安曼纳卓悦酒店</span>
+           <ul>
+              <li>报表管理</li>
+              <li>数据录入</li>
+              <li>成本录入</li>
+           </ul>
+        </li>
+        <li>
+           <span>账户管理</span>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div data-options="region:'center',title:'视图'">
+      <table class="tbhome">
+      <tr>
         <td>
-      <%}%>
+    
+
+  
 
  
     
