@@ -203,6 +203,7 @@ function sql_toExcel(req, res){
     var sql3 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql4 = "select * from ordergh where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql5 = "select * from orderb2b where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql6 = "select * from orderAmn where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         for(var i in obj){
@@ -248,14 +249,25 @@ function sql_toExcel(req, res){
                                 sendtype:obj5[i].sendtype
                             });
                         }
-                        //用数据源(对象)data渲染Excel模板
-                        var obj_str = '[ [{"date": "' + bd+'"}],';
-                        obj_str += JSON.stringify(obj) + "]";
-                        //console.log(obj_str);
-                        ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
-                            fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
-                            res.send(excelname);
-                        });
+                        mysql.query(sql6 ,function(error,obj6){
+                            if(error){console.log(error);return false;}
+                            for(var i in obj6){
+                                obj.push({
+                                    cname:obj6[i].name,
+                                    numTotal:'-',
+                                    priceTotal:obj6[i].priceTotal,
+                                    sendtype:obj6[i].sendtype
+                                });
+                            }
+                            //用数据源(对象)data渲染Excel模板
+                            var obj_str = '[ [{"date": "' + bd+'"}],';
+                            obj_str += JSON.stringify(obj) + "]";
+                            //console.log(obj_str);
+                            ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+                                fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+                                res.send(excelname);
+                            });
+                         });
                     });
                 });
             });
@@ -803,8 +815,7 @@ function sql_toExcelm(req, res){
     var sql3 = "select * from oldbooking where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql4 = "select * from ordergh where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
     var sql5 = "select * from orderb2b where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
-
-    //console.log(sql3);
+    var sql6 = "select * from orderAmn where date like '"+bd+"%' "+sql22+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";    //console.log(sql3);
     mysql.query(sql1 ,function(error,obj){
         if(error){console.log(error);return false;} 
         for(var i in obj){
@@ -854,10 +865,22 @@ function sql_toExcelm(req, res){
                                 sendtype:obj5[i].sendtype
                             });
                         }
-                        //用数据源(对象)data渲染Excel模板
-                        ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
-                            fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
-                            res.send(excelname);
+                        mysql.query(sql6 ,function(error,obj6){
+                            if(error){console.log(error);return false;}  
+                            for(var i in obj6){
+                                obj.push({
+                                    date1:obj6[i].date,
+                                    cname:obj6[i].name,
+                                    numTotal:'-',
+                                    priceTotal:obj6[i].priceTotal,
+                                    sendtype:obj6[i].sendtype
+                                });
+                            }
+                            //用数据源(对象)data渲染Excel模板
+                            ejsExcel.renderExcelCb(exlBuf, obj, function(exlBuf2){
+                                fs.writeFileSync("./public/excelop/temp/"+excelname, exlBuf2);
+                                res.send(excelname);
+                            });
                         });
                     });
                 });
