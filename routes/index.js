@@ -1,9 +1,12 @@
-var address,role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old,gh,kq,fedmenu,fixedmenu,fedreport;
+var address,role, menu, fs, user, customer, p400, booking, immediate, finance_d, mysql, erp,outline,old,gh,amn,box,kq,fina,fedmenu,fixedmenu,fedreport;
 address = require('./models/address.js');
 outline = require('./models/outline.js');
 old = require('./models/old.js');
 gh = require('./models/gh.js');
+amn = require('./models/amn.js');
+box = require('./models/box.js');
 kq = require('./models/kq.js');
+fina = require('./models/fina.js');
 fedmenu = require('./models/fedmenu.js');
 fixedmenu = require('./models/fixedmenu.js');
 fedreport = require('./models/fedreport.js');
@@ -705,6 +708,30 @@ exports.ghdo = function(req, res) {
 	gh.sqldo(req, res);
 };
 
+exports.amn = function(req, res) {
+	amn.sql_list(req, res);
+};
+
+exports.amndo = function(req, res) {
+	amn.sqldo(req, res);
+};
+
+exports.box = function(req, res) {
+	box.sql_list(req, res);
+};
+
+exports.boxdo = function(req, res) {
+	box.sqldo(req, res);
+};
+
+exports.fina = function(req, res) {
+	fina.sql_list(req, res);
+};
+
+exports.finado = function(req, res) {
+	fina.sqldo(req, res);
+};
+
 exports.kq = function(req, res) {
 	kq.sql_list(req, res);
 };
@@ -838,6 +865,10 @@ exports.immediate_left = function(req, res) {
 
 exports.finance_d = function(req, res) {
 	finance_d.sql_list(req, res);
+};
+
+exports.finance_total = function(req, res) {
+	finance_d.sql_list_t(req, res);
 };
 
 exports.finance_ddo = function(req, res) {

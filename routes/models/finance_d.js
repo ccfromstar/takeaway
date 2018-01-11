@@ -49,6 +49,8 @@ exports.sql_list = function (req, res) {
     var sql7 = "select * from oldbooking where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql8 = "select * from ordergh where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
     var sql9 = "select * from orderb2b where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    var sql10 = "select * from orderAmn where date like '"+bd+"' and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'";
+    
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -68,25 +70,31 @@ exports.sql_list = function (req, res) {
                         if(err){console.log(err);return false;}
                         mysql.query(sql9,function (err, rows9) {
                             if(err){console.log(err);return false;}
-                            for(var i in rows1){
-                                num_total = num_total + rows1[i].numTotal;
-                                price_total = price_total + rows1[i].priceTotal;
-                            }
-                            for(var i in rows6){
-                                num_total = num_total + rows6[i].num;
-                                price_total = price_total + rows6[i].numTotal;
-                            }
-                            for(var i in rows7){
-                                num_total = num_total + rows7[i].num;
-                                price_total = price_total + rows7[i].priceTotal;
-                            }
-                            for(var i in rows8){
-                                price_total = price_total + rows8[i].priceTotal;
-                            }
-                            for(var i in rows9){
-                                price_total = price_total + rows9[i].priceTotal;
-                            }
-                            res.render('cms/finance_d', {record4:rows9,cname:cname,sendtype:sendtype,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
+                            mysql.query(sql10,function (err, rows10) {
+                                if(err){console.log(err);return false;}
+                                for(var i in rows1){
+                                    num_total = num_total + rows1[i].numTotal;
+                                    price_total = price_total + rows1[i].priceTotal;
+                                }
+                                for(var i in rows6){
+                                    num_total = num_total + rows6[i].num;
+                                    price_total = price_total + rows6[i].numTotal;
+                                }
+                                for(var i in rows7){
+                                    num_total = num_total + rows7[i].num;
+                                    price_total = price_total + rows7[i].priceTotal;
+                                }
+                                for(var i in rows8){
+                                    price_total = price_total + rows8[i].priceTotal;
+                                }
+                                for(var i in rows9){
+                                    price_total = price_total + rows9[i].priceTotal;
+                                }
+                                for(var i in rows10){
+                                    price_total = price_total + rows10[i].priceTotal;
+                                }
+                                res.render('cms/finance_d', {record5:rows10,record4:rows9,cname:cname,sendtype:sendtype,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info}); 
+                            });
                         });
                     });
                 });
@@ -463,6 +471,106 @@ function sql_getrightbottom(req,res){
     });
 }
 
+exports.sql_list_t = function (req,res) {
+     var _info = req.session.infor;
+    req.session.infor = null;
+
+    var myDate = new Date();
+    var y = myDate.getFullYear(); 
+    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+    var bookingno = y+m+d;
+    var bookingdate = y+"-"+m;
+
+    var page = parseInt(req.query.p);
+    var key = req.query.key;
+    var bd = req.query.bd;
+    var cname = req.query.cname;
+    var sendtype = req.query.sendtype;
+    cname = cname?cname:'';
+    sendtype = sendtype?sendtype:'';
+    key = key?key:bookingno;
+    bookingdate =  bd?bd:bookingdate;
+    page = (page && page > 0) ? page : 1;
+    var limit = (limit && limit > 0) ? limit : LIMIT;
+    var num_total = 0;
+    var price_total = 0;
+
+    var d1 = req.query.d1;
+    var d2 = req.query.d2;
+
+    d1 = d1?d1:'';
+    d2 = d2?d2:'';
+
+    var sql1 = "";
+    var sql2 = "";
+
+    if(d1 != ""){
+        sql1 += " and date1 >= '"+d1+"'";
+        sql2 += " and date >= '"+d1+"'";
+    }
+    if(d2 != ""){
+        sql1 += " and date1 <= '"+d2+"'";
+        sql2 += " and date <= '"+d2+"'";
+    }
+
+    var sql1 = "select * from v_com_booking where date1 like '"+bd+"%'";
+    var sql6 = "select * from outbooking where date like '"+bd+"%'";
+    var sql7 = "select * from oldbooking where date like '"+bd+"%'";
+    var sql8 = "select * from ordergh where date like '"+bd+"%'";
+    var sql9 = "select * from orderb2b where date like '"+bd+"%'";
+    var sql10 = "select * from finance where date like '"+bd+"%'";
+    var sql11 = "select * from orderAmn where date like '"+bd+"%'";
+    mysql.query(sql1,function (err, rows1) {
+        if(err){console.log(err);return false;}
+            mysql.query(sql6,function (err, rows6) {
+                if(err){console.log(err);return false;}
+                mysql.query(sql7,function (err, rows7) {
+                    if(err){console.log(err);return false;}
+                    mysql.query(sql8,function (err, rows8) {
+                        if(err){console.log(err);return false;}
+                        mysql.query(sql9,function (err, rows9) {
+                            if(err){console.log(err);return false;}
+                            mysql.query(sql11,function (err, rows11) {
+                                if(err){console.log(err);return false;}
+                                for(var i in rows1){
+                                    num_total = num_total + rows1[i].numTotal;
+                                    price_total = price_total + rows1[i].priceTotal;
+                                }
+                                for(var i in rows6){
+                                    num_total = num_total + rows6[i].num;
+                                    price_total = price_total + rows6[i].numTotal;
+                                }
+                                for(var i in rows7){
+                                    num_total = num_total + rows7[i].num;
+                                    price_total = price_total + rows7[i].priceTotal;
+                                }
+                                for(var i in rows8){
+                                    price_total = price_total + rows8[i].priceTotal;
+                                }
+                                for(var i in rows9){
+                                    price_total = price_total + rows9[i].priceTotal;
+                                }
+                                for(var i in rows11){
+                                    price_total = price_total + rows11[i].priceTotal;
+                                }
+                                mysql.query(sql10,function (err, rows10) {
+                                    if(err){console.log(err);return false;}
+                                    console.log(rows10);
+                                    var pt = 0;
+                                    for(var i in rows10){
+                                        pt = pt + rows10[i].priceTotal;
+                                    }
+                                    res.render('cms/finance_t', {finance:pt,record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page});
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+    });
+}
+
 exports.sql_list_m = function (req, res) {
     var _info = req.session.infor;
     req.session.infor = null;
@@ -512,6 +620,7 @@ exports.sql_list_m = function (req, res) {
     var sql7 = "select * from oldbooking where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql8 = "select * from ordergh where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
     var sql9 = "select * from orderb2b where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
+    var sql10 = "select * from orderAmn where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
           mysql.query(sql5,function (err1, rows5) {
@@ -531,25 +640,31 @@ exports.sql_list_m = function (req, res) {
                         if(err){console.log(err);return false;}
                         mysql.query(sql9,function (err, rows9) {
                             if(err){console.log(err);return false;}
-                            for(var i in rows1){
-                                num_total = num_total + rows1[i].numTotal;
-                                price_total = price_total + rows1[i].priceTotal;
-                            }
-                            for(var i in rows6){
-                                num_total = num_total + rows6[i].num;
-                                price_total = price_total + rows6[i].numTotal;
-                            }
-                            for(var i in rows7){
-                                num_total = num_total + rows7[i].num;
-                                price_total = price_total + rows7[i].priceTotal;
-                            }
-                            for(var i in rows8){
-                                price_total = price_total + rows8[i].priceTotal;
-                            }
-                            for(var i in rows9){
-                                price_total = price_total + rows9[i].priceTotal;
-                            }
-                            res.render('cms/finance_m', {record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+                            mysql.query(sql10,function (err, rows10) {
+                                if(err){console.log(err);return false;}
+                                for(var i in rows1){
+                                    num_total = num_total + rows1[i].numTotal;
+                                    price_total = price_total + rows1[i].priceTotal;
+                                }
+                                for(var i in rows6){
+                                    num_total = num_total + rows6[i].num;
+                                    price_total = price_total + rows6[i].numTotal;
+                                }
+                                for(var i in rows7){
+                                    num_total = num_total + rows7[i].num;
+                                    price_total = price_total + rows7[i].priceTotal;
+                                }
+                                for(var i in rows8){
+                                    price_total = price_total + rows8[i].priceTotal;
+                                }
+                                for(var i in rows9){
+                                    price_total = price_total + rows9[i].priceTotal;
+                                }
+                                for(var i in rows10){
+                                    price_total = price_total + rows10[i].priceTotal;
+                                }
+                                res.render('cms/finance_m', {record5:rows10,record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+                            });
                         });
                     });
                 });

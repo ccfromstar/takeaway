@@ -1,19 +1,22 @@
 <!--业务逻辑-->
 <%
 	var CONSTANT1,parms,CONSTANT2,CONSTANT3,CONSTANTRole;
-	CONSTANT1 = "企业管理,菜单管理,账户管理".split(",");
-	CONSTANT2 = "g-item,g-item,g-item".split(",");
-	CONSTANT3 = "address,menu,role".split(",");
-	CONSTANTRole = "show,show,show".split(",");
+	CONSTANT1 = "网上订餐菜单,网上订餐报表,已支付取消,新注册用户,未取餐用户,固定菜单".split(",");
+	CONSTANT2 = "g-item,g-item,g-item,g-item,g-item,g-item".split(",");
+	CONSTANT3 = "fedmenu,fedreport,fedreport1,user,booking,fixedmenu".split(",");
+	CONSTANTRole = "show,show,show,show,show,show".split(",");
 
 	if(role=="主管"){
 		CONSTANTRole[2] = "hide";
 	}
 
 	parms = url.split("?p=");
-	if(parms[0]=="/cms/address"){CONSTANT2[0] = "g-item-selected";}
-	else if(parms[0]=="/cms/menu"){CONSTANT2[1] = "g-item-selected";}
-	else if(parms[0]=="/cms/role"){CONSTANT2[2] = "g-item-selected";}
+	if(parms[0]=="/cms/fedmenu"){CONSTANT2[0] = "group-item-selected";}
+	else if(parms[0]=="/cms/fedreport"){CONSTANT2[1] = "group-item-selected";}
+	else if(parms[0]=="/cms/fedreport1"){CONSTANT2[2] = "group-item-selected";}
+	else if(parms[0]=="/cms/user"){CONSTANT2[3] = "group-item-selected";}
+	else if(parms[0]=="/cms/booking"){CONSTANT2[4] = "group-item-selected";}
+	else if(parms[0]=="/cms/fixedmenu"){CONSTANT2[5] = "group-item-selected";}
 %>
 <!--页面逻辑-->
 <%for(var i in CONSTANT1){

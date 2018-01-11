@@ -1,0 +1,404 @@
+<!--页面逻辑-->
+<% include header %>
+<table class="tbpage">
+    <tr>
+      <td>
+      		<button type="button" class="btn btn-default btn-xs" id="table_new" onclick="newDoc()" >新增</button>
+			<table class="table table-hover" id="table_list">
+    		<thead>
+      			<tr>
+        			<th>序号</th>
+        			<th>日期</th>
+        			<th>总金额</th>
+        			<th>操作</th>
+      			</tr>
+    		</thead>
+    		<tbody>
+    		<%for(var i in address){%>
+      			<tr>
+        			<td><%-address[i].id%></td>
+        			<td><%=address[i].date%></td>
+        			<td><%=address[i].priceTotal%></td>
+        			<td>
+        				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=address[i].id%>)">编辑</button>
+        				<button type="button" class="btn btn-default btn-xs" onclick="delinfo(<%=address[i].id%>)">删除</button>
+        			</td>
+      			</tr>
+    		<%}%>
+    		</tbody>
+    		</table>
+    		<!--分页符-->
+			<div style='width:100%;text-align:center'>
+  				<button type='button' <%=isFirstPage?"disabled":""%> <%=isFirstPage?"":"onclick=toPage("+(page-1)+");"%> class='btn btn-default btn-xs'>上一页</button>
+  				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
+  				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
+			</div>  
+			<br/><br/>  	
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog" style="width:800px" >
+      <div class="modal-content">
+         <div class="modal-body">
+            <table class="table table-bordered"> 
+                <tr>
+                    <td>日期</td>
+                    <td>
+                      <input type="text" name="date" id="date" style="cursor:pointer" readonly  class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
+                    </td>
+                </tr> 
+                <tr>
+                    <td>a)税金及附加</td>
+                    <td><input type="text" class="input-sm form-control" id="numa" ></input></td>
+                </tr>
+                <tr>
+                    <td>b)办公室厨房租金</td>
+                    <td><input type="text" class="input-sm form-control" id="numb" ></input></td>
+                </tr>
+                <tr>
+                    <td>c)应交税金3%</td>
+                    <td><input type="text" class="input-sm form-control" id="numc" ></input></td>
+                </tr>
+                <tr>
+                    <td>d)银行手续费</td>
+                    <td><input type="text" class="input-sm form-control" id="numd" ></input></td>
+                </tr>
+                <tr>
+                    <td>e)借款利息费</td>
+                    <td><input type="text" class="input-sm form-control" id="nume" ></input></td>
+                </tr>
+                <tr>
+                    <td>f)行政人员工资</td>
+                    <td><input type="text" class="input-sm form-control" id="numf" ></input></td>
+                </tr>
+                <tr>
+                    <td>g)厨房人员工资</td>
+                    <td><input type="text" class="input-sm form-control" id="numg" ></input></td>
+                </tr>
+                <tr>
+                    <td>h)五险一金（企业部分）</td>
+                    <td><input type="text" class="input-sm form-control" id="numh" ></input></td>
+                </tr>
+                <tr>
+                    <td>i)五险一金（个人部分）</td>
+                    <td><input type="text" class="input-sm form-control" id="numi" ></input></td>
+                </tr>
+                <tr>
+                    <td>j)中央厨房水费和电费</td>
+                    <td><input type="text" class="input-sm form-control" id="numj" ></input></td>
+                </tr>
+                <tr>
+                    <td>k)中央厨房煤气费</td>
+                    <td><input type="text" class="input-sm form-control" id="numk" ></input></td>
+                </tr>
+                <tr>
+                    <td>l)额外运输费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numl" ></input></td>
+                </tr>
+                <tr>
+                    <td>m)法律及专业费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numm" ></input></td>
+                </tr>
+                <tr>
+                    <td>n)网络服务费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numn" ></input></td>
+                </tr>
+                <tr>
+                    <td>o)车贷还款费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numo" ></input></td>
+                </tr>
+                <tr>
+                    <td>p)办公费用</td>
+                    <td><input type="text" class="input-sm form-control" id="nump" ></input></td>
+                </tr>
+                <tr>
+                    <td>q)汽油费和停车费</td>
+                    <td><input type="text" class="input-sm form-control" id="numq" ></input></td>
+                </tr>
+                <tr>
+                    <td>r)电话网络费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numr" ></input></td>
+                </tr>
+                <tr>
+                    <td>s)快递费用</td>
+                    <td><input type="text" class="input-sm form-control" id="nums" ></input></td>
+                </tr>
+                <tr>
+                    <td>t)保洁费用（垃圾清运费）</td>
+                    <td><input type="text" class="input-sm form-control" id="numt" ></input></td>
+                </tr>
+                <tr>
+                    <td>u)洗涤费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numu" ></input></td>
+                </tr>
+                <tr>
+                    <td>v)维护及维修费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numv" ></input></td>
+                </tr>
+                <tr>
+                    <td>w)临时工费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numw" ></input></td>
+                </tr>
+                <tr>
+                    <td>x)员工福利费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numx" ></input></td>
+                </tr>
+                <tr>
+                    <td>y)新增固定资产</td>
+                    <td><input type="text" class="input-sm form-control" id="numy" ></input></td>
+                </tr>
+                <tr>
+                    <td>z)广告费</td>
+                    <td><input type="text" class="input-sm form-control" id="numz" ></input></td>
+                </tr>
+                <tr>
+                    <td>aa)业务招待费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numaa" ></input></td>
+                </tr>
+                <tr>
+                    <td>ab)管理费（佣金）</td>
+                    <td><input type="text" class="input-sm form-control" id="numab" ></input></td>
+                </tr>
+                <tr>
+                    <td>ac)食品安全保险费</td>
+                    <td><input type="text" class="input-sm form-control" id="numac" ></input></td>
+                </tr>
+                <tr>
+                    <td>ad)杂项费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numad" ></input></td>
+                </tr>
+                <tr>
+                    <td>ae)显示所有录入金额所对应显示的百分比</td>
+                    <td><input type="text" class="input-sm form-control" id="numae" ></input></td>
+                </tr>
+                <tr>
+                    <td>af)增加录入各个门店销售总额</td>
+                    <td><input type="text" class="input-sm form-control" id="numaf" ></input></td>
+                </tr>
+                <tr>
+                    <td>ag)增加显示同比上个月的增长或下降的百分比</td>
+                    <td><input type="text" class="input-sm form-control" id="numag" ></input></td>
+                </tr>
+                <tr>
+                    <td>ah)增加食品成本的录入</td>
+                    <td><input type="text" class="input-sm form-control" id="numah" ></input></td>
+                </tr>
+                <tr>
+                    <td>ai)显示一次性餐具费用</td>
+                    <td><input type="text" class="input-sm form-control" id="numai" ></input></td>
+                </tr> 
+             </table>
+             <input type="hidden" id="docid" ></input>
+             <input type="hidden" class="input-sm form-control" id="priceTotal"></input>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" onclick="submitDoc();">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+  var namelist = 'a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z;aa;ab;ac;ad;ae;af;ag;ah;ai';
+  var arr1 = namelist.split(";");
+
+	function newDoc(){
+		$("#date").val("");
+    for(var i=0;i<arr1.length;i++){
+      $("#num"+arr1[i]).val("0");
+    }
+
+		$("#docid").val("0");
+
+		$('#addModal').modal('show');
+	}
+
+  function toPage(i){
+    window.location = "/cms/fina?p="+i;
+  }
+
+  function setCom(){
+    var d = $("#selectcompany").val();
+    var arr = d.split("@");
+    $("#name").val(arr[0]);
+    $("#unitPrice").val(arr[1]);
+  }
+
+	function editDoc(id){
+        //根据id读取字段
+        $.ajax({ type:"POST" , url: "/fina/getinfo", data:{id:id}, success: function(data){
+               $("#date").val(data[0].date); 
+               $("#numa").val(data[0].a); 
+               $("#numb").val(data[0].b);
+               $("#numc").val(data[0].c);
+               $("#numd").val(data[0].d);
+               $("#nume").val(data[0].e);
+               $("#numf").val(data[0].f);
+               $("#numg").val(data[0].g);
+               $("#numh").val(data[0].h);
+               $("#numi").val(data[0].i);
+               $("#numj").val(data[0].j);
+               $("#numk").val(data[0].k);
+               $("#numl").val(data[0].l);
+               $("#numm").val(data[0].m);
+               $("#numn").val(data[0].n);
+               $("#numo").val(data[0].o);
+               $("#nump").val(data[0].p);
+               $("#numq").val(data[0].q);
+               $("#numr").val(data[0].r);
+               $("#nums").val(data[0].s);
+               $("#numt").val(data[0].t);
+               $("#numu").val(data[0].u);
+               $("#numv").val(data[0].v);
+               $("#numw").val(data[0].w);
+               $("#numx").val(data[0].x);
+               $("#numy").val(data[0].y);
+               $("#numz").val(data[0].z);
+               $("#numaa").val(data[0].aa);
+               $("#numab").val(data[0].ab);
+               $("#numac").val(data[0].ac);
+               $("#numad").val(data[0].ad);
+               $("#numae").val(data[0].ae);
+               $("#numaf").val(data[0].af);
+               $("#numag").val(data[0].ag);
+               $("#numah").val(data[0].ah);
+               $("#numai").val(data[0].ai);
+               $("#docid").val(id);
+        }});
+        $('#addModal').modal('show');
+    }
+
+	function submitDoc(){
+    var priceTotal = 0;
+    //计算总金额
+    for(var i=0;i<arr1.length;i++){
+      priceTotal = priceTotal + Number($("#num"+arr1[i]).val());
+    }
+    $("#priceTotal").val(priceTotal);
+		if($("#docid").val()=="0"){
+			//insert
+			$.ajax({ type:"POST" , url: "/fina/insert", data:{
+                date:$("#date").val(),
+                numa:$("#numa").val(),
+                numb:$("#numb").val(),
+                numc:$("#numc").val(),
+                numd:$("#numd").val(),
+                nume:$("#nume").val(),
+                numf:$("#numf").val(),
+                numg:$("#numg").val(),
+                numh:$("#numh").val(),
+                numi:$("#numi").val(),
+                numj:$("#numj").val(),
+                numk:$("#numk").val(),
+                numl:$("#numl").val(),
+                numm:$("#numm").val(),
+                numn:$("#numn").val(),
+                numo:$("#numo").val(),
+                nump:$("#nump").val(),
+                numq:$("#numq").val(),
+                numr:$("#numr").val(),
+                nums:$("#nums").val(),
+                numt:$("#numt").val(),
+                numu:$("#numu").val(),
+                numv:$("#numv").val(),
+                numw:$("#numw").val(),
+                numx:$("#numx").val(),
+                numy:$("#numy").val(),
+                numz:$("#numz").val(),
+                numaa:$("#numaa").val(),
+                numab:$("#numab").val(),
+                numac:$("#numac").val(),
+                numad:$("#numad").val(),
+                numae:$("#numae").val(),
+                numaf:$("#numaf").val(),
+                numag:$("#numag").val(),
+                numah:$("#numah").val(),
+                numai:$("#numai").val(),
+                priceTotal:$("#priceTotal").val()
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}else{
+			//update
+			$.ajax({ type:"POST" , url: "/fina/update", data:{
+                date:$("#date").val(),
+                numa:$("#numa").val(),
+                numb:$("#numb").val(),
+                numc:$("#numc").val(),
+                numd:$("#numd").val(),
+                nume:$("#nume").val(),
+                numf:$("#numf").val(),
+                numg:$("#numg").val(),
+                numh:$("#numh").val(),
+                numi:$("#numi").val(),
+                numj:$("#numj").val(),
+                numk:$("#numk").val(),
+                numl:$("#numl").val(),
+                numm:$("#numm").val(),
+                numn:$("#numn").val(),
+                numo:$("#numo").val(),
+                nump:$("#nump").val(),
+                numq:$("#numq").val(),
+                numr:$("#numr").val(),
+                nums:$("#nums").val(),
+                numt:$("#numt").val(),
+                numu:$("#numu").val(),
+                numv:$("#numv").val(),
+                numw:$("#numw").val(),
+                numx:$("#numx").val(),
+                numy:$("#numy").val(),
+                numz:$("#numz").val(),
+                numaa:$("#numaa").val(),
+                numab:$("#numab").val(),
+                numac:$("#numac").val(),
+                numad:$("#numad").val(),
+                numae:$("#numae").val(),
+                numaf:$("#numaf").val(),
+                numag:$("#numag").val(),
+                numah:$("#numah").val(),
+                numai:$("#numai").val(),
+                priceTotal:$("#priceTotal").val(),
+                docid:$("#docid").val()
+                }, success: function(data){
+                    if(data==200){
+                        $('#addModal').modal('hide');
+                        window.location.reload();
+                    }
+        	}});
+		}
+    }
+
+    function delinfo(id){
+    	$.confirm({
+    		title: '请确认',
+    		content: '是否确认删除？',
+    		confirm: function(){
+        		$.ajax({ type:"POST" , url: "/fina/delinfo", data:{id:id}, success: function(data){
+        			if(data==200){
+              			window.location.reload();     
+        			}
+      			}});	
+    		}
+		});
+    }
+
+<%if(info){%>
+    $.alert({title: '提示信息',content: '<%=info%>'});
+<%}%>
+</script>
+<% include footer %>

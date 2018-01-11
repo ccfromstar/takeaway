@@ -1,0 +1,28 @@
+<!--业务逻辑-->
+<%
+	var CONSTANT1,parms,CONSTANT2,CONSTANT3,CONSTANTRole;
+	CONSTANT1 = "分析报表,日报表,月报表".split(",");
+	CONSTANT2 = "g-item,g-item,g-item".split(",");
+	CONSTANT3 = "finance_total,finance_d,finance_m".split(",");
+	CONSTANTRole = "show,show,show".split(",");
+
+	if(role=="主管"){
+		CONSTANTRole[2] = "hide";
+	}
+
+	parms = url.split("?p=");
+	if(parms[0]=="/cms/finance_total"){CONSTANT2[0] = "group-item-selected";}
+	else if(parms[0]=="/cms/finance_d"){CONSTANT2[1] = "group-item-selected";}
+	else if(parms[0]=="/cms/finance_m"){CONSTANT2[2] = "group-item-selected";}
+%>
+<!--页面逻辑-->
+<%for(var i in CONSTANT1){
+	if(CONSTANTRole[i]=="show"){
+%>
+    <div class="<%=CONSTANT2[i]%>" onclick="toLocation('<%=CONSTANT3[i]%>')" >
+    	<span style="margin-left:20px;" class="glyphicon glyphicon-align-left"></span>
+    	<%=CONSTANT1[i]%>
+    </div>
+<%	}
+}
+%>

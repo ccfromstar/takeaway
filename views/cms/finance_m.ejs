@@ -5,6 +5,9 @@
 %>
 <!--页面逻辑-->
 <% include header %>
+<% include left-report %>
+</td>
+      <td>
 <table class="tbpage">
     <tr>
       <td>
@@ -43,14 +46,6 @@
         			<th>公司</th>
         			<th>送餐类别</th>
         			<th>订餐时间</th>
-        			<th>A套餐</th>
-              <th>A调整</th>
-              <th>B套餐</th>
-              <th>B调整</th>
-              <th>C套餐</th>
-              <th>C调整</th>
-              <th>D套餐</th>
-              <th>D调整</th>
         			<th>总数量</th>
         			<th>总价</th>
       			</tr>
@@ -62,14 +57,6 @@
 	        			<td><%-record[i].cname%></td>
 	        			<td><%-record[i].sendtype%></td>
 	        			<td><%-record[i].date2%></td>
-	        			<td><%-record[i].numA%></td>
-              <td><%-record[i].adjustA%></td>
-              <td><%-record[i].numB%></td>
-              <td><%-record[i].adjustB%></td>
-              <td><%-record[i].numC%></td>
-              <td><%-record[i].adjustC%></td>
-              <td><%-record[i].numD%></td>
-              <td><%-record[i].adjustD%></td>
 	        			<td><%-record[i].numTotal%></td>
 	        			<td><%-record[i].priceTotal%></td>
 	      			</tr>
@@ -79,14 +66,6 @@
                 <td><%-record1[i].date%></td>
                 <td><%-record1[i].head%></td>
                 <td><%-record1[i].sendtype%></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
                 <td><%-record1[i].num%></td>
                 <td><%-record1[i].numTotal%></td>
@@ -98,14 +77,6 @@
                 <td><%-record2[i].name%></td>
                 <td><%-record2[i].sendtype%></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td><%-record2[i].num%></td>
                 <td><%-record2[i].priceTotal%></td>
               </tr>
@@ -115,14 +86,6 @@
                 <td><%-record3[i].date%></td>
                 <td><%-record3[i].name%></td>
                 <td><%-record3[i].sendtype%></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td></td>
                 <td>-</td>
                 <td><%-record3[i].priceTotal%></td>
@@ -134,17 +97,20 @@
                 <td><%-record4[i].name%></td>
                 <td><%-record4[i].sendtype%></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td>-</td>
                 <td><%-record4[i].priceTotal%></td>
               </tr>
+          <%}%>
+          <%for(var i in record5){%>
+            <tr>
+              <td><%-record5[i].date%></td>
+              <td><%-record5[i].name%></td>
+              <td><%-record5[i].sendtype%></td>
+              <td></td>
+              <td>-</td>
+              <td><%-record5[i].priceTotal%></td>
+              <td></td>
+            </tr>
           <%}%>
     		</tbody>
     	</table>

@@ -1,8 +1,5 @@
 <!--页面逻辑-->
 <% include header %>
-<% include left-nav %>
-</td>
-      <td>
 <table class="tbpage">
     <tr>
       <td>
@@ -11,11 +8,12 @@
     		<thead>
       			<tr>
         			<th>序号</th>
-              <th>公司</th>
         			<th>日期</th>
-              <th>分类</th>
-        			<th>菜名</th>
-        			<th>价格</th>
+        			<th>早餐</th>
+              <th>午餐</th>
+              <th>晚餐</th>
+              <th>夜宵</th>
+        			<th>总金额</th>
         			<th>操作</th>
       			</tr>
     		</thead>
@@ -23,11 +21,12 @@
     		<%for(var i in address){%>
       			<tr>
         			<td><%-address[i].id%></td>
-              <td><%=address[i].company_name%></td>
         			<td><%=address[i].date%></td>
-              <td><%=address[i].type%></td>
-              <td><%=address[i].name%></td>
-        			<td><%=address[i].price%></td>
+        			<td><%=address[i].numA%></td>
+              <td><%=address[i].numB%></td>
+              <td><%=address[i].numC%></td>
+              <td><%=address[i].numD%></td>
+        			<td><%=address[i].priceTotal%></td>
         			<td>
         				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=address[i].id%>)">编辑</button>
         				<button type="button" class="btn btn-default btn-xs" onclick="delinfo(<%=address[i].id%>)">删除</button>
@@ -65,38 +64,21 @@
                     </td>
                 </tr> 
                 <tr>
-                    <td>公司</td>
-                    <td>
-                      <select id="company_name" class="input-sm selectpicker">
-                            <option value="fedex2017">fedex2017</option>
-                            <option value="机场">机场</option>
-                      </select>
-                    </td>
+                    <td>早餐(5元)</td>
+                    <td><input type="text" class="input-sm form-control" id="numA" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
                 </tr>
                 <tr>
-                    <td>分类</td>
-                    <td>
-                      <select id="type" class="input-sm selectpicker">
-                        <option value="-">请选择</option>
-                            <option value="早餐">早餐</option>
-                            <option value="午餐">午餐</option>
-                            <option value="晚餐">晚餐</option>
-                            <option value="夜宵">夜宵</option>
-                        </select>
-                    </td>
-                </tr>
-                 <tr>
-                    <td>菜名</td>
-                    <td><input type="text" class="input-sm form-control" id="name" ></input></td>
+                    <td>午餐(20元)</td>
+                    <td><input type="text" class="input-sm form-control" id="numB" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
                 </tr>
                 <tr>
-                    <td>详细介绍</td>
-                    <td><input type="text" class="input-sm form-control" id="remark" ></input></td>
+                    <td>晚餐(20元)</td>
+                    <td><input type="text" class="input-sm form-control" id="numC" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
                 </tr>
                 <tr>
-                    <td>价格</td>
-                    <td><input type="text" class="input-sm form-control" id="price" style="width:10%" ></input></td>
-                </tr> 
+                    <td>夜宵(5元)</td>
+                    <td><input type="text" class="input-sm form-control" id="numD" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
+                </tr>
              </table>
              <input type="hidden" id="docid" ></input>
              <input type="hidden" class="input-sm form-control" id="priceTotal"></input>
@@ -115,17 +97,17 @@
 <script type="text/javascript">
 	function newDoc(){
 		$("#date").val("");
-		$("#type").val("");
-    $("#name").val("");
-    $("#remark").val("");
-    $("#price").val("0");
+		$("#numA").val("0");
+    $("#numB").val("0");
+    $("#numC").val("0");
+    $("#numD").val("0");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
 	}
 
   function toPage(i){
-    window.location = "/cms/fedmenu?p="+i;
+    window.location = "/cms/amn?p="+i;
   }
 
   function setCom(){
@@ -137,13 +119,13 @@
 
 	function editDoc(id){
         //根据id读取字段
-        $.ajax({ type:"POST" , url: "/fedmenu/getinfo", data:{id:id}, success: function(data){
+        $.ajax({ type:"POST" , url: "/amn/getinfo", data:{id:id}, success: function(data){
                $("#date").val(data[0].date); 
-               $("#type").val(data[0].type); 
-               $("#name").val(data[0].name);
-               $("#price").val(data[0].price);
-               $("#remark").val(data[0].remark);
-               $("#company_name").val(data[0].company_name);
+               $("#numA").val(data[0].numA); 
+               $("#numB").val(data[0].numB);
+               $("#numC").val(data[0].numC);
+               $("#numD").val(data[0].numD);
+
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
@@ -151,14 +133,16 @@
 
 	function submitDoc(){
     //计算总金额
-    if($("#docid").val()=="0"){
+    $("#priceTotal").val(Number($("#numA").val())+Number($("#numB").val())+Number($("#numC").val())+Number($("#numD").val()));
+		if($("#docid").val()=="0"){
 			//insert
-			$.ajax({ type:"POST" , url: "/fedmenu/insert", data:{
+			$.ajax({ type:"POST" , url: "/amn/insert", data:{
                 date:$("#date").val(),
-                type:$("#type").val(),
-                name:$("#name").val(),
-                price:$("#price").val(),
-                remark:$("#remark").val()
+                numA:$("#numA").val(),
+                numB:$("#numB").val(),
+                numC:$("#numC").val(),
+                numD:$("#numD").val(),
+                priceTotal:$("#priceTotal").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -167,12 +151,13 @@
         	}});
 		}else{
 			//update
-			$.ajax({ type:"POST" , url: "/fedmenu/update", data:{
+			$.ajax({ type:"POST" , url: "/amn/update", data:{
                 date:$("#date").val(),
-                type:$("#type").val(),
-                name:$("#name").val(),
-                price:$("#price").val(),
-                remark:$("#remark").val(),
+                numA:$("#numA").val(),
+                numB:$("#numB").val(),
+                numC:$("#numC").val(),
+                numD:$("#numD").val(),
+                priceTotal:$("#priceTotal").val(),
                 docid:$("#docid").val()
                 }, success: function(data){
                     if(data==200){
@@ -188,7 +173,7 @@
     		title: '请确认',
     		content: '是否确认删除？',
     		confirm: function(){
-        		$.ajax({ type:"POST" , url: "/fedmenu/delinfo", data:{id:id}, success: function(data){
+        		$.ajax({ type:"POST" , url: "/amn/delinfo", data:{id:id}, success: function(data){
         			if(data==200){
               			window.location.reload();     
         			}

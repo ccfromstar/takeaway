@@ -1,8 +1,5 @@
 <!--页面逻辑-->
 <% include header %>
-<% include left-nav %>
-</td>
-      <td>
 <table class="tbpage">
     <tr>
       <td>
@@ -11,11 +8,8 @@
     		<thead>
       			<tr>
         			<th>序号</th>
-              <th>公司</th>
-        			<th>日期</th>
-              <th>分类</th>
-        			<th>菜名</th>
-        			<th>价格</th>
+        			<th>餐盒名</th>
+        			<th>金额</th>
         			<th>操作</th>
       			</tr>
     		</thead>
@@ -23,10 +17,7 @@
     		<%for(var i in address){%>
       			<tr>
         			<td><%-address[i].id%></td>
-              <td><%=address[i].company_name%></td>
-        			<td><%=address[i].date%></td>
-              <td><%=address[i].type%></td>
-              <td><%=address[i].name%></td>
+        			<td><%=address[i].name%></td>
         			<td><%=address[i].price%></td>
         			<td>
         				<button type="button" class="btn btn-default btn-xs" onclick="editDoc(<%=address[i].id%>)">编辑</button>
@@ -57,46 +48,15 @@
    <div class="modal-dialog" style="width:800px" >
       <div class="modal-content">
          <div class="modal-body">
-            <table class="table table-bordered"> 
+            <table class="table table-bordered">  
                 <tr>
-                    <td>日期</td>
-                    <td>
-                      <input type="text" name="date" id="date" style="cursor:pointer" readonly  class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})"></input>
-                    </td>
-                </tr> 
-                <tr>
-                    <td>公司</td>
-                    <td>
-                      <select id="company_name" class="input-sm selectpicker">
-                            <option value="fedex2017">fedex2017</option>
-                            <option value="机场">机场</option>
-                      </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>分类</td>
-                    <td>
-                      <select id="type" class="input-sm selectpicker">
-                        <option value="-">请选择</option>
-                            <option value="早餐">早餐</option>
-                            <option value="午餐">午餐</option>
-                            <option value="晚餐">晚餐</option>
-                            <option value="夜宵">夜宵</option>
-                        </select>
-                    </td>
-                </tr>
-                 <tr>
-                    <td>菜名</td>
+                    <td>餐盒名称</td>
                     <td><input type="text" class="input-sm form-control" id="name" ></input></td>
                 </tr>
                 <tr>
-                    <td>详细介绍</td>
-                    <td><input type="text" class="input-sm form-control" id="remark" ></input></td>
+                    <td>金额</td>
+                    <td><input type="text" class="input-sm form-control" id="price" ></input></td>
                 </tr>
-                <tr>
-                    <td>价格</td>
-                    <td><input type="text" class="input-sm form-control" id="price" style="width:10%" ></input></td>
-                </tr> 
              </table>
              <input type="hidden" id="docid" ></input>
              <input type="hidden" class="input-sm form-control" id="priceTotal"></input>
@@ -114,18 +74,15 @@
 
 <script type="text/javascript">
 	function newDoc(){
-		$("#date").val("");
-		$("#type").val("");
-    $("#name").val("");
-    $("#remark").val("");
-    $("#price").val("0");
+		$("#name").val("");
+		$("#price").val("0");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
 	}
 
   function toPage(i){
-    window.location = "/cms/fedmenu?p="+i;
+    window.location = "/cms/box?p="+i;
   }
 
   function setCom(){
@@ -137,28 +94,21 @@
 
 	function editDoc(id){
         //根据id读取字段
-        $.ajax({ type:"POST" , url: "/fedmenu/getinfo", data:{id:id}, success: function(data){
-               $("#date").val(data[0].date); 
-               $("#type").val(data[0].type); 
-               $("#name").val(data[0].name);
-               $("#price").val(data[0].price);
-               $("#remark").val(data[0].remark);
-               $("#company_name").val(data[0].company_name);
+        $.ajax({ type:"POST" , url: "/box/getinfo", data:{id:id}, success: function(data){
+               $("#name").val(data[0].name); 
+               $("#price").val(data[0].price); 
+
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
     }
 
 	function submitDoc(){
-    //计算总金额
-    if($("#docid").val()=="0"){
+		if($("#docid").val()=="0"){
 			//insert
-			$.ajax({ type:"POST" , url: "/fedmenu/insert", data:{
-                date:$("#date").val(),
-                type:$("#type").val(),
+			$.ajax({ type:"POST" , url: "/box/insert", data:{
                 name:$("#name").val(),
-                price:$("#price").val(),
-                remark:$("#remark").val()
+                price:$("#price").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -167,12 +117,9 @@
         	}});
 		}else{
 			//update
-			$.ajax({ type:"POST" , url: "/fedmenu/update", data:{
-                date:$("#date").val(),
-                type:$("#type").val(),
+			$.ajax({ type:"POST" , url: "/box/update", data:{
                 name:$("#name").val(),
                 price:$("#price").val(),
-                remark:$("#remark").val(),
                 docid:$("#docid").val()
                 }, success: function(data){
                     if(data==200){
@@ -188,7 +135,7 @@
     		title: '请确认',
     		content: '是否确认删除？',
     		confirm: function(){
-        		$.ajax({ type:"POST" , url: "/fedmenu/delinfo", data:{id:id}, success: function(data){
+        		$.ajax({ type:"POST" , url: "/box/delinfo", data:{id:id}, success: function(data){
         			if(data==200){
               			window.location.reload();     
         			}

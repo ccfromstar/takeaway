@@ -1,10 +1,10 @@
 <!--业务逻辑-->
 <%
 	var CONSTANT1,parms,CONSTANT2,CONSTANT3,CONSTANTRole;
-	CONSTANT1 = "日报表,月报表,企业管理,菜单管理,账户管理,临时订单,老客户,工行,康桥店,网上订餐菜单,网上订餐报表,已支付取消,新注册用户,未取餐用户,固定菜单".split(",");
-	CONSTANT2 = "group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item".split(",");
-	CONSTANT3 = "finance_d,finance_m,address,menu,role,outline,old,gh,kq,fedmenu,fedreport,fedreport1,user,booking,fixedmenu".split(",");
-	CONSTANTRole = "show,show,show,show,show,show,show,show,show,show,show,show,show,show,show".split(",");
+	CONSTANT1 = "报表管理,企业管理,菜单管理,账户管理,线外订单,团膳录入,工商银行项目,微信订餐管理,财务录入,安曼纳项目,餐盒管理".split(",");
+	CONSTANT2 = "group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item,group-item".split(",");
+	CONSTANT3 = "finance_total,address,menu,role,outline,old,gh,fedmenu,fina,amn,box".split(",");
+	CONSTANTRole = "show,show,show,show,show,show,show,show,show,show,show,show".split(",");
 
 	if(role=="主管"){
 		CONSTANTRole[4] = "hide";
@@ -17,20 +17,28 @@
 	parms = url.split("?p=");
 	
 	if(parms[0]=="/cms/finance_d"){CONSTANT2[0] = "group-item-selected";}
-	else if(parms[0]=="/cms/finance_m"){CONSTANT2[1] = "group-item-selected";}	
-	else if(parms[0]=="/cms/address"){CONSTANT2[2] = "group-item-selected";}
-	else if(parms[0]=="/cms/menu"){CONSTANT2[3] = "group-item-selected";}
-	else if(parms[0]=="/cms/role"){CONSTANT2[4] = "group-item-selected";}
-	else if(parms[0]=="/cms/outline"){CONSTANT2[5] = "group-item-selected";}
-	else if(parms[0]=="/cms/old"){CONSTANT2[6] = "group-item-selected";}
-	else if(parms[0]=="/cms/gh"){CONSTANT2[7] = "group-item-selected";}
-	else if(parms[0]=="/cms/kq"){CONSTANT2[8] = "group-item-selected";}
-	else if(parms[0]=="/cms/fedmenu"){CONSTANT2[9] = "group-item-selected";}
-	else if(parms[0]=="/cms/fedreport"){CONSTANT2[10] = "group-item-selected";}
-	else if(parms[0]=="/cms/fedreport1"){CONSTANT2[11] = "group-item-selected";}
-	else if(parms[0]=="/cms/user"){CONSTANT2[12] = "group-item-selected";}
-	else if(parms[0]=="/cms/booking"){CONSTANT2[13] = "group-item-selected";}
-	else if(parms[0]=="/cms/fixedmenu"){CONSTANT2[14] = "group-item-selected";}
+	else if(parms[0]=="/cms/finance_m"){CONSTANT2[0] = "group-item-selected";}
+	else if(parms[0]=="/cms/finance_total"){CONSTANT2[0] = "group-item-selected";}	
+
+	else if(parms[0]=="/cms/address"){CONSTANT2[1] = "group-item-selected";}
+	else if(parms[0]=="/cms/menu"){CONSTANT2[2] = "group-item-selected";}
+	else if(parms[0]=="/cms/role"){CONSTANT2[3] = "group-item-selected";}
+	else if(parms[0]=="/cms/outline"){CONSTANT2[4] = "group-item-selected";}
+	else if(parms[0]=="/cms/old"){CONSTANT2[5] = "group-item-selected";}
+	else if(parms[0]=="/cms/gh"){CONSTANT2[6] = "group-item-selected";}
+
+	//else if(parms[0]=="/cms/kq"){CONSTANT2[-] = "group-item-selected";}
+
+	else if(parms[0]=="/cms/fedmenu"){CONSTANT2[7] = "group-item-selected";}
+	else if(parms[0]=="/cms/fedreport"){CONSTANT2[7] = "group-item-selected";}
+	else if(parms[0]=="/cms/fedreport1"){CONSTANT2[7] = "group-item-selected";}
+	else if(parms[0]=="/cms/user"){CONSTANT2[7] = "group-item-selected";}
+	else if(parms[0]=="/cms/booking"){CONSTANT2[7] = "group-item-selected";}
+	else if(parms[0]=="/cms/fixedmenu"){CONSTANT2[7] = "group-item-selected";}
+
+	else if(parms[0]=="/cms/fina"){CONSTANT2[8] = "group-item-selected";}
+	else if(parms[0]=="/cms/amn"){CONSTANT2[9] = "group-item-selected";}
+	else if(parms[0]=="/cms/box"){CONSTANT2[10] = "group-item-selected";}
 %>
 <!--页面逻辑-->
 <%for(var i in CONSTANT1){

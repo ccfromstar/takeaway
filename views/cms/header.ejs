@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>后台管理系统1.0</title>
+<title>ERP管理系统 1.2</title>
 
 <script src="/js/jquery.min.js"></script>
 <link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -26,6 +26,12 @@
 <script type="text/javascript" src="/plugin/My97DatePicker/WdatePicker.js"></script>
 </head>
 <body>
+<!--业务逻辑-->
+<%
+  var CONSTANT1,parms;
+  CONSTANT1 = "/cms/finance_total,/cms/finance_d,/cms/finance_m,/cms/fedmenu,/cms/fedreport,/cms/fedreport1,/cms/user,/cms/booking,/cms/fixedmenu";
+  parms = url.split("?p=");
+%>
 	<div id="con_header" >
       <div class="divlogo"></div> 
       <div class="title_h">
@@ -39,7 +45,11 @@
   <table class="tbhome">
     <tr>
       <td class="tbleft"><% include left %></td>
-      <td>
+      <%if(CONSTANT1.indexOf(parms[0])!=-1 && parms[0] !="/cms/fina"){%>
+        <td style="width:150px">
+      <%}else{%>
+        <td>
+      <%}%>
 
  
     

@@ -54,6 +54,10 @@ module.exports = function (app, routes) {
     app.get('/scan',routes.scan_js);
 
     //cms
+    app.get('/cms/fina',routes.checkLogin);
+    app.get('/cms/fina',routes.fina);
+    app.post('/fina/:sql',routes.finado);
+
     app.get('/cms/booking',routes.checkLogin);
     app.get('/cms/booking',routes.booking);
 
@@ -95,6 +99,9 @@ module.exports = function (app, routes) {
     app.get('/cms/finance_z',routes.checkLogin);
     app.get('/cms/finance_z',routes.finance_z);
 
+    app.get('/cms/finance_total',routes.checkLogin);
+    app.get('/cms/finance_total',routes.finance_total);
+
     app.get('/cms/upload',routes.upload);
     app.get('/cms/uploadsuccess',routes.uploadsuccess);
     app.post('/cms/uploaddo',routes.uploaddo);
@@ -118,6 +125,14 @@ module.exports = function (app, routes) {
     app.get('/cms/kq',routes.checkLogin);
     app.get('/cms/kq',routes.kq);
     app.post('/kq/:sql',routes.kqdo);
+
+    app.get('/cms/amn',routes.checkLogin);
+    app.get('/cms/amn',routes.amn);
+    app.post('/amn/:sql',routes.amndo);
+
+    app.get('/cms/box',routes.checkLogin);
+    app.get('/cms/box',routes.box);
+    app.post('/box/:sql',routes.boxdo);
 
     app.get('/cms/fedmenu',routes.checkLogin);
     app.get('/cms/fedmenu',routes.fedmenu);

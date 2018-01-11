@@ -1,0 +1,94 @@
+<!--业务逻辑-->
+<%
+	var j = 0;
+	var total = "0,0,0,0,0,0,0,0,0".split(",");
+%>
+<!--页面逻辑-->
+<% include header %>
+<% include left-report %>
+</td>
+      <td>
+<table class="tbpage">
+    <tr>
+      <td>
+      	<div class="menufourth">
+      		日期
+      		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly value="<%=bookingdate%>" class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
+      		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
+      	</div>
+       
+      	<table class="table table-hover" style="width:50%;" id="table_list" >
+    		<tbody>
+	      			<tr>
+	      				<td>营业额</td>
+                <td><%=price_total%></td>
+	      			</tr>
+              <tr>
+                <td>营业额3%发票税费</td>
+                <td><%=(price_total*0.03).toFixed(2)%></td>
+              </tr>
+              <tr>
+                <td>当月总支出</td>
+                <td><%=finance%></td>
+              </tr>
+              <tr>
+                <td>利润</td>
+                <td><%=price_total-((price_total*0.03).toFixed(2))-finance%></td>
+              </tr>
+    		</tbody>
+    	</table>
+
+      </td>
+    </tr>
+</table>
+<!--table footer -->
+	  </td>
+    </tr>
+  </table>
+<script type="text/javascript">
+  <%if(sendtype !=''){%>
+    $('#sendtype').val('<%=sendtype%>');
+  <%}%>
+	function search(){
+		var _m = $("#bookingdate").val();
+  	window.location = "/cms/finance_total?p=1&bd="+_m;
+	}
+
+  function toExcel(){
+      var _d = $("#bookingdate").val();
+      var cname = $("#cname").val();
+      var sendtype = $("#sendtype").val();
+      var _m1 = $("#bookingdate1").val();
+      var _m2 = $("#bookingdate2").val();
+      $.ajax({ type:"POST" , url: "/finance_d/toExcelm", data:{id:_d,cname:cname,sendtype:sendtype,_m1:_m1,_m2:_m2}, success: function(data){
+        window.open("/excelop/temp/"+data);
+      }});
+  }
+
+  function getleft(){
+      var _d = $("#bookingdate").val();
+      $.ajax({ type:"POST" , url: "/finance_d/getleft_m", data:{id:_d.replace(/-/g,"")}, success: function(data){
+      var _html = "<div style='padding-left:10px;margin-bottom:10px;'>"+_d+"月菜品明细统计表</div>";
+      _html += "<table class='table table-hover' id='table_list'>";
+        var n = data.name.length;
+        var ydt = 0;var jdt = 0;var ttt = 0;
+        _html += "<thead><tr><th>品名</th><th>总数</th></tr></thead><tbody>"
+        for(var i=0;i<n;i++){
+            _html += "<tr>";
+            _html += "<td>"+data.name[i]+"</td>";
+            _html += "<td>"+data.total[i]+"</td>";
+            _html += "</tr>";
+            ttt = ttt + Number(data.total[i]);
+        }
+        _html += "<tr>";
+        _html += "<td>合计</td>";
+        _html += "<td>"+ttt+"</td>";
+        _html += "</tr>";
+        _html += "</tbody></table>";
+      $("#d_left").html(_html);
+      }});
+    }
+
+  getleft();
+</script>
+<% include footer %>
