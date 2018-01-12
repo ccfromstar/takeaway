@@ -507,9 +507,12 @@ exports.sql_list_t = function (req,res) {
     var limit = (limit && limit > 0) ? limit : LIMIT;
     var num_total = 0;
     var price_total = 0;
+    var boxTotal = 0;
 
     var d1 = req.query.d1;
     var d2 = req.query.d2;
+
+    bd = bd?bd:bookingdate;
 
     d1 = d1?d1:'';
     d2 = d2?d2:'';
@@ -527,8 +530,8 @@ exports.sql_list_t = function (req,res) {
     }
 
     var sql1 = "select * from v_com_booking where date1 like '"+bd+"%'";
-    var sql6 = "select * from outbooking where date like '"+bd+"%'";
-    var sql7 = "select * from oldbooking where date like '"+bd+"%'";
+    var sql6 = "select * from v_outbooking where date like '"+bd+"%'";
+    var sql7 = "select * from v_oldbooking where date like '"+bd+"%'";
     var sql8 = "select * from ordergh where date like '"+bd+"%'";
     var sql9 = "select * from orderb2b where date like '"+bd+"%'";
     var sql10 = "select * from finance where date like '"+bd+"%'";
@@ -552,28 +555,32 @@ exports.sql_list_t = function (req,res) {
                                 for(var i in rows6){
                                     num_total = num_total + rows6[i].num;
                                     price_total = price_total + rows6[i].numTotal;
+                                    boxTotal = boxTotal + rows6[i].price*rows6[i].num;
                                 }
                                 for(var i in rows7){
                                     num_total = num_total + rows7[i].num;
                                     price_total = price_total + rows7[i].priceTotal;
+                                    boxTotal = boxTotal + rows7[i].price*rows7[i].num;
                                 }
+                                /*
                                 for(var i in rows8){
                                     price_total = price_total + rows8[i].priceTotal;
-                                }
+                                }*/
                                 for(var i in rows9){
                                     price_total = price_total + rows9[i].priceTotal;
                                 }
+                                /*
                                 for(var i in rows11){
                                     price_total = price_total + rows11[i].priceTotal;
-                                }
+                                }*/
                                 mysql.query(sql10,function (err, rows10) {
                                     if(err){console.log(err);return false;}
-                                    console.log(rows10);
+                                    console.log(boxTotal);
                                     var pt = 0;
                                     for(var i in rows10){
                                         pt = pt + rows10[i].priceTotal;
                                     }
-                                    res.render('cms/finance_t', {finance:pt,record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page});
+                                    res.render('cms/finance_t', {boxTotal:boxTotal,finance:rows10,record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page});
                                 });
                             });
                         });
@@ -628,8 +635,8 @@ exports.sql_list_m = function (req, res) {
 
     var sql1 = "select * from v_com_booking where date1 like '"+bd+"%' "+sql1+" and cname like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql5 = "select count(*) as count from v_com_booking where date1 like '"+bd+"%'";
-    var sql6 = "select * from outbooking where date like '"+bd+"%' "+sql2+" and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
-    var sql7 = "select * from oldbooking where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    var sql6 = "select * from v_outbooking where date like '"+bd+"%' "+sql2+" and head like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
+    var sql7 = "select * from v_oldbooking where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%' order by id asc";
     var sql8 = "select * from ordergh where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
     var sql9 = "select * from orderb2b where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
     var sql10 = "select * from orderAmn where date like '"+bd+"%' "+sql2+" and name like '%"+cname+"%' and sendtype like '%"+sendtype+"%'  order by id asc";
@@ -666,15 +673,17 @@ exports.sql_list_m = function (req, res) {
                                     num_total = num_total + rows7[i].num;
                                     price_total = price_total + rows7[i].priceTotal;
                                 }
+                                /*
                                 for(var i in rows8){
                                     price_total = price_total + rows8[i].priceTotal;
-                                }
+                                }*/
                                 for(var i in rows9){
                                     price_total = price_total + rows9[i].priceTotal;
                                 }
+                                /*
                                 for(var i in rows10){
                                     price_total = price_total + rows10[i].priceTotal;
-                                }
+                                }*/
                                 res.render('cms/finance_m', {record5:rows10,record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
                             });
                         });

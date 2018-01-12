@@ -34,7 +34,7 @@
       	</div>
         <div class="menufourth">
           总数量:<%=num_total%>
-          总金额:<%=price_total.toFixed(2)%>
+          实际总金额:<%=price_total.toFixed(2)%>
         </div>
       	<table class="table table-hover" id="table_list" >
     		<thead>
@@ -42,72 +42,60 @@
       				<th>送餐日期</th>
         			<th>公司</th>
         			<th>送餐类别</th>
-        			<th>订餐时间</th>
         			<th>总数量</th>
-        			<th>总价</th>
+        			<th>实际总价</th>
+              <th>销售总价</th>
+              <th>餐盒金额</th>
       			</tr>
     		</thead>
     		<tbody>
+          <!--v_com_booking-->
     			<%for(var i in record){%>
 	      			<tr>
 	      				<td><%-record[i].date1%></td>
 	        			<td><%-record[i].cname%></td>
 	        			<td><%-record[i].sendtype%></td>
-	        			<td><%-record[i].date2%></td>
 	        			<td><%-record[i].numTotal%></td>
 	        			<td><%-record[i].priceTotal%></td>
+                <td></td>
+                <td></td>
 	      			</tr>
 	    		<%}%>
+          <!--outbooking-->
           <%for(var i in record1){%>
               <tr>
                 <td><%-record1[i].date%></td>
                 <td><%-record1[i].head%></td>
                 <td><%-record1[i].sendtype%></td>
-                <td></td>
                 <td><%-record1[i].num%></td>
                 <td><%-record1[i].numTotal%></td>
+                <td><%-record1[i].unitPrice_s%></td>
+                <td><%-record1[i].price*record1[i].num%></td>
               </tr>
           <%}%>
+          <!--oldbooking-->
           <%for(var i in record2){%>
               <tr>
                 <td><%-record2[i].date%></td>
                 <td><%-record2[i].name%></td>
                 <td><%-record2[i].sendtype%></td>
-                <td></td>
                 <td><%-record2[i].num%></td>
                 <td><%-record2[i].priceTotal%></td>
-              </tr>
-          <%}%>
-          <%for(var i in record3){%>
-              <tr>
-                <td><%-record3[i].date%></td>
-                <td><%-record3[i].name%></td>
-                <td><%-record3[i].sendtype%></td>
                 <td></td>
-                <td>-</td>
-                <td><%-record3[i].priceTotal%></td>
+                <td><%-record2[i].price*record2[i].num%></td>
               </tr>
           <%}%>
+          <!--orderb2b-->
           <%for(var i in record4){%>
               <tr>
                 <td><%-record4[i].date%></td>
                 <td><%-record4[i].name%></td>
                 <td><%-record4[i].sendtype%></td>
-                <td></td>
                 <td>-</td>
                 <td><%-record4[i].priceTotal%></td>
+                <td></td>
+                <td></td>
               </tr>
-          <%}%>
-          <%for(var i in record5){%>
-            <tr>
-              <td><%-record5[i].date%></td>
-              <td><%-record5[i].name%></td>
-              <td><%-record5[i].sendtype%></td>
-              <td></td>
-              <td>-</td>
-              <td><%-record5[i].priceTotal%></td>
-              <td></td>
-            </tr>
           <%}%>
     		</tbody>
     	</table>

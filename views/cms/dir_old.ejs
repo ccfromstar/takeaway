@@ -86,6 +86,17 @@
                         </select>
                     </td>
                 </tr> 
+                <tr>
+                    <td>餐盒</td>
+                    <td>
+                        <select id="box" class="input-sm selectpicker">
+                            <option value="-">请选择</option>
+                            <%for(var i in box){%>
+                              <option value="<%=box[i].name%>"><%=box[i].name%></option>
+                            <%}%>
+                        </select>
+                    </td>
+                </tr> 
              </table>
              <input type="hidden" id="docid" ></input>
              <input type="hidden" class="input-sm form-control" id="head" ></input>
@@ -119,6 +130,7 @@
 		$("#state").val("");
 		$("#type").val("");
     $("#sendtype").val("");
+    $("#box").val("");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
@@ -147,6 +159,7 @@
                $("#head").val(data[0].head);
                $("#state").val(data[0].state);
                $("#type").val(data[0].type);
+               $("#box").val(data[0].box);
                $("#sendtype").val(data[0].sendtype);
                $("#docid").val(id);
         }});
@@ -168,6 +181,7 @@
                 head:$("#head").val(),
                 state:$("#state").val(),
                 type:$("#type").val(),
+                box:$("#box").val(),
                 sendtype:$("#sendtype").val()
                 }, success: function(data){
                     if(data==200){
@@ -187,6 +201,7 @@
                 head:$("#head").val(),
                 state:$("#state").val(),
                 type:$("#type").val(),
+                box:$("#box").val(),
                 sendtype:$("#sendtype").val(),
                 docid:$("#docid").val()
                 }, success: function(data){

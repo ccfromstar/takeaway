@@ -60,10 +60,10 @@
                     <td><input type="text" class="input-sm form-control" id="num" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
                 </tr>   
                 <tr>
-                    <td>单价</td>
+                    <td>实际单价</td>
                     <td><input type="text" class="input-sm form-control" id="unitPrice" ></input></td>
-                    <td>送餐时间</td>
-                    <td><input type="text" class="input-sm form-control" id="sendtime" ></input></td>
+                    <td>销售单价</td>
+                    <td><input type="text" class="input-sm form-control" id="unitPrice_s" ></input></td>
                 </tr>
                 <tr>
                     <td>送餐地址</td>
@@ -111,6 +111,19 @@
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td>餐盒</td>
+                    <td>
+                        <select id="box" class="input-sm selectpicker">
+                            <option value="-">请选择</option>
+                            <%for(var i in box){%>
+                              <option value="<%=box[i].name%>"><%=box[i].name%></option>
+                            <%}%>
+                        </select>
+                    </td>
+                    <td>送餐时间</td>
+                    <td><input type="text" class="input-sm form-control" id="sendtime" ></input></td>
+                </tr> 
              </table>
              <input type="hidden" id="docid" ></input>
          </div>
@@ -140,6 +153,8 @@
 		$("#type").val("");
     $("#sendtype").val("");
 		$("#docid").val("0");
+    $("#box").val("");
+    $("#unitPrice_s").val("");
 
 		$('#addModal').modal('show');
 	}
@@ -163,6 +178,8 @@
                $("#InvoiceNum").val(data[0].InvoiceNum);
                $("#type").val(data[0].type);
                $("#sendtype").val(data[0].sendtype);
+               $("#box").val(data[0].box);
+               $("#unitPrice_s").val(data[0].unitPrice_s);
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
@@ -183,7 +200,9 @@
                 head:$("#head").val(),
                 InvoiceNum:$("#InvoiceNum").val(),
                 type:$("#type").val(),
-                sendtype:$("#sendtype").val()
+                sendtype:$("#sendtype").val(),
+                box:$("#box").val(),
+                unitPrice_s:$("#unitPrice_s").val()
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -205,6 +224,8 @@
                 InvoiceNum:$("#InvoiceNum").val(),
                 type:$("#type").val(),
                 sendtype:$("#sendtype").val(),
+                box:$("#box").val(),
+                unitPrice_s:$("#unitPrice_s").val(),
                 docid:$("#docid").val()
                 }, success: function(data){
                     if(data==200){

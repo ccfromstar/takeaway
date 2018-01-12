@@ -21,8 +21,9 @@ function sql_insert(req, res) {
     var state = req.param('state');
     var type = req.param('type');
     var sendtype = req.param('sendtype');
+    var box = req.param('box');
 
-    var insertSql = "insert into oldbooking (date,num,unitPrice,manager,name,priceTotal,head,state,type,sendtype) values ('"+date+"','"+num+"','"+unitPrice+"','"+manager+"','"+name+"','"+priceTotal+"','"+head+"','"+state+"','"+type+"','"+sendtype+"')";
+    var insertSql = "insert into oldbooking (date,num,unitPrice,manager,name,priceTotal,head,state,type,sendtype,box) values ('"+date+"','"+num+"','"+unitPrice+"','"+manager+"','"+name+"','"+priceTotal+"','"+head+"','"+state+"','"+type+"','"+sendtype+"','"+box+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -69,6 +70,7 @@ function sql_update(req, res) {
     var state = req.param('state');
     var type = req.param('type');
     var sendtype = req.param('sendtype');
+    var box = req.param('box');
     var id = req.param('docid');
     var updateSql = "update oldbooking set date = '"+date
      +"',num ='"+num
@@ -79,6 +81,7 @@ function sql_update(req, res) {
      +"',head ='"+head
      +"',state ='"+state
      +"',type ='"+type
+     +"',box ='"+box
      +"',sendtype ='"+sendtype
      +"'  where id = "+id;
     mysql.query(updateSql ,function(error,obj){
@@ -97,6 +100,7 @@ exports.sql_list = function (req, res) {
     var limit = (limit && limit > 0) ? limit : LIMIT;
     var sql1 = "select * from oldbooking order by date desc limit "+(page-1)*limit+","+limit;
     var sql5 = "select count(*) as count from oldbooking";
+    var sql7 = "select * from box";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
         for(var i in rows1){
@@ -116,7 +120,10 @@ exports.sql_list = function (req, res) {
             mysql.query(sql6,function (err1, rows6) {
               if(err1){console.log(err1);return false;}
               //console.log(rows6);
-              res.render('cms/dir_old', {rows6:rows6,url:req.url,address:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+              mysql.query(sql7,function (err1, rows7) {
+                if(err1){console.log(err1);return false;}
+                res.render('cms/dir_old', {box:rows7,rows6:rows6,url:req.url,address:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+              });
             });
         });
     });

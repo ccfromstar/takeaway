@@ -23,8 +23,10 @@ function sql_insert(req, res) {
     var InvoiceNum = req.param('InvoiceNum');
     var type = req.param('type');
     var sendtype = req.param('sendtype');
+    var box = req.param('box');
+    var unitPrice_s = req.param('unitPrice_s');
 
-    var insertSql = "insert into outbooking (date,num,unitPrice,sendtime,sendaddress,linkname,tel,numTotal,head,InvoiceNum,type,sendtype) values ('"+date+"','"+num+"','"+unitPrice+"','"+sendtime+"','"+sendaddress+"','"+linkname+"','"+tel+"','"+numTotal+"','"+head+"','"+InvoiceNum+"','"+type+"','"+sendtype+"')";
+    var insertSql = "insert into outbooking (date,num,unitPrice,sendtime,sendaddress,linkname,tel,numTotal,head,InvoiceNum,type,sendtype,box,unitPrice_s) values ('"+date+"','"+num+"','"+unitPrice+"','"+sendtime+"','"+sendaddress+"','"+linkname+"','"+tel+"','"+numTotal+"','"+head+"','"+InvoiceNum+"','"+type+"','"+sendtype+",'"+box+",'"+unitPrice_s+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -73,6 +75,8 @@ function sql_update(req, res) {
     var InvoiceNum = req.param('InvoiceNum');
     var type = req.param('type');
     var sendtype = req.param('sendtype');
+    var box = req.param('box');
+    var unitPrice_s = req.param('unitPrice_s');
     var id = req.param('docid');
     var updateSql = "update outbooking set date = '"+date
      +"',num ='"+num
@@ -86,6 +90,8 @@ function sql_update(req, res) {
      +"',InvoiceNum ='"+InvoiceNum
      +"',type ='"+type
      +"',sendtype ='"+sendtype
+     +"',box ='"+box
+     +"',unitPrice_s ='"+unitPrice_s
      +"'  where id = "+id;
     mysql.query(updateSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -103,6 +109,7 @@ exports.sql_list = function (req, res) {
     var limit = (limit && limit > 0) ? limit : LIMIT;
     var sql1 = "select * from outbooking  order by date desc limit "+(page-1)*limit+","+limit;
     var sql5 = "select count(*) as count from outbooking";
+    var sql6 = "select * from box";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
         for(var i in rows1){
@@ -117,7 +124,10 @@ exports.sql_list = function (req, res) {
             var totalpage = Math.ceil(total/limit);
             var isFirstPage = page == 1 ;
             var isLastPage = ((page -1) * limit + rows1.length) == total;
-                res.render('cms/dir_outline', {url:req.url,address:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+            mysql.query(sql6,function (err1, rows6) {
+              if(err1){console.log(err1);return false;}
+              res.render('cms/dir_outline', {box:rows6,url:req.url,address:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});
+            });
         });
     });
 };

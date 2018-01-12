@@ -98,3 +98,19 @@ LEFT JOIN user b
 ON a.userid = b.username
 LEFT JOIN fedbooking_price c
 ON a.bookingno = c.bno;
+
+DROP VIEW IF EXISTS `v_outbooking`;
+CREATE VIEW v_outbooking
+AS
+SELECT a.*,b.price as price
+FROM outbooking a
+LEFT JOIN box b
+ON a.box = b.name;
+
+DROP VIEW IF EXISTS `v_oldbooking`;
+CREATE VIEW v_oldbooking
+AS
+SELECT a.*,b.price as price
+FROM oldbooking a
+LEFT JOIN box b
+ON a.box = b.name;
