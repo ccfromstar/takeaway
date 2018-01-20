@@ -13,6 +13,7 @@ exports.sqldo = function (req, res) {
 function sql_insert(req, res) {
     var date = req.param('date');
     var num = req.param('num');
+    var snum = req.param('snum');
     var unitPrice = req.param('unitPrice');
     var sendtime = req.param('sendtime');
     var sendaddress = req.param('sendaddress');
@@ -26,7 +27,7 @@ function sql_insert(req, res) {
     var box = req.param('box');
     var unitPrice_s = req.param('unitPrice_s');
 
-    var insertSql = "insert into outbooking (date,num,unitPrice,sendtime,sendaddress,linkname,tel,numTotal,head,InvoiceNum,type,sendtype,box,unitPrice_s) values ('"+date+"','"+num+"','"+unitPrice+"','"+sendtime+"','"+sendaddress+"','"+linkname+"','"+tel+"','"+numTotal+"','"+head+"','"+InvoiceNum+"','"+type+"','"+sendtype+",'"+box+",'"+unitPrice_s+"')";
+    var insertSql = "insert into outbooking (date,num,unitPrice,sendtime,sendaddress,linkname,tel,numTotal,head,InvoiceNum,type,sendtype,box,unitPrice_s,snum) values ('"+date+"','"+num+"','"+unitPrice+"','"+sendtime+"','"+sendaddress+"','"+linkname+"','"+tel+"','"+numTotal+"','"+head+"','"+InvoiceNum+"','"+type+"','"+sendtype+"','"+box+"','"+unitPrice_s+"','"+snum+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -65,6 +66,7 @@ function sql_select(req, res) {
 function sql_update(req, res) {
     var date = req.param('date');
     var num = req.param('num');
+    var snum = req.param('snum');
     var unitPrice = req.param('unitPrice');
     var sendtime = req.param('sendtime');
     var sendaddress = req.param('sendaddress');
@@ -80,6 +82,7 @@ function sql_update(req, res) {
     var id = req.param('docid');
     var updateSql = "update outbooking set date = '"+date
      +"',num ='"+num
+     +"',snum ='"+snum
      +"',unitPrice ='"+unitPrice
      +"',sendtime ='"+sendtime
      +"',sendaddress ='"+sendaddress

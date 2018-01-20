@@ -37,6 +37,7 @@
   				当前第<%=page%>页/共<%=totalpage%>页&nbsp;<%=total%>条数据
   				<button type='button' <%=isLastPage?"disabled":""%> <%=isLastPage?"":"onclick=toPage("+(page+1)+");"%> class='btn btn-default btn-xs'>下一页</button>
 			</div>  
+      <!--
 			<br/><br/>  	
       <table class="table table-hover" id="table_list">
         <thead>
@@ -94,6 +95,7 @@
             </tr>
         </tbody>
       </table>
+      -->
       </td>
     </tr>
 </table>
@@ -118,15 +120,25 @@
                 <tr>
                     <td>登陆密码</td>
                     <td><input type="text" class="input-sm form-control" id="password" ></input></td>
-                    <td>用户权限</td>
+                    <td></td>
                     <td>
-                    	<select id="role" class="input-sm selectpicker">
-                    		<option value="-">请选择</option>
-                            <option value="BOSS">BOSS</option>
-                            <option value="主管">主管</option>
-                            <option value="客服">客服</option>
-                            <option value="财务">财务</option>
-                        </select>
+                      
+                    </td>
+                </tr>
+                <tr>
+                    <td>用户权限</td>
+                    <td colspan="3">
+                    	<input name="r_list1" type="checkbox" value="1" /> 报表管理
+                      <input name="r_list2" type="checkbox" value="1" /> 企业管理
+                      <input name="r_list3" type="checkbox" value="1" /> 财务录入
+                      <input name="r_list4" type="checkbox" value="1" /> 菜单管理
+                      <input name="r_list5" type="checkbox" value="1" /> 餐盒管理
+                      <input name="r_list6" type="checkbox" value="1" /> 团膳录入
+                      <input name="r_list7" type="checkbox" value="1" /> 线外录入
+                      <input name="r_list8" type="checkbox" value="1" /> 微信订餐
+                      <input name="r_list9" type="checkbox" value="1" /> 工商银行
+                      <input name="r_list10" type="checkbox" value="1" /> 安曼纳
+                      <input name="r_list11" type="checkbox" value="1" /> 账户管理
                     </td>
                 </tr>
              </table>
@@ -146,11 +158,23 @@
 <script type="text/javascript">
 	var _page = "role";
 
+  function jqchk(name){ //jquery获取复选框值
+      var chk_value = '';
+      $('input[name="' + name + '"]:checked').each(function (){
+          if (chk_value == ""){
+              chk_value = $(this).val();
+          }else{
+              chk_value = chk_value + "*" + $(this).val();
+          }
+      }
+      );
+      return chk_value;
+  }
+
 	function newDoc(){
 		$("#username").val("");
 		$("#password").val("");
 		$("#name").val("");
-		$("#role").val("-");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
@@ -166,7 +190,13 @@
                $("#username").val(data[0].username); 
                $("#password").val(data[0].password); 
                $("#name").val(data[0].name);
-               $("#role").val(data[0].role);
+               var role = data[0].role;
+               var arr1 = role.split("*");
+               for(var i=0;i<arr1.length;i++){
+                  if(arr1[i]=="1"){
+                    $("[name='r_list"+(i+1)+"']").attr("checked",'true');
+                  }
+               }
                $("#docid").val(id);
         }});
         $('#addModal').modal('show');
@@ -182,16 +212,26 @@
 		if($("#name").val()==""){
 			$.alert({title: '提示信息',content: '姓名必填！'});return false;
 		}
-		if($("#role").val()=="-"){
-			$.alert({title: '提示信息',content: '用户权限必填！'});return false;
-		}
+		/*设置自定义权限*/
+    var r_list1 = (jqchk("r_list1"))==1?1:0;
+    var r_list2 = (jqchk("r_list2"))==1?1:0;
+    var r_list3 = (jqchk("r_list3"))==1?1:0;
+    var r_list4 = (jqchk("r_list4"))==1?1:0;
+    var r_list5 = (jqchk("r_list5"))==1?1:0;
+    var r_list6 = (jqchk("r_list6"))==1?1:0;
+    var r_list7 = (jqchk("r_list7"))==1?1:0;
+    var r_list8 = (jqchk("r_list8"))==1?1:0;
+    var r_list9 = (jqchk("r_list9"))==1?1:0;
+    var r_list10 = (jqchk("r_list10"))==1?1:0;
+    var r_list11 = (jqchk("r_list11"))==1?1:0;
+    var r_list = r_list1 + "*" + r_list2  + "*" + r_list3  + "*" + r_list4  + "*" + r_list5  + "*" + r_list6  + "*" + r_list7  + "*" + r_list8  + "*" + r_list9  + "*" + r_list10  + "*" + r_list11;
 		if($("#docid").val()=="0"){
 			//insert
 			$.ajax({ type:"POST" , url: "/"+_page+"/insert", data:{
                 username:$("#username").val(),
                 password:$("#password").val(),
                 name:$("#name").val(),
-                role:$("#role").val(),
+                role:r_list,
                 }, success: function(data){
                     if(data==200){
                         $('#addModal').modal('hide');
@@ -204,7 +244,7 @@
                 username:$("#username").val(),
                 password:$("#password").val(),
                 name:$("#name").val(),
-                role:$("#role").val(),
+                role:r_list,
                 docid:$("#docid").val(),
                 }, success: function(data){
                     if(data==200){

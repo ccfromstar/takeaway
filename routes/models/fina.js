@@ -5,9 +5,25 @@ var mysql,LIMIT;
 exports.sqldo = function (req, res) {
     var _sql = req.params.sql;
     if(_sql == "insert"){sql_insert(req,res);}
+    if(_sql == "addfile"){addfile(req,res);}
     else if(_sql == "delinfo"){sql_delete(req,res);}
     else if(_sql == "update"){sql_update(req,res);}
     else if(_sql == "getinfo"){sql_select(req,res);}
+};
+
+function addfile(req, res) {
+    var docid = req.param('docid');
+    var type = req.param('type');
+    var filename = req.param('filename');
+    
+
+    var insertSql = "insert into attachement (docid,type,filename) values ('"+docid+"','"+type+"','"+filename+"')";
+    console.log(insertSql);
+    mysql.query(insertSql ,function(error,obj){
+          if(error){console.log(error);return false;}
+          req.session.infor = "新建成功！";
+          res.send("200");
+    });
 };
 
 function sql_insert(req, res) {

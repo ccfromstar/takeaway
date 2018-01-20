@@ -22,8 +22,9 @@ function sql_insert(req, res) {
     var type = req.param('type');
     var sendtype = req.param('sendtype');
     var box = req.param('box');
+    var snum = req.param('snum');
 
-    var insertSql = "insert into oldbooking (date,num,unitPrice,manager,name,priceTotal,head,state,type,sendtype,box) values ('"+date+"','"+num+"','"+unitPrice+"','"+manager+"','"+name+"','"+priceTotal+"','"+head+"','"+state+"','"+type+"','"+sendtype+"','"+box+"')";
+    var insertSql = "insert into oldbooking (date,num,unitPrice,manager,name,priceTotal,head,state,type,sendtype,box,snum) values ('"+date+"','"+num+"','"+unitPrice+"','"+manager+"','"+name+"','"+priceTotal+"','"+head+"','"+state+"','"+type+"','"+sendtype+"','"+box+"','"+snum+"')";
     console.log(insertSql);
     mysql.query(insertSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -71,9 +72,11 @@ function sql_update(req, res) {
     var type = req.param('type');
     var sendtype = req.param('sendtype');
     var box = req.param('box');
+    var snum = req.param('snum');
     var id = req.param('docid');
     var updateSql = "update oldbooking set date = '"+date
      +"',num ='"+num
+     +"',snum ='"+snum
      +"',unitPrice ='"+unitPrice
      +"',manager ='"+manager
      +"',name ='"+name

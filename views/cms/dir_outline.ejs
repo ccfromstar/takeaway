@@ -124,6 +124,12 @@
                     <td>送餐时间</td>
                     <td><input type="text" class="input-sm form-control" id="sendtime" ></input></td>
                 </tr> 
+                <tr>
+                    <td>小圆盒数量</td>
+                    <td><input type="text" class="input-sm form-control" id="snum" onkeyup="value=value.replace(/[^\d]/g,'')"></input></td>
+                    <td></td>
+                    <td></td>
+                </tr>  
              </table>
              <input type="hidden" id="docid" ></input>
          </div>
@@ -142,6 +148,7 @@
 	function newDoc(){
 		$("#date").val("");
 		$("#num").val("");
+    $("#snum").val("0");
 		$("#unitPrice").val("");
 		$("#sendtime").val("");
 		$("#sendaddress").val("");
@@ -168,6 +175,7 @@
         $.ajax({ type:"POST" , url: "/outline/getinfo", data:{id:id}, success: function(data){
                $("#date").val(data[0].date); 
                $("#num").val(data[0].num); 
+               $("#snum").val(data[0].snum); 
                $("#unitPrice").val(data[0].unitPrice);
                $("#sendtime").val(data[0].sendtime);
                $("#sendaddress").val(data[0].sendaddress);
@@ -191,6 +199,7 @@
 			$.ajax({ type:"POST" , url: "/outline/insert", data:{
                 date:$("#date").val(),
                 num:$("#num").val(),
+                snum:$("#snum").val(),
                 unitPrice:$("#unitPrice").val(),
                 sendtime:$("#sendtime").val(),
                 sendaddress:$("#sendaddress").val(),
@@ -214,6 +223,7 @@
 			$.ajax({ type:"POST" , url: "/outline/update", data:{
                 date:$("#date").val(),
                 num:$("#num").val(),
+                snum:$("#snum").val(),
                 unitPrice:$("#unitPrice").val(),
                 sendtime:$("#sendtime").val(),
                 sendaddress:$("#sendaddress").val(),

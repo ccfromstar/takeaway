@@ -71,6 +71,7 @@ exports.sql_list = function (req, res) {
             for(var i in rows1){
               num_total = num_total + rows1[i].num;
               price_total = price_total + (rows1[i].price)*(rows1[i].num);
+              rows1[i].createAt = (rows1[i].createAt).Format("yyyy-MM-dd hh:mm:ss");
             }
             res.render('cms/fedreport', {cname:cname,sendtype:sendtype,price_total:price_total,num_total:num_total,bookingdate:bookingdate,bookingdate1:bookingdate1,url:req.url,record:rows1,page:page,total:total,totalpage:totalpage,isFirstPage:isFirstPage,isLastPage:isLastPage,info:_info});     
         });

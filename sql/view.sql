@@ -84,10 +84,12 @@ ON a.sid = b.id;
 DROP VIEW IF EXISTS `v_fedbooking`;
 CREATE VIEW v_fedbooking
 AS
-SELECT a.*,b.date,b.type,b.state
+SELECT a.*,b.date,b.type,b.state,b.userid,b.createAt,c.name as uname
 FROM fedbooking_price a
 LEFT JOIN fedbooking b
-ON a.bno = b.bookingno;
+ON a.bno = b.bookingno
+LEFT JOIN user c
+ON b.userid = c.username;
 
 DROP VIEW IF EXISTS `v_user_fedbooking`;
 CREATE VIEW v_user_fedbooking

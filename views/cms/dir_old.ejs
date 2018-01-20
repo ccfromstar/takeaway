@@ -97,6 +97,12 @@
                         </select>
                     </td>
                 </tr> 
+                <tr>
+                    <td>小圆盒数量</td>
+                    <td>
+                        <input type="text" class="input-sm form-control" id="snum" value="0" onkeyup="value=value.replace(/[^\d]/g,'')"></input>
+                    </td>
+                </tr> 
              </table>
              <input type="hidden" id="docid" ></input>
              <input type="hidden" class="input-sm form-control" id="head" ></input>
@@ -121,7 +127,8 @@
 <script type="text/javascript">
 	function newDoc(){
 		$("#date").val("");
-		$("#num").val("");
+		$("#num").val("0");
+    $("#snum").val("0");
 		$("#unitPrice").val("");
 		$("#manager").val("");
 		$("#name").val("");
@@ -131,6 +138,7 @@
 		$("#type").val("");
     $("#sendtype").val("");
     $("#box").val("");
+    $("#selectcompany").val("-");
 		$("#docid").val("0");
 
 		$('#addModal').modal('show');
@@ -152,6 +160,7 @@
         $.ajax({ type:"POST" , url: "/old/getinfo", data:{id:id}, success: function(data){
                $("#date").val(data[0].date); 
                $("#num").val(data[0].num); 
+               $("#snum").val(data[0].snum); 
                $("#unitPrice").val(data[0].unitPrice);
                $("#manager").val(data[0].manager);
                $("#name").val(data[0].name);
@@ -175,6 +184,7 @@
 			$.ajax({ type:"POST" , url: "/old/insert", data:{
                 date:$("#date").val(),
                 num:$("#num").val(),
+                snum:$("#snum").val(),
                 unitPrice:$("#unitPrice").val(),
                 manager:$("#manager").val(),
                 name:$("#name").val(),
@@ -195,6 +205,7 @@
 			$.ajax({ type:"POST" , url: "/old/update", data:{
                 date:$("#date").val(),
                 num:$("#num").val(),
+                snum:$("#snum").val(),
                 unitPrice:$("#unitPrice").val(),
                 manager:$("#manager").val(),
                 name:$("#name").val(),

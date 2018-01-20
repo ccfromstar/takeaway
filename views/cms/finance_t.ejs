@@ -13,6 +13,7 @@
       		<input type="text" name="bookingdate" id="bookingdate" style="cursor:pointer" readonly value="<%=bookingdate%>" class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM'})"></input>
       		<button type="button" class="btn btn-default btn-xs" onclick="search()" >检索</button>
       	</div>
+        <p>&nbsp;&nbsp;&nbsp;总数量:<%=num_total%></p>
         <%if(finance[0]){%>
       	<table class="table table-hover" style="width:50%;" id="table_list" >
     		<tbody>
@@ -42,98 +43,154 @@
                 <td><%=finance[0].a%></td>
                 <td><%=(finance[0].a*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.a){%>
+                <a target='blank' href="/pic/<%=filelist.a%>"><%=filelist.a%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>办公室厨房租金</td>
                 <td><%=finance[0].b%></td>
                 <td><%=(finance[0].b*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.b){%>
+                <a target='blank' href="/pic/<%=filelist.b%>"><%=filelist.b%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>应交税金3%</td>
                 <td><%=finance[0].c%></td>
                 <td><%=(finance[0].c*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.c){%>
+                <a target='blank' href="/pic/<%=filelist.c%>"><%=filelist.c%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>银行手续费</td>
                 <td><%=finance[0].d%></td>
                 <td><%=(finance[0].d*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.d){%>
+                <a target='blank' href="/pic/<%=filelist.d%>"><%=filelist.d%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>借款利息费</td>
                 <td><%=finance[0].e%></td>
                 <td><%=(finance[0].e*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.e){%>
+                <a target='blank' href="/pic/<%=filelist.e%>"><%=filelist.e%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>行政人员工资</td>
                 <td><%=finance[0].f%></td>
                 <td><%=(finance[0].f*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.f){%>
+                <a target='blank' href="/pic/<%=filelist.f%>"><%=filelist.f%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>厨房人员工资</td>
                 <td><%=finance[0].g%></td>
                 <td><%=(finance[0].g*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.g){%>
+                <a target='blank' href="/pic/<%=filelist.g%>"><%=filelist.g%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>五险一金（企业部分）</td>
                 <td><%=finance[0].h%></td>
                 <td><%=(finance[0].h*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.h){%>
+                <a target='blank' href="/pic/<%=filelist.h%>"><%=filelist.h%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>五险一金（个人部分）</td>
                 <td><%=finance[0].i%></td>
                 <td><%=(finance[0].i*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.i){%>
+                <a target='blank' href="/pic/<%=filelist.i%>"><%=filelist.i%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>中央厨房水费和电费</td>
                 <td><%=finance[0].j%></td>
                 <td><%=(finance[0].j*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.j){%>
+                <a target='blank' href="/pic/<%=filelist.j%>"><%=filelist.j%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>中央厨房煤气费</td>
                 <td><%=finance[0].k%></td>
                 <td><%=(finance[0].k*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.k){%>
+                <a target='blank' href="/pic/<%=filelist.k%>"><%=filelist.k%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>额外运输费用</td>
                 <td><%=finance[0].l%></td>
                 <td><%=(finance[0].l*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.l){%>
+                <a target='blank' href="/pic/<%=filelist.l%>"><%=filelist.l%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>法律及专业费用</td>
                 <td><%=finance[0].m%></td>
                 <td><%=(finance[0].m*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.m){%>
+                <a target='blank' href="/pic/<%=filelist.m%>"><%=filelist.m%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>网络服务费用</td>
                 <td><%=finance[0].n%></td>
                 <td><%=(finance[0].n*100/price_total).toFixed(2)%>%</td>
                 <td></td>
-                <td></td>
+                <td>
+                <%if(filelist.e){%>
+                <a target='blank' href="/pic/<%=filelist.n%>"><%=filelist.n%></a>
+                <%}%>
+                </td>
               </tr>
               <tr>
                 <td>车贷还款费用</td>

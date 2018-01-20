@@ -536,6 +536,7 @@ exports.sql_list_t = function (req,res) {
     var sql9 = "select * from orderb2b where date like '"+bd+"%'";
     var sql10 = "select * from finance where date like '"+bd+"%'";
     var sql11 = "select * from orderAmn where date like '"+bd+"%'";
+    var sql12 = "select * from attachement where docid like '"+bd+"%'";
     mysql.query(sql1,function (err, rows1) {
         if(err){console.log(err);return false;}
             mysql.query(sql6,function (err, rows6) {
@@ -548,39 +549,78 @@ exports.sql_list_t = function (req,res) {
                             if(err){console.log(err);return false;}
                             mysql.query(sql11,function (err, rows11) {
                                 if(err){console.log(err);return false;}
-                                for(var i in rows1){
-                                    num_total = num_total + rows1[i].numTotal;
-                                    price_total = price_total + rows1[i].priceTotal;
-                                }
-                                for(var i in rows6){
-                                    num_total = num_total + rows6[i].num;
-                                    price_total = price_total + rows6[i].numTotal;
-                                    boxTotal = boxTotal + rows6[i].price*rows6[i].num;
-                                }
-                                for(var i in rows7){
-                                    num_total = num_total + rows7[i].num;
-                                    price_total = price_total + rows7[i].priceTotal;
-                                    boxTotal = boxTotal + rows7[i].price*rows7[i].num;
-                                }
-                                /*
-                                for(var i in rows8){
-                                    price_total = price_total + rows8[i].priceTotal;
-                                }*/
-                                for(var i in rows9){
-                                    price_total = price_total + rows9[i].priceTotal;
-                                }
-                                /*
-                                for(var i in rows11){
-                                    price_total = price_total + rows11[i].priceTotal;
-                                }*/
-                                mysql.query(sql10,function (err, rows10) {
+                                mysql.query(sql12,function (err, rows12) {
                                     if(err){console.log(err);return false;}
-                                    console.log(boxTotal);
-                                    var pt = 0;
-                                    for(var i in rows10){
-                                        pt = pt + rows10[i].priceTotal;
+                                    for(var i in rows1){
+                                        num_total = num_total + rows1[i].numTotal;
+                                        price_total = price_total + rows1[i].priceTotal;
                                     }
-                                    res.render('cms/finance_t', {boxTotal:boxTotal,finance:rows10,record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page});
+                                    for(var i in rows6){
+                                        num_total = num_total + rows6[i].num;
+                                        price_total = price_total + rows6[i].numTotal;
+                                        boxTotal = boxTotal + rows6[i].price*rows6[i].num + rows6[i].snum*0.5;
+                                    }
+                                    for(var i in rows7){
+                                        num_total = num_total + rows7[i].num;
+                                        price_total = price_total + rows7[i].priceTotal;
+                                        boxTotal = boxTotal + rows7[i].price*rows7[i].num + rows7[i].snum*0.5;
+                                    }
+                                    /*
+                                    for(var i in rows8){
+                                        price_total = price_total + rows8[i].priceTotal;
+                                    }*/
+                                    for(var i in rows9){
+                                        price_total = price_total + rows9[i].priceTotal;
+                                    }
+                                    /*
+                                    for(var i in rows11){
+                                        price_total = price_total + rows11[i].priceTotal;
+                                    }*/
+                                    mysql.query(sql10,function (err, rows10) {
+                                        if(err){console.log(err);return false;}
+                                        console.log(boxTotal);
+                                        var pt = 0;
+                                        for(var i in rows10){
+                                            pt = pt + rows10[i].priceTotal;
+                                        }
+                                        var o = {};
+                                        for(var i in rows12){
+                                            if(rows12[i].type=="a"){o.a = rows12[i].filename}
+                                            if(rows12[i].type=="b"){o.b = rows12[i].filename}
+                                            if(rows12[i].type=="c"){o.c = rows12[i].filename}
+                                            if(rows12[i].type=="d"){o.d = rows12[i].filename}
+                                            if(rows12[i].type=="e"){o.e = rows12[i].filename}
+                                            if(rows12[i].type=="f"){o.f = rows12[i].filename}
+                                            if(rows12[i].type=="g"){o.g = rows12[i].filename}
+                                            if(rows12[i].type=="h"){o.h = rows12[i].filename}
+                                            if(rows12[i].type=="i"){o.i = rows12[i].filename}
+                                            if(rows12[i].type=="j"){o.j = rows12[i].filename}
+                                            if(rows12[i].type=="k"){o.k = rows12[i].filename}
+                                            if(rows12[i].type=="l"){o.l = rows12[i].filename}
+                                            if(rows12[i].type=="m"){o.m = rows12[i].filename}
+                                            if(rows12[i].type=="n"){o.n = rows12[i].filename}
+                                            if(rows12[i].type=="o"){o.o = rows12[i].filename}
+                                            if(rows12[i].type=="p"){o.p = rows12[i].filename}
+                                            if(rows12[i].type=="q"){o.q = rows12[i].filename}
+                                            if(rows12[i].type=="r"){o.r = rows12[i].filename}
+                                            if(rows12[i].type=="s"){o.s = rows12[i].filename}
+                                            if(rows12[i].type=="t"){o.t = rows12[i].filename}
+                                            if(rows12[i].type=="u"){o.u = rows12[i].filename}
+                                            if(rows12[i].type=="v"){o.v = rows12[i].filename}
+                                            if(rows12[i].type=="w"){o.w = rows12[i].filename}
+                                            if(rows12[i].type=="x"){o.x = rows12[i].filename}
+                                            if(rows12[i].type=="y"){o.y = rows12[i].filename}
+                                            if(rows12[i].type=="z"){o.z = rows12[i].filename}
+                                            if(rows12[i].type=="aa"){o.aa = rows12[i].filename}
+                                            if(rows12[i].type=="ab"){o.ab = rows12[i].filename}
+                                            if(rows12[i].type=="ac"){o.ac = rows12[i].filename}
+                                            if(rows12[i].type=="ad"){o.ad = rows12[i].filename}
+                                            if(rows12[i].type=="ae"){o.ae = rows12[i].filename}
+                                            if(rows12[i].type=="af"){o.af = rows12[i].filename}
+                                            if(rows12[i].type=="ag"){o.ag = rows12[i].filename}    
+                                        }
+                                        res.render('cms/finance_t', {filelist:o,boxTotal:boxTotal,finance:rows10,record4:rows9,cname:cname,sendtype:sendtype,bookingdate1:d1,bookingdate2:d2,record3:rows8,price_total:price_total,num_total:num_total,bookingdate:bookingdate,record2:rows7,record1:rows6,url:req.url,record:rows1,page:page});
+                                    });
                                 });
                             });
                         });

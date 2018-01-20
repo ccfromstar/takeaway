@@ -38,7 +38,10 @@
               <th>公司</th>
         			<th>菜名</th>
         			<th>送餐类别</th>
+              <th>联系人</th>
+              <th>联系人电话</th>
         			<th>订餐时间</th>
+              <th>下单时间</th>
         			<th>数量</th>
         			<th>总价</th>
       			</tr>
@@ -49,7 +52,10 @@
               <td>fedex2017</td>
         			<td><%-record[i].name%></td>
         			<td><%-record[i].type%></td>
+              <td><%-record[i].uname%></td>
+              <td><%-record[i].userid%></td>
         			<td><%-record[i].date%></td>
+              <td><%-record[i].createAt%></td>
         			<td><%-record[i].num%></td>
               <td><%-(Number(record[i].num)*Number(record[i].price))%></td>
       			</tr>

@@ -81,6 +81,9 @@
 </style>
 </head>
 <body>
+<%
+  var arr1 = role.split("*");
+%>
   <div class="easyui-layout" style="width:100%;min-height:768px;">
     <div data-options="region:'north'" style="height:50px;overflow: hidden;">
       <div id="con_header" >
@@ -97,9 +100,11 @@
     <div data-options="region:'west',split:true" title="目录" style="width:170px;">
       <div title="TreeMenu" data-options="iconCls:'icon-search'" style="padding:10px;">
       <ul id="munes" class="easyui-tree">
+        <%if(arr1[0]=="1"||arr1[1]=="1"||arr1[2]=="1"||arr1[3]=="1"||arr1[4]=="1"||arr1[5]=="1"||arr1[6]=="1"||arr1[7]=="1"){%>
         <li>
           <span>中央厨房团膳</span>
           <ul>
+            <%if(arr1[0]=="1"){%>
             <li>
               <span>报表管理</span>
               <ul>
@@ -107,24 +112,38 @@
                 <li>查询报表</li>
               </ul>
             </li>
+            <%}%>
+            <%if(arr1[1]=="1"){%>
             <li>
               <span>企业管理</span>
             </li>
+            <%}%>
+            <%if(arr1[2]=="1"){%>
             <li>
               <span>财务录入</span>
             </li>
+            <%}%>
+            <%if(arr1[3]=="1"){%>
             <li>
               <span>菜单管理</span>
             </li>
+            <%}%>
+            <%if(arr1[4]=="1"){%>
             <li>
               <span>餐盒管理</span>
             </li>
+            <%}%>
+            <%if(arr1[5]=="1"){%>
             <li>
               <span>团膳录入</span>
             </li>
+            <%}%>
+            <%if(arr1[6]=="1"){%>
             <li>
               <span>线外录入</span>
             </li>
+            <%}%>
+            <%if(arr1[7]=="1"){%>
             <li>
               <span>微信订餐</span>
               <ul>
@@ -136,8 +155,11 @@
                 <li>固定菜单</li>
               </ul>
             </li>
+            <%}%>
           </ul>
         </li>
+        <%}%>
+         <%if(arr1[8]=="1"){%>
         <li>
            <span>工商银行</span>
            <ul>
@@ -146,6 +168,8 @@
               <li>成本录入(工)</li>
            </ul>
         </li>
+        <%}%>
+         <%if(arr1[9]=="1"){%>
         <li>
            <span>安曼纳卓悦酒店</span>
            <ul>
@@ -154,9 +178,12 @@
               <li>成本录入(安)</li>
            </ul>
         </li>
+        <%}%>
+         <%if(arr1[10]=="1"){%>
         <li>
            <span>账户管理</span>
         </li>
+        <%}%>
       </ul>
     </div>
     </div>

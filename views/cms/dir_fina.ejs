@@ -194,6 +194,22 @@
                 <tr style="display:none">
                     <td>ai)显示一次性餐具费用</td>
                     <td><input type="text" class="input-sm form-control" id="numai" ></input></td>
+                </tr>
+                <tr>
+                    <td>附件添加</td>
+                    <td>
+                        <select id="typename" class="input-sm selectpicker">
+                              <option value="">请选择附件类目</option>
+                              <option value="a">税金及附加</option>
+                              <option value="b">办公室厨房租金</option>
+                              <option value="c">应交税金3%</option>
+                              <option value="d">银行手续费</option>
+                        </select>
+                        <br/><br/>
+                        <iframe frameborder=0 src="/cms/upload" style="width:550px;height:60px"></iframe>
+                        <button type="button" class="btn btn-primary" onclick="add_file();">确定添加</button>
+                        <input type="hidden" id="imgname" ></input>
+                    </td>
                 </tr> 
              </table>
              <input type="hidden" id="docid" ></input>
@@ -224,6 +240,10 @@
 
 		$('#addModal').modal('show');
 	}
+
+    function setImg(name){
+        $("#imgname").val(name);
+    }
 
   function toPage(i){
     window.location = "/cms/fina?p="+i;
@@ -395,6 +415,18 @@
       			}});	
     		}
 		});
+    }
+
+    function add_file(){
+        $.ajax({ type:"POST" , url: "/fina/addfile", data:{
+            docid:$("#date").val(),
+            type:$("#typename").val(),
+            filename:$("#imgname").val()
+        }, success: function(data){
+          if(data==200){
+               alert("添加成功");        
+          }
+        }});
     }
 
 <%if(info){%>
