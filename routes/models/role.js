@@ -246,7 +246,8 @@ function cancelFPbooking(req, res) {
 
 function setFBookState(req,res){
     var bno = req.param('bno');
-    var deleteSql = "update fedbooking set state = '已支付' where bookingno = '"+bno+"'";
+    var Couponsel = req.param('Couponsel');
+    var deleteSql = "update fedbooking set state = '已支付',numTotal = (numTotal - "+Couponsel+") where bookingno = '"+bno+"'";
     console.log(deleteSql);
     mysql.query(deleteSql ,function(error,obj){
           if(error){console.log(error);return false;}
@@ -438,7 +439,7 @@ function chekfeduserlogin (req, res) {
                   var sql1 = "update user set openid = '"+req.session.openid+"' where id = "+obj[0].id;
                   mysql.query(sql1 ,function(error,obj1){
                     if(error){console.log(error);return false;}
-                    res.send("200");
+                    res.send(obj[0]);
                   });
                 }
             });

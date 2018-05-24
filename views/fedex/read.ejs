@@ -40,13 +40,14 @@
     </tr>
 <%for(var i in obj2){%>
     <tr>
-        <td><%=obj2[i].name%></td>
+        <td><%-obj2[i].name%></td>
         <td><%=obj2[i].price%></td>
         <td><%=obj2[i].num%></td>
         <td><%=Number(obj2[i].price)*Number(obj2[i].num)%></td>
     </tr>
 <%}%>
 </table>
+<div id="Coupon"></div>
 <%if(obj1[0].state == '未付款'){%>
     <fieldset>
         <div class="am-form-group">
@@ -88,10 +89,25 @@
 <script type="text/javascript">
   //check login state
   var sessionID = window.localStorage.getItem("sessionID");
+  var companyID = window.localStorage.getItem("companyID");
   if(!sessionID){
     window.location = '/fedex/login';
   }
+  if(!companyID){
+    window.location = '/fedex/login';
+  }
   $('#userid').val(sessionID);
+
+  var Coupon = window.localStorage.getItem("Coupon");
+
+  if(Coupon !="undefined"){
+    var html_ = "";
+    var arr1 = Coupon.split("@");
+    for(var i in arr1){
+        html_ = html_ + "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='radio' value='"+arr1[i]+"' name='Coupon1' checked>"+arr1[i]+"元优惠券";
+    }
+    $("#Coupon").html(html_);
+  }
 
   $("#code").qrcode({
         render: "table", //table方式
@@ -136,8 +152,22 @@
     }
   }
 
+  function jqradio(name){
+    return $(':checked[name="' + name + '"]').val();
+  }
+
   function pay(){
-    window.location = '/jsapipay?bookingNo=' + '<%=obj1[0].bookingno%>' + '&total_fee=' + ('<%=obj1[0].numTotal%>' * 100);
+    //判断优惠券
+    var yh = jqradio('Coupon1');
+    var yhh = 0;
+    if(yh){
+        yhh = Number(yh);
+    }
+    var urls = '/jsapipay?bookingNo=' + '<%=obj1[0].bookingno%>' + '&total_fee=' + (('<%=obj1[0].numTotal%>'-yhh) * 100);
+    //var urls = '/jsapipay?bookingNo=' + '<%=obj1[0].bookingno%>' + '&total_fee=1';
+    window.localStorage.setItem("Couponsel",yhh+"");
+    //alert(urls);
+    window.location = urls;
   }
 </script>
 <% include footer %>

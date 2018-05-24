@@ -31,11 +31,23 @@
                     //alert(res.err_msg);
                     if( res.err_msg =="get_brand_wcpay_request:ok"){
                         alert("支付成功!");
+                        var Couponsel = window.localStorage.getItem("Couponsel");
                         $.ajax({ type:"POST" , url: "/role/setFBookState", data:{
-                            bno:'<%=bookingNo%>'
+                            bno:'<%=bookingNo%>',
+                            Couponsel:Couponsel
                             }, success: function(data){
                                 if(data == '200'){
                                     window.location = '/fedex/option';
+                                    
+                                    var Coupon = window.localStorage.getItem("Coupon");
+                                    var arr1 = Coupon.split("@");
+                                    var arr2;
+                                    for(var i in arr1){
+                                        if(arr1[i]!=Couponsel){
+                                            arr2 = arr1[i];
+                                        }
+                                    }
+                                     window.localStorage.setItem("Coupon",arr2);
                                 }
                             }
                         });

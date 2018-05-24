@@ -87,7 +87,11 @@
 <script type="text/javascript">
   //check login state
   var sessionID = window.localStorage.getItem("sessionID");
+  var companyID = window.localStorage.getItem("companyID");
   if(!sessionID){
+    window.location = '/fedex/login';
+  }
+  if(!companyID){
     window.location = '/fedex/login';
   }
   $('#userid').val(sessionID);
@@ -104,6 +108,11 @@
   var add_menu = 0;
 
   function step1(){
+    //判断公司
+     if(companyID != "fedex2017"){
+        alert('订餐功能暂时关闭');return false;
+     }
+
     var date = $('#date').val();
     var type = $('#type').val();
     if(date == ''){
@@ -113,26 +122,44 @@
         alert('请选择类别');return false;
     }
     var myDate = new Date();
+    var y = myDate.getFullYear(); 
+    var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
+    var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
+    var dmy1 = y+'-'+m+'-'+d;
+
     myDate.setDate(myDate.getDate()+1);
     var y = myDate.getFullYear(); 
     var m = (((myDate.getMonth()+1)+"").length==1)?"0"+(myDate.getMonth()+1):(myDate.getMonth()+1);
     var d = (((myDate.getDate())+"").length==1)?"0"+(myDate.getDate()):(myDate.getDate());
     var dmy = y+'-'+m+'-'+d;
+
+    if(date == '2018-04-29' || date == '2018-04-30' || date == '2018-05-01'){
+        alert('节假日期间停止送餐');return false;
+    }
     if(date < dmy){
         alert('送餐日期不正确');return false;
     }
     var d = new Date();
     /*如果送餐日期是第二天，如果超过18:00就不能下单了*/
-    if((date == dmy) && (d.getHours() > 17)){
-        alert('已超过18点，不能预订第二天');return false;
+    if(companyID == "fedex2017"){
+        if((date == dmy) && (d.getHours() > 17)){
+            alert('已超过18点，不能预订第二天');return false;
+        }
+    }else{
+        if((date == dmy1) && (d.getHours() > 1)){
+            alert('已超过1点，不能预订当天');return false;
+        }
     }
+    
 
     /*周六周日不可订*/
     var myDate1 = new Date(date);
     var week = myDate1.getDay();
-    if(week == 0 || week == 6){
-        alert('周末不可预定');return false;
-    }  
+    if(companyID == "fedex2017"){
+        if(week == 0 || week == 6){
+            alert('周末不可预定');return false;
+        } 
+    } 
 
     /*load menu list*/
     $.ajax({ type:"POST" , url: "/role/getfmenu", data:{
@@ -145,22 +172,26 @@
                     /*load list*/
 
                     var mlist = '';
-                    for(var i in data){
-                        mlist += '<li class="am-g am-list-item-dated"><a href="##" onclick="showModel(\''+data[i].remark+'\')" class="am-list-item-hd " style="margin-left:10px"><span id="fname'+i+'">'+data[i].name+'</span> ￥<span id="fprice'+i+'">'+data[i].price+'</span></a><span class="am-list-date">';
-                        mlist += '<img src="/img/minus.png" style="height:25px;margin-right:10px" onclick="minus('+i+','+data[i].price+')" />';
-                        mlist += '<span id="num'+i+'">0</span>';
-                        mlist += '<img src="/img/plus.png" style="height:25px;margin-left:10px" onclick="plus('+i+','+data[i].price+')" />';
-                        mlist += '</span></li>';
-                        num_menu += 1;
+                    if(companyID != "fedex2017"){
+                        for(var i in data){
+                            mlist += '<li class="am-g am-list-item-dated"><a href="##" onclick="showModel(\''+data[i].remark+'\')" class="am-list-item-hd " style="margin-left:10px"><span id="fname'+i+'">'+data[i].name+'</span> ￥<span id="fprice'+i+'">'+data[i].price+'</span></a><span class="am-list-date">';
+                            mlist += '<img src="/img/minus.png" style="height:25px;margin-right:10px" onclick="minus('+i+','+data[i].price+')" />';
+                            mlist += '<span id="num'+i+'">0</span>';
+                            mlist += '<img src="/img/plus.png" style="height:25px;margin-left:10px" onclick="plus('+i+','+data[i].price+')" />';
+                            mlist += '</span></li>';
+                            num_menu += 1;
+                        }
+                    }else{
+                        for(var i in data1){
+                            mlist += '<li class="am-g am-list-item-dated"><a href="##" onclick="showModel(\''+data1[i].imgname+'\')" class="am-list-item-hd " style="margin-left:10px"><span id="ffname'+i+'">'+data1[i].name+'</span> ￥<span id="ffprice'+i+'">'+data1[i].price+'</span></a><span class="am-list-date">';
+                            mlist += '<img src="/img/minus.png" style="height:25px;margin-right:10px" onclick="minusF('+i+','+data1[i].price+')" />';
+                            mlist += '<span id="numF'+i+'">0</span>';
+                            mlist += '<img src="/img/plus.png" style="height:25px;margin-left:10px" onclick="plusF('+i+','+data1[i].price+')" />';
+                            mlist += '</span></li>';
+                            add_menu += 1;
+                        }
                     }
-                    for(var i in data1){
-                        mlist += '<li class="am-g am-list-item-dated"><a href="##" onclick="showModel(\''+data1[i].imgname+'\')" class="am-list-item-hd " style="margin-left:10px"><span id="ffname'+i+'">'+data1[i].name+'</span> ￥<span id="ffprice'+i+'">'+data1[i].price+'</span></a><span class="am-list-date">';
-                        mlist += '<img src="/img/minus.png" style="height:25px;margin-right:10px" onclick="minusF('+i+','+data1[i].price+')" />';
-                        mlist += '<span id="numF'+i+'">0</span>';
-                        mlist += '<img src="/img/plus.png" style="height:25px;margin-left:10px" onclick="plusF('+i+','+data1[i].price+')" />';
-                        mlist += '</span></li>';
-                        add_menu += 1;
-                    }
+
                     mlist += '<li class="am-g am-list-item-dated"><a href="##" class="am-list-item-hd " style="margin-left:10px">合计</a><span class="am-list-date" style="margin-right:10px"> ￥<span id="numTotal">0</span></span></li>';
                     $('#mlist').html(mlist);
                     $('#page1').hide();
@@ -178,7 +209,8 @@
 
 
 function showModel(str){
-    $('#infos').html("<img src='/pic/"+str+"' style='width:250px' />");
+    //$('#infos').html("<img src='/pic/"+str+"' style='width:250px' />");
+    $('#infos').html(str);
     $('#doc-modal-1').css('display', 'inline').css('opacity','1');
 }
 

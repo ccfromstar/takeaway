@@ -13,6 +13,8 @@
           <select id="company_name" class="input-sm selectpicker">
                             <option value="fedex2017">fedex2017</option>
                             <option value="机场">机场</option>
+                            <option value="哒哒">哒哒</option>
+                            <option value="联强">联强</option>
                       </select>
           菜名
           <input type="text" id="cname" value="<%=cname%>" ></input> 
@@ -49,7 +51,7 @@
     		<tbody>
     		<%for(var i in record){%>
       			<tr>
-              <td>fedex2017</td>
+              <td><%-record[i].companyc%></td>
         			<td><%-record[i].name%></td>
         			<td><%-record[i].type%></td>
               <td><%-record[i].uname%></td>
@@ -120,6 +122,13 @@
   <%if(sendtype !=''){%>
     $('#sendtype').val('<%=sendtype%>');
   <%}%>
+
+  var l = window.location.href;
+  var arrw = l.split("&company_name=");
+  if(arrw.length == 2){
+      $("#company_name").val(arrw[1]);
+  }
+
 	var w = window.screen.width;
 	w = w - 330;
 	$("#_viewl").css("width",w);
@@ -139,7 +148,9 @@
       var _d1 = $("#bookingdate1").val();
       var cname = $("#cname").val();
       var sendtype = $("#sendtype").val();
-  		window.location = "/cms/fedreport?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname+"&sendtype="+sendtype+"&bd1="+_d1;
+      var company_name = $("#company_name").val();
+      
+  		window.location = "/cms/fedreport?p=1&key="+_d.replace(/-/g,"")+"&bd="+_d+"&cname="+cname+"&sendtype="+sendtype+"&bd1="+_d1+"&company_name="+company_name;
   	}
 
   	function setinfo(id,k1,k2,k3,k4){

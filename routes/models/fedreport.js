@@ -46,18 +46,20 @@ exports.sql_list = function (req, res) {
     var bd = req.query.bd;
     var bd1 = req.query.bd1;
     var cname = req.query.cname;
+    var company_name = req.query.company_name;
     var sendtype = req.query.sendtype;
     key = key?key:bookingno;
     bookingdate =  bd?bd:bookingdate;
     bookingdate1 =  bd1?bd1:bookingdate1;
     cname = cname?cname:'';
+    company_name = company_name?company_name:'';
     sendtype = sendtype?sendtype:'';
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
     var num_total = 0;
     var price_total = 0;
     //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
-    var sql1 = "select * from v_fedbooking where num !=0 and (state='已支付' or state='已取餐')  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
+    var sql1 = "select * from v_fedbooking where companyc like '%"+company_name+"%' and num !=0 and (state='已支付' or state='已取餐')  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
     var sql5 = "select count(*) as count from v_fedbooking where date like '"+bd+"'";
   
     mysql.query(sql1,function (err, rows1) {
@@ -100,13 +102,15 @@ exports.sql_list1 = function (req, res) {
     bookingdate =  bd?bd:bookingdate;
     bookingdate1 =  bd1?bd1:bookingdate1;
     cname = cname?cname:'';
+    var company_name = req.query.company_name;
+    company_name = company_name?company_name:'';
     sendtype = sendtype?sendtype:'';
     page = (page && page > 0) ? page : 1;
     var limit = (limit && limit > 0) ? limit : LIMIT;
     var num_total = 0;
     var price_total = 0;
     //var sql1 = "select * from v_com_booking where date1 like '"+bd+"' limit "+(page-1)*limit+","+limit;
-    var sql1 = "select * from v_fedbooking where num !=0 and state='已支付取消'  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
+    var sql1 = "select * from v_fedbooking where  companyc like '%"+company_name+"%' and num !=0 and state='已支付取消'  and date >= '"+bd+"' and date <= '"+bd1+"' and name like '%"+cname+"%' and type like '%"+sendtype+"%'";
     var sql5 = "select count(*) as count from v_fedbooking where date like '"+bd+"'";
   
     mysql.query(sql1,function (err, rows1) {

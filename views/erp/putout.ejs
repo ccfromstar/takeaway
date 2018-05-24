@@ -97,6 +97,7 @@
 					<button class="btn btn-xs" onclick="getDate()">筛选</button>
 					<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
 					<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
+					<button class="btn btn-xs" onclick="Print()">打印</button>
 				</td>
 	</tr>
 </table>
@@ -385,6 +386,23 @@
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
 					k_date_end: $("#k_date_end").val()
+				},
+				success: function(data) {
+					window.open("/excelop/temp/" + data);
+				}
+			});
+		}
+
+		function Print() {
+			$.ajax({
+				type: "POST",
+				url: "/erp/Printputout",
+				data: {
+					k_store: $("#sk_store").val(),
+					k_category: $("#k_category").val(),
+					k_date: $("#k_date").val(),
+					k_date_end: $("#k_date_end").val(),
+					cid:window.sessionStorage.getItem("cid")
 				},
 				success: function(data) {
 					window.open("/excelop/temp/" + data);

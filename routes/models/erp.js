@@ -44,12 +44,20 @@ exports.sqldo = function(req, res) {
 		getPutoutbyMonth(req, res);
 	} else if(_sql == "toExcelorderlist") {
 		toExcelorderlist(req, res);
+	} else if(_sql == "Printorderlist") {
+		Printorderlist(req, res);
 	} else if(_sql == "toExcelputin") {
 		toExcelputin(req, res);
+	} else if(_sql == "Printputin") {
+		Printputin(req, res);
 	} else if(_sql == "toExcelstock") {
 		toExcelstock(req, res);
+	} else if(_sql == "Printstock") {
+		Printstock(req, res);
 	} else if(_sql == "toExcelputout") {
 		toExcelputout(req, res);
+	} else if(_sql == "Printputout") {
+		Printputout(req, res);
 	} else if(_sql == "insertC") {
 		insertC(req, res);
 	} else if(_sql == "delC") {
@@ -132,6 +140,39 @@ function toExcelorderlist(req, res) {
 	});
 }
 
+/*导出采购单*/
+function Printorderlist(req, res) {
+	var k_store = req.param('k_store');
+	var k_category = req.param('k_category');
+	var k_date = req.param('k_date');
+	var cid = req.param('cid');
+	k_store = k_store == '所有' ? '' : k_store;
+	k_category = k_category == '所有' ? '' : k_category;
+	var ks = k_store == '' ? '所有门店' : k_store;
+	var kc = k_category == '' ? '所有分类' : k_category;
+	//获得Excel模板的buffer对象
+	var exlBuf = fs.readFileSync("./public/excelop/template/p_orderlist.xlsx");
+	var excelname = setFileName();
+	//数据源
+	var sql1 = "select * from c_orderlist where store like '%"+k_store+"%' and category like '%" + k_category + "%' and date = '" + k_date + "' order by no desc";
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		var sql2 = "select * from erprole where id = "+cid;
+		mysql.query(sql2, function(error, obj2) {
+			//用数据源(对象)data渲染Excel模板
+			var obj_str = '[ [{"date": "' + k_date+ '","store":"'+obj2[0].store+'","cname":"'+obj2[0].name+'"}],';
+			obj_str += JSON.stringify(obj) + "]";
+			ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+				fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+				res.send(excelname);
+			});
+		});
+	});
+}
+
 /*导出入库单*/
 function toExcelputin(req, res) {
 	var k_store = req.param('k_store');
@@ -163,6 +204,44 @@ function toExcelputin(req, res) {
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
 			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
 			res.send(excelname);
+		});
+	});
+}
+
+/*导出入库单*/
+function Printputin(req, res) {
+	var k_store = req.param('k_store');
+	var k_category = req.param('k_category');
+	var k_date = req.param('k_date');
+	var k_date_end = req.param('k_date_end');
+	var cid = req.param('cid');
+	k_store = k_store == '所有' ? '' : k_store;
+	k_category = k_category == '所有' ? '' : k_category;
+	var ks = k_store == '' ? '所有门店' : k_store;
+	var kc = k_category == '' ? '所有分类' : k_category;
+	//获得Excel模板的buffer对象
+	var exlBuf = fs.readFileSync("./public/excelop/template/p_putin.xlsx");
+	var excelname = setFileName();
+	//数据源
+	//var sql1 = "select * from c_putin where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
+	var sql1 = "select * from c_putin where store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	if(k_category == '') {
+		sql1 = "select * from c_putin where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	}
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		var sql2 = "select * from erprole where id = "+cid;
+		mysql.query(sql2, function(error, obj2) {
+			//用数据源(对象)data渲染Excel模板
+			var obj_str = '[ [{"date": "' + k_date+ '","store":"'+obj2[0].store+'","cname":"'+obj2[0].name+'"}],';
+			obj_str += JSON.stringify(obj) + "]";
+			ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+				fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+				res.send(excelname);
+			});
 		});
 	});
 }
@@ -253,6 +332,58 @@ function toExcelstock(req, res) {
 	});
 }
 
+function Printstock(req, res) {
+	var k_store = req.param('k_store');
+	var k_category = req.param('k_category');
+	var k_no = req.param('k_no');
+	var cate_id = req.param('cate_id');
+	var k_n = req.param('k_n');
+	var cid = req.param('cid');
+	k_store = k_store == '所有' ? '' : k_store;
+	k_category = k_category == '所有' ? '' : k_category;
+	k_no = k_no ? k_no : "";
+	cate_id = cate_id ? cate_id : "";
+	k_n = k_n ? k_n : "";
+	var k_n1 = "";
+	if(k_n != ""){
+		var tmp = k_n.split(".");
+		k_n1 = tmp[1];
+	}
+	//获得Excel模板的buffer对象
+	var exlBuf = fs.readFileSync("./public/excelop/template/p_stock.xlsx");
+	var excelname = setFileName();
+	//数据源
+	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
+	var sql1 = "select * from c_stock where store like '%"+k_store+"%' and name like '%"+k_n1+"%' and no like '"+cate_id+"%' and category = '" + k_category + "'  order by no desc";
+	if(k_category == '') {
+		sql1 = "select * from c_stock where store like '%"+k_store+"%' and name like '%"+k_n1+"%' and no like '"+cate_id+"%' order by no desc";
+	}
+	console.log(sql1);
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		/*计算库存结余金额*/
+		var totalout = 0;
+		for(var i in obj){
+			totalout += (obj[i].unitPrice)*(obj[i].num);
+		}
+		totalout = Math.round(totalout * 100) / 100;
+		//用数据源(对象)data渲染Excel模板
+		var sql2 = "select * from erprole where id = "+cid;
+		mysql.query(sql2, function(error, obj2) {
+			//用数据源(对象)data渲染Excel模板
+			var obj_str = '[ [{"store":"'+obj2[0].store+'","cname":"'+obj2[0].name+'","totalout": "' + totalout + '"}],';
+			obj_str += JSON.stringify(obj) + "]";
+			ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+				fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+				res.send(excelname);
+			});
+		});
+	});
+}
+
 /*导出出库单*/
 function toExcelputout(req, res) {
 	var k_category = req.param('k_category');
@@ -283,6 +414,44 @@ function toExcelputout(req, res) {
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
 			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
 			res.send(excelname);
+		});
+	});
+}
+
+function Printputout(req, res) {
+	var k_category = req.param('k_category');
+	var k_store = req.param('k_store');
+	var k_date = req.param('k_date');
+	var k_date_end = req.param('k_date_end');
+	var cid = req.param('cid');
+	k_category = k_category == '所有' ? '' : k_category;
+	k_store = k_store == '所有' ? '' : k_store;
+	var ks = k_store == '' ? '所有门店' : k_store;
+	var kc = k_category == '' ? '所有分类' : k_category;
+	//获得Excel模板的buffer对象
+	var exlBuf = fs.readFileSync("./public/excelop/template/p_putout.xlsx");
+	var excelname = setFileName();
+	//数据源
+	//var sql1 = "select * from putout where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
+	var sql1 = "select * from c_putout where store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	if(k_category == '') {
+		sql1 = "select * from c_putout where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	}
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		//用数据源(对象)data渲染Excel模板
+		var sql2 = "select * from erprole where id = "+cid;
+		mysql.query(sql2, function(error, obj2) {
+			//用数据源(对象)data渲染Excel模板
+			var obj_str = '[ [{"date": "' + k_date+ '","store":"'+obj2[0].store+'","cname":"'+obj2[0].name+'"}],';
+			obj_str += JSON.stringify(obj) + "]";
+			ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
+				fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
+				res.send(excelname);
+			});
 		});
 	});
 }

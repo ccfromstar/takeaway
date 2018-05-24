@@ -133,7 +133,7 @@
 	    	alert("有错误信息不能提交！");return false;
 	    }
 
-	    if($("#password").val()!="机场" && $("#password").val()!="fedex2017"){
+	    if($("#password").val()!="机场" && $("#password").val()!="联强B1" && $("#password").val()!="fedex2017" && $("#password").val()!="哒哒B5" && $("#password").val()!="哒哒B7" && $("#password").val()!="哒哒B9"){
 	    	alert("企业代码错误！");return false;
 	    }
 
@@ -147,6 +147,8 @@
        		}else if(data == "200"){
        			alert("注册成功！");
        			window.localStorage.setItem("sessionID",$("#username").val());
+       			window.localStorage.setItem("companyID",$("#password").val());
+       			window.localStorage.setItem("Coupon","5@10");
        			window.location = "/fedex/booking";
        		}
     	}});
@@ -169,6 +171,7 @@
 
 		//生成随机6位验证码
 		code = addNumber(6);
+		console.log(code);
 		//发送短信
 		$.ajax({ type:"POST" , url: "/role/sendSMS",data:{mobile:$("#username").val(),code:code},  success: function(data){
        		if(data == "200"){
