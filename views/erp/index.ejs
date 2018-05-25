@@ -1,10 +1,15 @@
 <% include header %>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">采购管理</strong> / <small>采购清单</small></div>
+</div>
 <!--采购单-->
-<h1>1.选择日期、门店和分类</h1>
-<table class="form">
+<div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 采购清单添加</p>
+          <table class="am-form">
 	<tr>
 		<td>
-			<input type="text" id="date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+			<input type="text"  id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
 		<td>
 			<input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value);setCat(0);" />
@@ -28,8 +33,7 @@
 		</td>
 	</tr>
 </table>
-<h1>2.添加材料</h1>
-<table class="form">
+<table class="am-form">
 	<tr>
 		<td>
 			<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
@@ -48,21 +52,28 @@
 						<option value="<%=obj2[i].no+"."+obj2[i].name%>">
 							<%}%>
 				</datalist>
+		</td>
+		<td>
 			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
 		</td>
 		<td>
 			<input type="text" id="num" placeholder="数量" />
 		</td>
 		<td id="addorder">
-			<button class="btn btn-xs"  onclick="add()">添加</button>
+			<button class="am-btn am-btn-primary"  onclick="add()">添加</button>
 		</td>
 	</tr>
 </table>
-<h1>3.采购清单查询(可选日期、门店和分类)</h1>
-<table class="form">
+        </div>
+      </div>
+
+<div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 采购清单查询</p>
+          <table class="am-form">
 	<tr>
 		<td>
-			<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+			<input type="text" id="k_date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
 		<td>
 			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
@@ -73,7 +84,8 @@
 						</option>
 					<%}%>
 				</datalist>
-
+		</td>	
+		<td>		
 			<input type="text" id="k_category" list="list4" value="所有" />
 			<datalist id="list4">
 					<%for(var i in obj3){%>
@@ -84,56 +96,60 @@
 				</datalist>
 		</td>
 		<td>
-			<button class="btn btn-xs" onclick="getDate()">筛选</button>
-			<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
-			<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
-			<button class="btn btn-xs" onclick="Print()">打印</button>
+			<button class="am-btn am-btn-primary" onclick="getDate()">筛选</button>
+			<button class="am-btn am-btn-warning" onclick="window.location.reload();">查看全部</button>
+			<button class="am-btn am-btn-success" onclick="toExcel()">导出Excel</button>
+			<button class="am-btn am-btn-danger" onclick="Print()">打印</button>
 		</td>
 	</tr>
 </table>
-<h2>材料采购总预算金额：<span id="totalout"></span>元</h2>
+<div class="am-panel am-panel-default">
+    <div class="am-panel-bd">材料采购总预算金额：<span id="totalout"></span>元</div>
+</div>
 <div class="div_auto_short">
-	<table class="table table-hover table-bordered">
-		<tr>
-			<th>门店</th>
-			<th>分类</th>
-			<th>材料名称</th>
-			<th>材料类别</th>
-			<th>数量</th>
-			<th>单价（元）</th>
-			<th>总价（元）</th>
-			<th>单位</th>
-			<th>入库情况</th>
-			<th>操作</th>
-		</tr>
+	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+		<thead>
+			<tr>
+				<th>门店</th>
+				<th>分类</th>
+				<th>材料名称</th>
+				<th>材料类别</th>
+				<th>数量</th>
+				<th>单价（元）</th>
+				<th>总价（元）</th>
+				<th>单位</th>
+				<th>入库情况</th>
+				<th>操作</th>
+			</tr>
+		</thead>
 		<tbody id="content">
 		</tbody>
 	</table>
 </div>
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog" style="width:300px">
-		<div class="modal-content">
-			<div class="modal-body">
-				<table class="table table-bordered table_modeal">
+        </div>
+      </div>
+
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">修改数量
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd">
+      <table class="am-table am-table-bordered">
 					<tr>
 						<td>数量</td>
 						<td><input type="text" id="numc" /></td>
 					</tr>
 				</table>
-
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+				<button type="button" class="am-btn am-btn-danger" onclick="closeDoc();">关闭
             </button>
-				<button type="button" class="btn btn-primary" onclick="submitDoc();">
+				<button type="button" class="am-btn am-btn-primary" onclick="submitDoc();">
                提交
             </button>
-			</div>
-		</div>
-		<!-- /.modal-content -->
-	</div>
-	<!-- /.modal -->
+    </div>
+  </div>
+</div>
+
 <script>
 	var g_id = 0;
 	var myDate = new Date();
@@ -166,8 +182,8 @@
 					html += "<td>" + ((data[i].unitPrice)*(data[i].num)).toFixed(2) + "</td>";
 					html += "<td>" + data[i].unit + "</td>";
 					html += "<td>" + data[i].inStock + "</td>";
-					html += "<td><button class='btn btn-xs' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>修改数量</button>";
-					html += " <button class='btn btn-xs' onclick='del(" + data[i].id + ")'>删除</button></td>";
+					html += "<td><button style='display:inline !important' class='am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only' onclick='intoput(" + data[i].id + "," + data[i].num + ")'>修改数量</button>";
+					html += " <button style='display:inline !important' class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' onclick='del(" + data[i].id + ")'>删除</button></td>";
 					html += "</tr>";
 					totalout += (data[i].unitPrice)*(data[i].num);
 				}
@@ -231,7 +247,8 @@
 					if(data == 200) {
 						//alert('新增成功！');
 						getDate();
-						$('#addModal').modal('hide');
+						var $modal = $('#doc-modal-1');
+						$modal.modal('close');
 					}
 				}
 			});
@@ -302,8 +319,15 @@
 		function intoput(id, num) {
 			g_id = id;
 			$("#numc").val(num);
-			$('#addModal').modal('show');
+			//$('#addModal').modal('show');
+			var $modal = $('#doc-modal-1');
+			$modal.modal('toggle');
 		}
+
+	function closeDoc(){
+		var $modal = $('#doc-modal-1');
+			$modal.modal('close');
+	}
 
 	/*根据名店加载分类*/
 	function setCat(i) {

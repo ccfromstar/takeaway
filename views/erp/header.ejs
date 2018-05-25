@@ -1,60 +1,83 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>云库存管理系统</title>
+		<title>库存管理ERP系统 v3.0</title>
 		<script src="/js/jquery.min.js"></script>
-		<link href="/css/erp.css" rel="stylesheet">
-		<link href="/plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		<script src="/plugin/bootstrap/js/bootstrap.min.js"></script>
 		
+		<link rel="stylesheet" href="../framework/amazeui/amazeui.min.css" />
 		<script type="text/javascript" src="/plugin/My97DatePicker/WdatePicker.js"></script>
 		<link href="/plugin/select2/dist/css/select2.min.css" rel="stylesheet" />
 		<script type="text/javascript" src="/plugin/craftpip/dist/jquery-confirm.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="/plugin/craftpip/css/jquery-confirm.css">
 		<script src="/plugin/select2/dist/js/select2.min.js"></script>
+		<script src="../framework/amazeui/amazeui.min.js"></script>
+		<link rel="stylesheet" href="../framework/css/admin.css">
 		<script src="/js/basic.js"></script>
 		<script src="/js/check.js"></script>
 	</head>
-	<body>
-		<header>
-			<strong>云库存</strong>
-			<small>管理系统 Version 2.1</small>
-			<p id="userinfo"></p>
-		</header>
-		<nav>
-			<ul>
-				<li>
-					<a href="#">采购管理</a>
-					<dl>
-						<dd><a href="/erp/index">采购清单</a></dd>
-						<dd><a href="/erp/putin">入库</a></dd>
-					</dl>
-				</li>
-				<li>
-					<a href="#">库存管理</a>
-					<dl>
-						<dd><a href="/erp/stock?p=所有&s=所有">库存数</a></dd>
-						<dd><a href="/erp/putout">出库</a></dd>
-					</dl>
-				</li>
-				<li>
-					<a href="#">财务管理</a>
-					<dl>
-						<dd><a href="/erp/byday">日报表</a></dd>
-						<dd><a href="/erp/bymonth">月报表</a></dd>
-					</dl>
-				</li>
-				<li>
-					<a href="#">系统管理</a>
-					<dl>
-						<dd><a href="/erp/store">门店</a></dd>
-						<dd><a href="/erp/category">分类</a></dd>
-						<dd><a href="/erp/c_material">材料类别</a></dd>
-						<dd><a href="/erp/material">材料</a></dd>
-						<dd><a href="/erp/role">用户权限</a></dd>
-						<dd><a href="/erp/log">调整记录</a></dd>
-					</dl>
-				</li>
-			</ul>
-		</nav>
-		<article>
+	<body style="overflow: auto">
+		    <header class="am-topbar am-topbar-inverse admin-header">
+				<div class="am-topbar-brand">
+					<strong>库存管理ERP系统 </strong> <small>v3.0</small>
+				</div>
+
+				<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+				<div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+					<ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+						<li><a href="javascript:;"><span class="am-icon-user"></span> 当前用户 <span id="cname"></span></a></li>
+						<li><a href="#" id="exit"><span class="am-icon-power-off"></span> 退出</a></li>
+					</ul>
+				</div>
+			</header>
+			<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+      <ul class="am-list admin-sidebar-list" id="s-left">
+        <li class="admin-parent">
+          <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 采购管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+          <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+            <li><a href="/erp/index" class="am-cf"><span class="am-icon-puzzle-piece"></span> 采购清单</a></li>
+            <li><a href="/erp/putin"><span class="am-icon-puzzle-piece"></span> 入库</a></li>
+          </ul>
+        </li>
+        <li class="admin-parent">
+          <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-table"></span> 库存管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+          <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+            <li><a href="/erp/stock?p=所有&s=所有" class="am-cf"><span class="am-icon-puzzle-piece"></span> 库存数</a></li>
+            <li><a href="/erp/putout"><span class="am-icon-puzzle-piece"></span> 出库</a></li>
+          </ul>
+        </li>
+        <li class="admin-parent">
+          <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-pencil-square-o"></span> 财务管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+          <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+            <li><a href="/erp/byday" class="am-cf"><span class="am-icon-puzzle-piece"></span> 日报表</a></li>
+            <li><a href="/erp/bymonth"><span class="am-icon-puzzle-piece"></span> 月报表</a></li>
+          </ul>
+        </li>
+        <li class="admin-parent">
+          <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-sign-out"></span> 系统管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+          <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+            <li><a href="/erp/store" class="am-cf"><span class="am-icon-puzzle-piece"></span> 门店管理</a></li>
+            <li><a href="/erp/category"><span class="am-icon-puzzle-piece"></span> 分类管理</a></li>
+            <li><a href="/erp/c_material"><span class="am-icon-puzzle-piece"></span> 材料类别</a></li>
+            <li><a href="/erp/material"><span class="am-icon-puzzle-piece"></span> 材料</a></li>
+            <li><a href="/erp/role"><span class="am-icon-puzzle-piece"></span> 用户权限</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 公告</p>
+          <p>系统升级为3.0版本，预计2018-06-01上线试运营。—— 管理员</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- sidebar end -->
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">

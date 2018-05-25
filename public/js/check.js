@@ -1,7 +1,8 @@
 $(function(){
     var cid = window.sessionStorage.getItem('cid');
     if(cid){
-        $('#userinfo').html('当前用户；'+window.sessionStorage.getItem('cname')+'【'+window.sessionStorage.getItem('crolename')+'】| <span id="exit"> 退出</span>');
+        //$('#userinfo').html('当前用户；'+window.sessionStorage.getItem('cname')+'【'+window.sessionStorage.getItem('crolename')+'】| <span id="exit"> 退出</span>');
+        $("#cname").html(window.sessionStorage.getItem('cname')+'【'+window.sessionStorage.getItem('crolename')+'】');
     }else{
         window.location = '/login.html';
     }

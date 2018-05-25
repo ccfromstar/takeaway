@@ -1,6 +1,11 @@
 <% include header %>
-<h1>1.库存查询(可选门店、分类和材料分类)</h1>
-<table class="form">
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">库存管理</strong> / <small>库存数</small></div>
+</div>
+<div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 库存查询</p>
+          <table class="am-form">
 	<tr>
 		<td>
 			<input type="text" id="k_store" list="list3" value="<%=k_store%>" onblur="setCat(1);" />
@@ -37,18 +42,72 @@
 						<option value="<%=obj6[i].no+"."+obj6[i].name%>">
 					<%}%>
 				</datalist>
+		</td>
+		<td>
 			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
 		</td>
 		<td>
-			<button class="btn btn-xs" onclick="getDate()">筛选</button>
-			<button class="btn btn-xs" onclick="window.location='/erp/stock?p=所有&s=所有';">查看全部</button>
-			<button class="btn btn-xs" onclick="toExcel()">导出Excel</button>
-			<button class="btn btn-xs" onclick="Print()">打印</button>
+			<button class="am-btn am-btn-primary" onclick="getDate()">筛选</button>
+			<button class="am-btn am-btn-warning" onclick="window.location='/erp/stock?p=所有&s=所有';">查看全部</button>
+			<button class="am-btn am-btn-success" onclick="toExcel()">导出Excel</button>
+			<button class="am-btn am-btn-danger" onclick="Print()">打印</button>
 		</td>
 	</tr>
 </table>
-<h2>库存结余金额：<span id="totalout"><%=totalout%></span>元</h2>
 
+	<div class="am-panel am-panel-default">
+	    <div class="am-panel-bd">库存结余金额：<span id="totalout"><%=totalout%></span>元</div>
+	</div>
+
+	<div class="div_auto">
+	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+		<tr>
+			<th>门店</th>
+			<th>分类</th>
+			<th>材料名称</th>
+			<th>单价</th>
+			<th>单位</th>
+			<th>库存数</th>
+			<th>操作</th>
+		</tr>
+		<%for(var i in obj2){%>
+		<tr>
+			<td>
+				<%=obj2[i].store%>
+			</td>
+			<td>
+				<%=obj2[i].category%>
+			</td>
+			<td>
+				<%=obj2[i].no%>.
+				<%=obj2[i].name%>
+			</td>
+			<td>
+				<%=obj2[i].unitPrice%>
+			</td>
+			<td>
+				<%=obj2[i].unit%>
+			</td>
+			<%if(obj2[i].num < 10){%>
+			<td style="background:#FF2F2F;color:#fff" id="dd_<%=obj2[i].id%>">
+				<%=obj2[i].num%>
+			</td id="dd_<%=obj2[i].id%>">
+			<%}else{%>
+			<td>
+				<%=obj2[i].num%>
+			</td>
+			<%}%>
+			<td>
+				<input type="text" name="" id="cc_<%=obj2[i].id%>">
+				<button type="button" style="display:inline !important" class="am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only" onclick="UpdateDoc(<%=obj2[i].id%>)">修改数量</button>
+			</td>
+		</tr>
+		<%}%>
+	</table>
+</div>
+        </div>
+      </div>
+<!--
 <h1>2.移库操作</h1>
 <table class="form">
 	<tr>
@@ -99,53 +158,8 @@
 		</td>
 	</tr>
 </table>
+-->
 
-<div class="div_auto">
-	<table class="table table-hover table-bordered">
-		<tr>
-			<th>门店</th>
-			<th>分类</th>
-			<th>材料名称</th>
-			<th>单价</th>
-			<th>单位</th>
-			<th>库存数</th>
-			<th>操作</th>
-		</tr>
-		<%for(var i in obj2){%>
-		<tr>
-			<td>
-				<%=obj2[i].store%>
-			</td>
-			<td>
-				<%=obj2[i].category%>
-			</td>
-			<td>
-				<%=obj2[i].no%>.
-				<%=obj2[i].name%>
-			</td>
-			<td>
-				<%=obj2[i].unitPrice%>
-			</td>
-			<td>
-				<%=obj2[i].unit%>
-			</td>
-			<%if(obj2[i].num < 10){%>
-			<td style="background:#FF2F2F;color:#fff" id="dd_<%=obj2[i].id%>">
-				<%=obj2[i].num%>
-			</td id="dd_<%=obj2[i].id%>">
-			<%}else{%>
-			<td>
-				<%=obj2[i].num%>
-			</td>
-			<%}%>
-			<td>
-				<input type="text" name="" id="cc_<%=obj2[i].id%>">
-				<button type="button" class="btn btn-default btn-xs" onclick="UpdateDoc(<%=obj2[i].id%>)">修改数量</button>
-			</td>
-		</tr>
-		<%}%>
-	</table>
-</div>
 <script>
 	function moveStock(){
 			$.ajax({

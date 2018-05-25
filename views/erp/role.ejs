@@ -1,5 +1,8 @@
 <% include header %>
-<table class="form">
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">系统管理</strong> / <small>用户权限</small></div>
+</div>
+<table  class="am-form" style="margin:5px">
 	<tr>
 		<td>
 			<input type="text" id="username" placeholder="用户名" />
@@ -45,12 +48,12 @@
 				</datalist>
 		</td>
 		<td>
-			<button class="btn btn-xs" onclick="add()">新增</button>
+			<button class="am-btn am-btn-primary" onclick="add()">新增</button>
 		</td>
 	</tr>
 </table>
 <div class="div_auto">
-	<table class="table table-hover table-bordered">
+	<table style="margin:5px" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 		<tr>
 			<th>用户名</th>
 			<th>密码</th>
@@ -59,7 +62,7 @@
 			<th>所属门店</th>
 			<th>操作</th>
 		</tr>
-		<tbody id="content">
+		
 		
 		<%for(var i in obj){%>
 		<tr>
@@ -79,28 +82,56 @@
 				<%=obj[i].store%>
 			</td>
 			<td>
-				<button class="btn btn-xs" onclick="del(<%=obj[i].id%>)">删除</button>
+				<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del(<%=obj[i].id%>)"><span class="am-icon-trash-o"></span>删除</button>
 			</td>
 		</tr>
 
 		<%}%>
-		</tbody>
+		
 	</table>
-	<p>权限指南：</p>
-<h1>1.申请者</h1>
-<p>申请者只能看到自己门店的采购管理-采购清单，可以添加采购清单</p>
-<h1>2.采购员</h1>
-<p>采购员只能看到自己门店的采购管理-采购清单，不可以添加采购清单</p>
-<h1>3.仓管</h1>
-<p>仓管只能看到自己门店的采购管理-入库，库存管理-库存数和库存管理-出库</p>
-<h1>4.财务</h1>
-<p>财务只能看到自己门店的财务管理-日报表，财务管理-月报表</p>
-<h1>5.门店管理员</h1>
-<p>可以看到自己门店的除了系统管理外的所有内容</p>
-<h1>6.超级管理员</h1>
-<p>可以看到自己门店的所有内容</p>
-<h1>6.自定义</h1>
-<p>可以自己定义权限</p>
+	<p style="margin:5px">权限指南：</p>
+	<div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 申请者</p>
+          <p>申请者只能看到自己门店的采购管理-采购清单，可以添加采购清单</p>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 采购员</p>
+          <p>采购员只能看到自己门店的采购管理-采购清单，不可以添加采购清单</p>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 仓管</p>
+          <p>仓管只能看到自己门店的采购管理-入库，库存管理-库存数和库存管理-出库</p>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 财务</p>
+          <p>财务只能看到自己门店的财务管理-日报表，财务管理-月报表</p>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 门店管理员</p>
+          <p>可以看到自己门店的除了系统管理外的所有内容</p>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 超级管理员</p>
+          <p>可以看到自己门店的所有内容</p>
+        </div>
+      </div>
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 自定义</p>
+          <p>可以自己定义权限</p>
+        </div>
+      </div>
 </div>
 <script>
 	function getRolebyKey(key,name) {

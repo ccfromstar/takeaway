@@ -1,5 +1,8 @@
 <% include header %>
-	<table class="form">
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">系统管理</strong> / <small>分类管理</small></div>
+</div>
+	<table class="am-form" style="margin:5px">
 		<tr>
 			<td>
 				<input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value)" />
@@ -15,12 +18,12 @@
 				<input type="text" id="name" placeholder="分类名称" />
 			</td>
 			<td>
-				<button class="btn btn-xs" onclick="add()">新增</button>
+				<button class="am-btn am-btn-primary" onclick="add()">新增</button>
 			</td>
 		</tr>
 	</table>
 	<div class="div_auto">
-		<table class="table table-hover table-bordered">
+		<table style="margin:5px" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 			<tr>
 				<th>门店名称</th>
 				<th>分类名称</th>
@@ -35,7 +38,7 @@
 						<%=obj[i].name%>
 					</td>
 					<td>
-						<button class="btn btn-xs" onclick="del(<%=obj[i].id%>)">删除</button>
+						<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del(<%=obj[i].id%>)"><span class="am-icon-trash-o"></span>删除</button>
 					</td>
 				</tr>
 				<%}%>

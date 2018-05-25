@@ -1,12 +1,15 @@
 <% include header %>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">财务管理</strong> / <small>月报表</small></div>
+</div>
 <!--财务月统计表-->
-<table class="form">
+<table class="am-form">
 	<tr>
 		<td>
-			<input type="text" id="k_date" style="cursor:pointer" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM'})"></input>
+			<input type="text" id="k_date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM'})"></input>
 		</td>
 		<td>
-			门店：<input id="k_store" type="text" list="list3" value="所有" onblur="setCat(1);" />
+			<input id="k_store" type="text" list="list3" placeholder="门店" onblur="setCat(1);" />
 			<datalist id="list3">
 					<option value="所有">所有</option>
 					<%for(var i in obj4){%>
@@ -15,7 +18,7 @@
 				</datalist>
 		</td>
 		<td>
-			类别：<input id="k_category" type="text" list="list1" value="所有" />
+			<input id="k_category" type="text" list="list1" placeholder="类别" />
 			<datalist id="list1">
 					<option value="所有">所有</option>
 					<%for(var i in obj3){%>
@@ -34,28 +37,45 @@
 				</datalist>
 		</td>
 		<td>
-			材料名：<input type="text" id="k_name" value="*.所有" list="mlist" />
+			<input type="text" id="k_name" value="*.所有" placeholder ="材料名" list="mlist" />
 			<datalist id="mlist">
 					<option value="*.所有">
 					<%for(var i in obj2){%>
 						<option value="<%=obj2[i].no+"."+obj2[i].name%>">
 							<%}%>
 				</datalist>
+		</td>
+		<td>
 			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
 		</td>
 		<td>
-			<button class="btn btn-xs" onclick="filter()">筛选</button>
-			<button class="btn btn-xs" onclick="window.location.reload();">查看全部</button>
+			<button class="am-btn am-btn-primary" onclick="filter()">筛选</button>
+			<button class="am-btn am-btn-default" onclick="window.location.reload();">查看全部</button>
 		</td>
 	</tr>
 </table>
-<h2>
-		当月总入库消费金额：<span id="totalout"></span>元，总差价<span id="totaldif"></span>元 
-		<button class="btn btn-xs" onclick="toExcelin()">导出入库Excel</button>
-	</h2>
-<div class="div_auto_stock">
-	<table class="table table-hover table-bordered">
-		<tr>
+<br/>
+<div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="doc-tab-demo-1">
+  <ul class="am-tabs-nav am-nav am-nav-tabs">
+    <li class="am-active"><a href="javascript: void(0)">入库消费情况</a></li>
+    <li><a href="javascript: void(0)">出库消耗情况</a></li>
+  </ul>
+
+  <div class="am-tabs-bd">
+    <div class="am-tab-panel am-active">
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 入库消费情况</p>
+          <div class="am-panel am-panel-default">
+    <div class="am-panel-bd">当月总入库消费金额：<span id="totalout"></span>元，总差价<span id="totaldif"></span>元 
+		<button class="am-btn am-btn-primary" onclick="toExcelin()">导出入库Excel</button></div>
+</div>
+        </div>
+
+
+        <div class="div_auto_stock">
+	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+		<thead><tr>
 			<th>日期</th>
 			<th>门店</th>
 			<th>材料名称</th>
@@ -66,18 +86,27 @@
 			<th>单价</th>
 			<th>差价</th>
 			<th>材料类别</th>
-		</tr>
+		</tr></thead>
 		<tbody id="content">
 		</tbody>
 	</table>
 </div>
-<h2>
-		当月总出库消耗的材料费用：<span id="totaluse"></span>元
-		<button class="btn btn-xs" onclick="toExcelout()">导出出库Excel</button>
-	</h2>
-<div class="div_auto_stock">
-	<table class="table table-hover table-bordered">
-		<tr>
+
+      </div>
+    </div>
+    <div class="am-tab-panel">
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 出库消耗情况</p>
+          <div class="am-panel am-panel-default">
+    <div class="am-panel-bd">当月总出库消耗的材料费用：<span id="totaluse"></span>元
+		<button class="am-btn am-btn-primary" onclick="toExcelout()">导出出库Excel</button></div>
+</div>
+        </div>
+
+        <div class="div_auto_stock">
+	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+		<thead><tr>
 			<th>日期</th>
 			<th>门店</th>
 			<th>材料名称</th>
@@ -86,11 +115,24 @@
 			<th>单价</th>
 			<th>总价</th>
 			<th>材料类别</th>
-		</tr>
+		</tr></thead>
 		<tbody id="contentuse">
 		</tbody>
 	</table>
 </div>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 <script>
 	var myDate = new Date();
 	var y = myDate.getFullYear();

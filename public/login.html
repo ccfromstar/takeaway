@@ -2,70 +2,78 @@
 <html lang="zh-CN">
 
 	<head>
-		<title>云库存管理系统</title>
+		<title>库存管理ERP系统 v3.0</title>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="Cache-Control" content="no-siteapp" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<script src="js/jquery.min.js"></script>
-		<script src="js/amazeui.min.js"></script>
+		<link rel="stylesheet" href="../framework/amazeui/amazeui.min.css" />
+		<script src="../framework/jquery-1.9.1.js"></script>
 		<script type="text/javascript" src="js/setting.js"></script>
 		<script type="text/javascript" src="js/login.js"></script>
-		<link rel="stylesheet" href="css/amazeui.min.css" />
-		<link rel="stylesheet" href="css/basic.css" />
 		<style>
 			.header {
 				text-align: center;
 			}
 			
 			.header h1 {
-				font-size: 150%;
+				font-size: 200%;
 				color: #333;
-				margin-top: 30px;
+				margin-top: 10px;
 			}
 			
 			.header p {
 				font-size: 14px;
 			}
-			
-			.am-u-lg-6 {
-				width: 250px !important;
-			}
-			
-			label{
-				font-weight: 300;
-				font-size:12px;
-			}
 		</style>
 	</head>
 
-	<body>
+	<body style="background-image: url('/img/2.jpg');background-repeat:no-repeat;background-size:100% 100%;">
 		<div class="header">
 			<div class="am-g">
-				<h1>云库存管理系统</h1>
+				<br/><br/><br/><br/><br/>
+				
+				
+				
 			</div>
-			<hr />
+			
 		</div>
-		<div class="am-g">
+		<div ></div>
+		<!--<img src="/img/b.png" style="width:100%">-->
+		<div style="width: 100%;text-align: center">
+				<h1 style="color: #fff;font-size:30px">库存管理ERP系统 v3.0</h1>
+		</div>
+		
+		<div class="am-g" style="background-image: url('/img/a.png');width: 800px;margin-top: -100px">
 			<div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+			
 				<form method="post" class="am-form">
-					<label for="username">用户名:</label>
-					<input type="text" name="" id="username" value="">
+					
+					<select style="margin-top:220px;margin-left:15px;width:330px;border:none" id="company" data-am-selected>
+					  <option value="康桥">康桥</option>
+					  <option value="商城路店">商城路店</option>
+					  <option value="天潼路（工行）">天潼路（工行）</option>
+					</select>
 					<br>
-					<label for="password">密码:</label>
-					<input type="password" name="" id="password" value="">
+					
+					<input style="margin-top:40px;margin-left:15px;width:330px;border:none" type="text" name="" id="username" value="">
 					<br>
-					<label for="remember-me">
-						<input id="remember-me" name="remember-me" type="checkbox" > 记住密码</input>
-					</label>
-					<br />
-					<div class="am-cf">
-						<input type="submit" id="login" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
-					</div>
+					
+					<input style="margin-top:25px;margin-left:15px;width:330px;border:none" type="password" name="" id="password" value="">
+					<br>
+					<table>
+						<tr>
+							<td><input id="remember-me" name="remember-me" type="checkbox" style="margin-top:30px;color:#fff;" > </input><span style="color:#fff">记住密码</span></td>
+							<td>
+								<button style="margin-left:170px;margin-top:30px;width:100px" type="button" id="login" onclick="login1()" class="am-btn am-btn-default">登 录</button>
+							</td>
+						</tr>
+					</table>
+					<div style="height:30px"></div>
+					
 				</form>
 			</div>
 		</div>
-		<div class="am-alert am-alert-danger none errorinfo" data-am-alert></div>
 	</body>
 </html>

@@ -1649,6 +1649,9 @@ exports.erp_log = function(req, res) {
 			console.log(error);
 			return false;
 		}
+		for(var i in obj){
+			obj[i].createAt = (obj[i].createAt).Format("yyyy-MM-dd hh:mm:ss")
+		}
 		res.render('erp/log', {
 			obj: obj
 		});
