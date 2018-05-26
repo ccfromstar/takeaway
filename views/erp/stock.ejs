@@ -68,7 +68,7 @@
 			<th>单价</th>
 			<th>单位</th>
 			<th>库存数</th>
-			<th>操作</th>
+			<!--<th>操作</th>-->
 		</tr>
 		<%for(var i in obj2){%>
 		<tr>
@@ -97,10 +97,11 @@
 				<%=obj2[i].num%>
 			</td>
 			<%}%>
+			<!--
 			<td>
 				<input type="text" name="" id="cc_<%=obj2[i].id%>">
 				<button type="button" style="display:inline !important" class="am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only" onclick="UpdateDoc(<%=obj2[i].id%>)">修改数量</button>
-			</td>
+			</td>-->
 		</tr>
 		<%}%>
 	</table>

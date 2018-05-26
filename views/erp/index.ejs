@@ -2,71 +2,85 @@
 <div class="am-cf am-padding">
     <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">采购管理</strong> / <small>采购清单</small></div>
 </div>
-<!--采购单-->
+<div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="doc-tab-demo-1">
+  <ul class="am-tabs-nav am-nav am-nav-tabs">
+    <li class="am-active"><a href="javascript: void(0)">采购清单添加</a></li>
+    <li><a href="javascript: void(0)">采购清单查询</a></li>
+  </ul>
+
+  <div class="am-tabs-bd">
+    <div class="am-tab-panel am-active">
+    	<!--采购单BEGIN-->
 <div class="am-panel am-panel-default admin-sidebar-panel">
         <div class="am-panel-bd">
           <p><span class="am-icon-bookmark"></span> 采购清单添加</p>
-          <table class="am-form">
-	<tr>
-		<td>
-			<input type="text"  id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
-		</td>
-		<td>
-			<input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value);setCat(0);" />
+          <table class="am-table am-table-bordered am-form">
+    		<tr>
+    			<td>日期</td>
+    			<td><input type="text"  id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input></td>
+    		</tr>
+    		<tr>
+    			<td>门店</td>
+    			<td><input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value);setCat(0);" />
 			<datalist id="list2">
 					<%for(var i in obj){%>
 						<option value="<%=obj[i].name%>">
 							<%=obj[i].name%>
 						</option>
 					<%}%>
-				</datalist>
-		</td>
-		<td>
-			<input id="category" type="text" placeholder="分类" list="list1" onblur="setDate(0,this.value)" />
+				</datalist></td>
+    		</tr>
+    		<tr>
+    			<td>分类</td>
+    			<td><input id="category" type="text" placeholder="分类" list="list1" onblur="setDate(0,this.value)" />
 			<datalist id="list1">
 					<%for(var i in obj3){%>
 						<option value="<%=obj3[i].name%>">
 							<%=obj3[i].name%>
 						</option>
 					<%}%>
-				</datalist>
-		</td>
-	</tr>
-</table>
-<table class="am-form">
-	<tr>
-		<td>
-			<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
+				</datalist></td>
+    		</tr>
+    		<tr>
+    			<td>材料所属分类</td>
+    			<td><input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
 			<datalist id="mlist1">
 					<%for(var i in obj4){%>
 						<option value="<%=obj4[i].no%>">
 							<%=obj4[i].name%>
 						</option>
 						<%}%>
-				</datalist>
-		</td>
-		<td>
-			<input type="text" id="name" placeholder="材料名称" list="mlist" />
+				</datalist></td>
+    		</tr>
+    		<tr>
+    			<td>材料名称</td>
+    			<td>
+    				<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" /><br/>
+    				<input type="text" id="name" placeholder="材料名称" list="mlist" />
 			<datalist id="mlist">
 					<%for(var i in obj2){%>
 						<option value="<%=obj2[i].no+"."+obj2[i].name%>">
 							<%}%>
-				</datalist>
-		</td>
-		<td>
-			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
-		</td>
-		<td>
-			<input type="text" id="num" placeholder="数量" />
-		</td>
-		<td id="addorder">
-			<button class="am-btn am-btn-primary"  onclick="add()">添加</button>
-		</td>
-	</tr>
-</table>
+				</datalist></td>
+    		</tr>
+    		<tr>
+    			<td>数量</td>
+    			<td><input type="text" id="num" placeholder="数量" /></td>
+    		</tr>
+    		<tr>
+    			<td id="addorder"><button class="am-btn am-btn-primary"  onclick="add()">添加</button></td>
+    			<td></td>
+    		</tr>
+			</table>
         </div>
       </div>
+<!--采购单END-->
+    </div>
+  </div>
 
+   <div class="am-tabs-bd">
+    <div class="am-tab-panel">
+    	<!--采购清单查询BEGIN-->
 <div class="am-panel am-panel-default admin-sidebar-panel">
         <div class="am-panel-bd">
           <p><span class="am-icon-bookmark"></span> 采购清单查询</p>
@@ -128,6 +142,11 @@
 </div>
         </div>
       </div>
+<!--采购清单查询END-->
+    </div>
+  </div>
+
+ </div>
 
 <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
   <div class="am-modal-dialog">
