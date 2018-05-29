@@ -19,9 +19,9 @@
     			<td>日期</td>
     			<td><input type="text"  id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input></td>
     		</tr>
-    		<tr>
+    		<tr style="display: none">
     			<td>门店</td>
-    			<td><input id="store" type="text" placeholder="门店" list="list2" onblur="setDate(1,this.value);setCat(0);" />
+    			<td><input id="store" type="text" placeholder="门店" list="list2" value="康桥" onblur="setDate(1,this.value);setCat(0);" />
 			<datalist id="list2">
 					<%for(var i in obj){%>
 						<option value="<%=obj[i].name%>">
@@ -30,9 +30,9 @@
 					<%}%>
 				</datalist></td>
     		</tr>
-    		<tr>
+    		<tr style="display: none">
     			<td>分类</td>
-    			<td><input id="category" type="text" placeholder="分类" list="list1" onblur="setDate(0,this.value)" />
+    			<td><input id="category" type="text" placeholder="分类" value="外卖" list="list1" onblur="setDate(0,this.value)" />
 			<datalist id="list1">
 					<%for(var i in obj3){%>
 						<option value="<%=obj3[i].name%>">
@@ -89,7 +89,7 @@
 		<td>
 			<input type="text" id="k_date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
 			<datalist id="list3">
 					<%for(var i in obj){%>
@@ -99,7 +99,7 @@
 					<%}%>
 				</datalist>
 		</td>	
-		<td>		
+		<td style="display: none">		
 			<input type="text" id="k_category" list="list4" value="所有" />
 			<datalist id="list4">
 					<%for(var i in obj3){%>
@@ -124,8 +124,6 @@
 	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 		<thead>
 			<tr>
-				<th>门店</th>
-				<th>分类</th>
 				<th>材料名称</th>
 				<th>材料类别</th>
 				<th>数量</th>
@@ -192,8 +190,7 @@
 				var totalout = 0;
 				for(var i in data) {
 					html += "<tr>";
-					html += "<td>" + data[i].store + "</td>";
-					html += "<td>" + data[i].category + "</td>";
+					
 					html += "<td>" + data[i].no + "." + data[i].name + "</td>";
 					html += "<td>" + data[i].cname + "</td>";
 					html += "<td>" + data[i].num + "</td>";

@@ -21,7 +21,7 @@
 		<td>
 			<input type="text" id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(0);" />
 			<datalist id="list3">
 						<%for(var i in obj5){%>
@@ -31,7 +31,7 @@
 						<%}%>
 				</datalist>
 			</td>
-				<td>
+				<td style="display: none">
 					<input id="category" type="text" list="list1" value="所有" />
 					<datalist id="list1">
 					<option value="所有">所有</option>
@@ -71,8 +71,6 @@
 	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 		<thead>
 			<tr>
-				<th>门店</th>
-				<th>分类</th>
 				<th>材料名称</th>
 				<th>单价</th>
 				<th>单位</th>
@@ -105,7 +103,7 @@
 		<td>
 			<input type="text" id="k_date_end" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="sk_store" list="list3a" value="所有" onblur="setCat(1);" />
 			<datalist id="list3a">
 					<%for(var i in obj5){%>
@@ -114,8 +112,8 @@
 						</option>
 					<%}%>
 				</datalist>
-			<td>
-				<td>
+			<td style="display: none">
+				<td style="display: none">
 					<input type="text" id="k_category" list="list2" value="所有" />
 					<datalist id="list2">
 					<option value="所有">所有</option>
@@ -142,7 +140,6 @@
 				<th>门店</th>
 				<th>材料名称</th>
 				<th>材料类别</th>
-				<th>类别</th>
 				<th>数量</th>
 				<th>单价</th>
 				<th>单位</th>
@@ -174,7 +171,7 @@
     <div class="am-modal-bd">
       <table class="am-table am-table-bordered">
       				<tr>
-						<td>出库门店选择<br/></td>
+						<td>销售网点选择<br/></td>
 						<td>
 							<input type="text" id="ck_store" list="list39" />
 							<datalist id="list39">
@@ -230,8 +227,8 @@
 						var h1 = "<input type='text' id='cc_"+data[i].id+"' style='cursor:pointer;height:30px' readonly  class='Wdate' onfocus='WdatePicker({doubleCalendar:false,dateFmt:\"yyyy-MM-dd\"})'' value='"+ data[i].date +"'></input>";
 						var h2 = "<button type='button' style='display:inline !important' class='am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only' onclick='UpdateDoc("+data[i].id+")'>调整</button>";
 						html += "<tr>";
-						html += "<td>" + data[i].store + "</td>";
-						html += "<td>" + data[i].category + "</td>";
+						//html += "<td>" + data[i].store + "</td>";
+						//html += "<td>" + data[i].category + "</td>";
 						html += "<td>" + data[i].name + "</td>";
 						html += "<td>" + data[i].unitPrice + "元</td>";
 						html += "<td>" + data[i].unit + "</td>";
@@ -261,7 +258,7 @@
 			g_unitPrice = unitPrice;
 			g_category = category;
 			g_id = id;
-			$("#ck_store").val(g_store);
+			//$("#ck_store").val(g_store);
 			var $modal = $('#doc-modal-1');
 			$modal.modal('toggle');
 			/*
@@ -356,7 +353,7 @@
 						html += "<td>" + data[i].store + "</td>";
 						html += "<td>" + data[i].name + "</td>";
 						html += "<td>" + data[i].cname + "</td>";
-						html += "<td>" + data[i].category + "</td>";
+						//html += "<td>" + data[i].category + "</td>";
 						html += "<td>" + data[i].num + "</td>";
 						html += "<td>" + data[i].unitPrice + "元</td>";
 						html += "<td>" + data[i].unit + "</td>";

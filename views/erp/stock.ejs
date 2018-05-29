@@ -7,7 +7,7 @@
           <p><span class="am-icon-bookmark"></span> 库存查询</p>
           <table class="am-form">
 	<tr>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_store" list="list3" value="<%=k_store%>" onblur="setCat(1);" />
 			<datalist id="list3">
 					<%for(var i in obj5){%>
@@ -17,7 +17,7 @@
 					<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_category" list="list2" value="<%=k_cate%>" />
 			<datalist id="list2">
 					<%for(var i in obj3){%>
@@ -62,8 +62,6 @@
 	<div class="div_auto">
 	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 		<tr>
-			<th>门店</th>
-			<th>分类</th>
 			<th>材料名称</th>
 			<th>单价</th>
 			<th>单位</th>
@@ -72,12 +70,6 @@
 		</tr>
 		<%for(var i in obj2){%>
 		<tr>
-			<td>
-				<%=obj2[i].store%>
-			</td>
-			<td>
-				<%=obj2[i].category%>
-			</td>
 			<td>
 				<%=obj2[i].no%>.
 				<%=obj2[i].name%>

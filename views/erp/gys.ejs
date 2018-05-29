@@ -1,0 +1,114 @@
+<% include header %>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">系统管理</strong> / <small>供应商管理</small></div>
+</div>
+	<table class="am-form" style="margin:5px">
+		<tr>
+			<td>
+				<input type="text" id="name" placeholder="名称" />
+			</td>
+			<td>
+				<input type="text" id="account" placeholder="账户名" />
+			</td>
+			<td>
+				<input type="text" id="number" placeholder="账号" />
+			</td>
+			<td>
+				<input type="text" id="linkname" placeholder="联系人" />
+			</td>
+			<td>
+				<input type="text" id="tel" placeholder="电话" />
+			</td>
+			<td>
+				<input type="text" id="address" placeholder="地址" />
+			</td>
+			<td>
+				<button class="am-btn am-btn-primary" onclick="add()">新增</button>
+			</td>
+		</tr>
+	</table>
+	<div class="div_auto">
+		<table style="margin:5px" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+			<tr>
+				<th>编号</th>
+				<th>名称</th>
+				<th>账户名</th>
+				<th>账号</th>
+				<th>联系人</th>
+				<th>电话</th>
+				<th>地址</th>
+				<th>操作</th>
+			</tr>
+			<%for(var i in obj){%>
+				<tr>
+					<td>
+						<%=obj[i].id%>
+					</td>
+					<td>
+						<%=obj[i].name%>
+					</td>
+					<td>
+						<%=obj[i].account%>
+					</td>
+					<td>
+						<%=obj[i].number%>
+					</td>
+					<td>
+						<%=obj[i].linkname%>
+					</td>
+					<td>
+						<%=obj[i].tel%>
+					</td>
+					<td>
+						<%=obj[i].address%>
+					</td>
+					<td>
+						<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del(<%=obj[i].id%>)"><span class="am-icon-trash-o"></span>删除</button>
+					</td>
+				</tr>
+				<%}%>
+		</table>
+	</div>
+	<script>
+		function add() {
+			
+			$.ajax({
+				type: "POST",
+				url: "/erp/insertGYS",
+				data: {
+					name: $("#name").val(),
+					account: $("#account").val(),
+					number: $("#number").val(),
+					linkname: $("#linkname").val(),
+					tel: $("#tel").val(),
+					address: $("#address").val()
+				},
+				success: function(data) {
+					if (data == 200) {
+						//alert('新增成功！');
+						window.location.reload();
+					}
+				}
+			});
+		}
+		
+		function del(id){
+			var _con = confirm("是否确认删除?");
+ 			if(_con){
+ 				$.ajax({
+					type: "POST",
+					url: "/erp/delGYS",
+					data: {
+						id: id
+					},
+					success: function(data) {
+						if (data == 200) {
+							//alert('删除成功！');
+							window.location.reload();
+						}
+					}
+				});	
+ 			}
+		}
+	</script>
+	<% include footer %>

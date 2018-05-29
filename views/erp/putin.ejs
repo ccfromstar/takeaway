@@ -22,7 +22,7 @@
 		<td>
 			<input type="text" id="k_date_s" style="cursor:pointer" readonly  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" ></input>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
 			<datalist id="list3">
 					<%for(var i in obj4){%>
@@ -32,7 +32,7 @@
 					<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_category" list="list4" value="所有" />
 			<datalist id="list4">
 					<%for(var i in obj3){%>
@@ -53,8 +53,6 @@
 		<thead>
 		<tr>
 			<th>日期</th>
-			<th>门店</th>
-			<th>分类</th>
 			<th>材料名称</th>
 			<th>材料类别</th>
 			<th>数量</th>
@@ -82,7 +80,7 @@
 		<td>
 			<input type="text" id="k_date_s1" style="cursor:pointer" readonly  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" ></input>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_store1" list="list3" value="所有" onblur="setCat(1);" />
 			<datalist id="list3">
 					<%for(var i in obj4){%>
@@ -92,7 +90,7 @@
 					<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_category1" list="list4" value="所有" />
 			<datalist id="list4">
 					<%for(var i in obj3){%>
@@ -113,8 +111,6 @@
 		<thead>
 		<tr>
 			<th>日期</th>
-			<th>门店</th>
-			<th>分类</th>
 			<th>材料名称</th>
 			<th>材料类别</th>
 			<th>数量</th>
@@ -145,7 +141,7 @@
 		<td>
 			<input type="text" id="k_date_end" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
 			<datalist id="list3">
 					<%for(var i in obj4){%>
@@ -154,8 +150,8 @@
 						</option>
 					<%}%>
 				</datalist>
-			<td>
-				<td>
+			<td style="display: none">
+				<td style="display: none">
 					<input type="text" id="k_category" list="list2" value="所有" />
 					<datalist id="list2">
 					<%for(var i in obj3){%>
@@ -178,8 +174,6 @@
 	<table style="margin:5px;width:90%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 		<thead>
 			<tr>
-				<th>门店</th>
-				<th>类别</th>
 				<th>材料名称</th>
 				<th>材料类别</th>
 				<th>数量</th>
@@ -254,8 +248,8 @@
 					var totalout = 0;
 					for(var i in data) {
 						html += "<tr>";
-						html += "<td>" + data[i].store + "</td>";
-						html += "<td>" + data[i].category + "</td>";
+						//html += "<td>" + data[i].store + "</td>";
+						//html += "<td>" + data[i].category + "</td>";
 						html += "<td>" + data[i].name + "</td>";
 						html += "<td>" + data[i].cname + "</td>";
 						html += "<td>" + data[i].num + "</td>";
@@ -402,8 +396,8 @@
 					for(var i in data) {
 						html += "<tr>";
 						html += "<td>" + data[i].date + "</td>";
-						html += "<td>" + data[i].store + "</td>";
-						html += "<td>" + data[i].category + "</td>";
+						//html += "<td>" + data[i].store + "</td>";
+						//html += "<td>" + data[i].category + "</td>";
 						html += "<td>" + data[i].no + "." + data[i].name + "</td>";
 						html += "<td>" + data[i].cname + "</td>";
 						html += "<td>" + data[i].num + "</td>";
@@ -432,8 +426,8 @@
 					for(var i in data) {
 						html += "<tr>";
 						html += "<td>" + data[i].date + "</td>";
-						html += "<td>" + data[i].store + "</td>";
-						html += "<td>" + data[i].category + "</td>";
+						//html += "<td>" + data[i].store + "</td>";
+						//html += "<td>" + data[i].category + "</td>";
 						html += "<td>" + data[i].no + "." + data[i].name + "</td>";
 						html += "<td>" + data[i].cname + "</td>";
 						html += "<td>" + data[i].num + "</td>";
@@ -458,8 +452,8 @@
 						if(data[i].store == key){
 							html += "<tr>";
 							html += "<td>" + data[i].date + "</td>";
-							html += "<td>" + data[i].store + "</td>";
-							html += "<td>" + data[i].category + "</td>";
+							//html += "<td>" + data[i].store + "</td>";
+							//html += "<td>" + data[i].category + "</td>";
 							html += "<td>" + data[i].no + "." + data[i].name + "</td>";
 							html += "<td>" + data[i].cname + "</td>";
 							html += "<td>" + data[i].num + "</td>";

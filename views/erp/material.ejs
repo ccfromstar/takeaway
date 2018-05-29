@@ -5,7 +5,7 @@
 	<table  class="am-form" style="margin:5px">
 		<tr>
 			<td>
-				<input type="text" id="name" placeholder="材料名称" />
+				<input type="text" id="name" placeholder="名称" />
 			</td>
 			<td>
 				<input type="text" id="unit" placeholder="单位" />
@@ -21,6 +21,33 @@
 				</datalist>
 			</td>
 			<td>
+				<input type="text" id="gys_id" placeholder="供应商" list="gyslist" />
+				<datalist id="gyslist">
+					<%for(var i in obj3){%>
+						<option value="<%=obj3[i].id%>">
+							<%=obj3[i].name%>
+						</option>
+						<%}%>
+				</datalist>
+			</td>
+			<td>
+				<input type="text" id="guige" placeholder="规格" />
+			</td>
+			<td>
+				<input type="text" id="weight" placeholder="重量" />
+			</td>
+			<td>
+				<input type="text" id="pinpai" placeholder="品牌" />
+			</td>
+			<td>
+				<input type="text" id="yujing" value="10" placeholder="库存警示量" />
+			</td>
+			
+		</tr>
+	</table>
+	<table  class="am-form" style="margin:5px">
+		<tr>
+			<td>
 				<button class="am-btn am-btn-primary" onclick="add()">新增</button>
 				<button class="am-btn am-btn-success" onclick="toExcelMat()">导出Excel</button>
 			</td>
@@ -32,6 +59,11 @@
 				<th>材料名称</th>
 				<th>单位</th>
 				<th>类别</th>
+				<th>供应商</th>
+				<th>规格</th>
+				<th>重量</th>
+				<th>品牌</th>
+				<th>库存警示量</th>
 				<th>操作</th>
 			</tr>
 			<%for(var i in obj){%>
@@ -46,6 +78,21 @@
 						<%=obj[i].cname%>
 					</td>
 					<td>
+						<%=obj[i].cgys%>
+					</td>
+					<td>
+						<%=obj[i].guige%>
+					</td>
+					<td>
+						<%=obj[i].weight%>
+					</td>
+					<td>
+						<%=obj[i].pinpai%>
+					</td>
+					<td>
+						<%=obj[i].yujing%>
+					</td>
+					<td>
 						<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del(<%=obj[i].id%>)"><span class="am-icon-trash-o"></span>删除</button>
 					</td>
 				</tr>
@@ -54,22 +101,19 @@
 	</div>
 	<script>
 		function add() {
-			if($('#name').val() ==''){
-				alert('材料名称必填！');return false;
-			}
-			if($('#unit').val() ==''){
-				alert('单位必填！');return false;
-			}
-			if($('#cate_id').val() ==''){
-				alert('所属分类必填！');return false;
-			}
+			
 			$.ajax({
 				type: "POST",
 				url: "/erp/insertM",
 				data: {
 					name: $("#name").val(),
 					cate_id: $("#cate_id").val(),
-					unit: $("#unit").val()
+					unit: $("#unit").val(),
+					gys_id: $("#gys_id").val(),
+					guige: $("#guige").val(),
+					weight: $("#weight").val(),
+					pinpai: $("#pinpai").val(),
+					yujing: $("#yujing").val()
 				},
 				success: function(data) {
 					if (data == 200) {

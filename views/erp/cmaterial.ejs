@@ -5,10 +5,10 @@
 	<table class="am-form" style="margin:5px">
 		<tr>
 			<td>
-				<input type="text" id="no" placeholder="分类编号" />
+				<input type="text" id="no" placeholder="大类名称" />
 			</td>
 			<td>
-				<input type="text" id="name" placeholder="分类名称" />
+				<input type="text" id="name" placeholder="小类名称" />
 			</td>
 			<td>
 				<button class="am-btn am-btn-primary" onclick="add()">新增</button>
@@ -18,8 +18,8 @@
 	<div class="div_auto">
 		<table style="margin:5px" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 			<tr>
-				<th>分类编号</th>
-				<th>分类名称</th>
+				<th>大类名称</th>
+				<th>小类名称</th>
 				<th>操作</th>
 			</tr>
 			<%for(var i in obj){%>

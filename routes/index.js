@@ -1318,6 +1318,7 @@ exports.erp_index = function(req, res) {
 exports.erp_material = function(req, res) {
 	var sql1 = "select * from c_material order by id desc";
 	var sql2 = "select * from material_category";
+	var sql3 = "select * from gys";
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
@@ -1328,9 +1329,16 @@ exports.erp_material = function(req, res) {
 				console.log(error);
 				return false;
 			}
-			res.render('erp/material', {
-				obj: obj,
-				obj2: obj2
+			mysql.query(sql3, function(error, obj3) {
+				if(error) {
+					console.log(error);
+					return false;
+				}
+				res.render('erp/material', {
+					obj: obj,
+					obj2: obj2,
+					obj3: obj3
+				});
 			});
 		});
 	});
@@ -1595,6 +1603,19 @@ exports.erp_store = function(req, res) {
 			return false;
 		}
 		res.render('erp/store', {
+			obj: obj
+		});
+	});
+};
+
+exports.erp_gys = function(req, res) {
+	var sql1 = "select * from gys order by id desc";
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.render('erp/gys', {
 			obj: obj
 		});
 	});

@@ -14,9 +14,13 @@ exports.sqldo = function(req, res) {
 		getOrd(req, res);
 	} else if(_sql == "insertOrd") {
 		insertOrd(req, res);
+	} else if(_sql == "insertGYS") {
+		insertGYS(req, res);
 	} else if(_sql == "delOrd") {
 		delOrd(req, res);
-	}  else if(_sql == "delOrd1") {
+	} else if(_sql == "delGYS") {
+		delGYS(req, res);
+	} else if(_sql == "delOrd1") {
 		delOrd1(req, res);
 	} else if(_sql == "delOrdh") {
 		delOrdh(req, res);
@@ -504,7 +508,12 @@ function insertM(req, res) {
 	var name = req.param('name');
 	var cate_id = req.param('cate_id');
 	var unit = req.param('unit');
-	var sql1 = "insert into material (name,cate_id,unit) values ('" + name + "'," + cate_id + ",'" + unit + "')";
+	var gys_id = req.param('gys_id');
+	var guige = req.param('guige');
+	var weight = req.param('weight');
+	var pinpai = req.param('pinpai');
+	var yujing = req.param('yujing');
+	var sql1 = "insert into material (name,cate_id,unit,gys_id,guige,weight,pinpai,yujing) values ('" + name + "'," + cate_id + ",'" + unit + "','" + gys_id + "','" + guige + "','" + weight + "','" + pinpai + "','" + yujing + "')";
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
@@ -544,9 +553,38 @@ function insertStore(req, res) {
 	});
 };
 
+function insertGYS(req, res) {
+	var name = req.param('name');
+	var account = req.param('account');
+	var number = req.param('number');
+	var linkname = req.param('linkname');
+	var tel = req.param('tel');
+	var address = req.param('address');
+	var sql1 = "insert into gys (name,account,number,linkname,tel,address) values ('" + name + "','" + account + "','" + number + "','" + linkname + "','" + tel + "','" + address + "')";
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
 function delStore(req, res) {
 	var id = req.param('id');
 	var sql1 = "delete from store where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
+function delGYS(req, res) {
+	var id = req.param('id');
+	var sql1 = "delete from gys where id = " + id;
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
