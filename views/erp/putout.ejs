@@ -173,6 +173,20 @@
     </div>
     <div class="am-modal-bd">
       <table class="am-table am-table-bordered">
+      				<tr>
+						<td>出库门店选择<br/></td>
+						<td>
+							<input type="text" id="ck_store" list="list39" />
+							<datalist id="list39">
+										<%for(var i in obj5){%>
+											<option value="<%=obj5[i].name%>">
+												<%=obj5[i].name%>
+											</option>
+										<%}%>
+							</datalist>
+						</td>
+
+					</tr>
 					<tr>
 						<td>出库数量<br/>(库存数:<span id="stocknum"></span>)</td>
 						<td><input type="number" class="input-sm form-control" id="g_num"></input>
@@ -247,6 +261,7 @@
 			g_unitPrice = unitPrice;
 			g_category = category;
 			g_id = id;
+			$("#ck_store").val(g_store);
 			var $modal = $('#doc-modal-1');
 			$modal.modal('toggle');
 			/*
@@ -303,7 +318,7 @@
 				url: "/erp/insertPutout",
 				data: {
 					category: g_category,
-					store: g_store,
+					store: $("#ck_store").val(),
 					date: $("#date").val(),
 					name: g_name,
 					num: val,

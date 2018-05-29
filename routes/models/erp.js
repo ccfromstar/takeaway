@@ -16,6 +16,8 @@ exports.sqldo = function(req, res) {
 		insertOrd(req, res);
 	} else if(_sql == "delOrd") {
 		delOrd(req, res);
+	}  else if(_sql == "delOrd1") {
+		delOrd1(req, res);
 	} else if(_sql == "delOrdh") {
 		delOrdh(req, res);
 	} else if(_sql == "delOrdh1") {
@@ -24,6 +26,8 @@ exports.sqldo = function(req, res) {
 		getPutIn(req, res);
 	} else if(_sql == "insertPutin") {
 		insertPutin(req, res);
+	}  else if(_sql == "insertPutin1") {
+		insertPutin1(req, res);
 	} else if(_sql == "delPutin") {
 		delPutin(req, res);
 	} else if(_sql == "getStock") {
@@ -76,6 +80,8 @@ exports.sqldo = function(req, res) {
 		delCM(req, res);
 	} else if(_sql == "getUninOrd") {
 		getUninOrd(req, res);
+	}  else if(_sql == "getUninOrd1") {
+		getUninOrd1(req, res);
 	} else if(_sql == "delRole") {
 		delRole(req, res);
 	} else if(_sql == "insertRole") {
@@ -644,6 +650,26 @@ function delOrd(req, res) {
 	});
 };
 
+function delOrd1(req, res) {
+	var id = req.param('id');
+	var oid = req.param('oid');
+	var sql1 = "delete from putin where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		var sql2 = "update orderlist set inStock='未入库' where id ="+oid;
+		mysql.query(sql2, function(error, row2) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			res.send('200');
+		});
+	});
+};
+
 function delOrdh(req, res) {
 	var id = req.param('id');
 	var sql1 = "insert into putin_log select * from putin where id = " + id;
@@ -689,9 +715,9 @@ function getPutIn(req, res) {
 	var k_date_end = req.param('k_date_end');
 	k_category = k_category == '所有' ? '' : k_category;
 	k_store = k_store == '所有' ? '' : k_store;
-	var sql1 = "select * from c_putin where store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var sql1 = "select * from c_putin where state='已入库' and store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_putin where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+		sql1 = "select * from c_putin where state='已入库' and store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
@@ -779,12 +805,73 @@ function insertPutin(req, res) {
 				console.log(error);
 				return false;
 			}
-			var sql1 = "insert into putin (name,category,date,num,total,store,unitPrice,difference) values ('" + r0[0].name + "','" + r0[0].category + "','" + r0[0].date + "','" + num + "'," + total + ",'" + r0[0].store + "'," + unitPrice + "," + difference + ")";
+			var sql1 = "insert into putin (name,category,date,num,total,store,unitPrice,difference,state,oid) values ('" + r0[0].name + "','" + r0[0].category + "','" + r0[0].date + "','" + num + "'," + total + ",'" + r0[0].store + "'," + unitPrice + "," + difference + ",'待入库',"+id+")";
 			mysql.query(sql1, function(error, row) {
 				if(error) {
 					console.log(error);
 					return false;
 				}
+				res.send('200');
+				/*
+				//入库
+				//1.判断是否库存已存在
+				//var sql2 = "select * from stock where name = '"+name+"' and unitPrice = "+unitPrice+" and category = '"+category+"'";
+				var sql2 = "select * from stock where name = '" + r0[0].name + "' and category = '" + r0[0].category + "' and store = '"+r0[0].store+"'";
+				mysql.query(sql2, function(error, row2) {
+					if(error) {
+						console.log(error);
+						return false;
+					}
+					var sql3 = "";
+					if(row2[0]) {
+						//库存存在，单价做加权平均
+						var n_unitPrice = (row2[0].num * row2[0].unitPrice + num * unitPrice) / (row2[0].num + num);
+						n_unitPrice = Math.round(n_unitPrice * 100) / 100;
+						sql3 = "update stock set num = " + (row2[0].num + num) + ",unitPrice = " + n_unitPrice + " where id = " + row2[0].id;
+					} else {
+						//库存不存在，新增
+						sql3 = "insert into stock (name,unitPrice,num,category,store) values ('" + r0[0].name + "'," + unitPrice + "," + num + ",'" + r0[0].category + "','"+r0[0].store+"')";
+					}
+					mysql.query(sql3, function(error, row3) {
+						if(error) {
+							console.log(error);
+							return false;
+						}
+						res.send('200');
+					});
+				});*/
+			});
+		});
+	});
+};
+
+function insertPutin1(req, res) {
+
+	var id = Number(req.param('id'));
+	//先根据id得到采购清单数据
+	var sql0 = "select * from c_putin where id = " + id;
+	mysql.query(sql0, function(error, r0) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		var total = r0[0].total;
+		var num = r0[0].num;
+		//计算单价 = 总价/数量
+		//var num = Number(r0[0].num);
+		var unitPrice = total / num;
+		unitPrice = Math.round(unitPrice * 100) / 100;
+		//差价 = 总价 - 数量*单价
+		var difference = total - num * unitPrice;
+		/*把状态设置为已入库*/
+		var sql00 = "update c_putin set state = '已入库' where id = " + id;
+		mysql.query(sql00, function(error, is1) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			
+				
 				//入库
 				//1.判断是否库存已存在
 				//var sql2 = "select * from stock where name = '"+name+"' and unitPrice = "+unitPrice+" and category = '"+category+"'";
@@ -812,7 +899,7 @@ function insertPutin(req, res) {
 						res.send('200');
 					});
 				});
-			});
+			
 		});
 	});
 };
@@ -1043,6 +1130,17 @@ function delCM(req, res) {
 
 function getUninOrd(req, res) {
 	var sql1 = "select * from c_orderlist where inStock = '未入库' order by id desc";
+	mysql.query(sql1, function(error, rows) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.json(rows);
+	});
+};
+
+function getUninOrd1(req, res) {
+	var sql1 = "select * from c_putin where state = '待入库' order by id desc";
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
 			console.log(error);
