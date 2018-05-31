@@ -12,6 +12,8 @@ exports.sqldo = function(req, res) {
 		delM(req, res);
 	} else if(_sql == "getOrd") {
 		getOrd(req, res);
+	}  else if(_sql == "getMatById") {
+		getMatById(req, res);
 	} else if(_sql == "insertOrd") {
 		insertOrd(req, res);
 	} else if(_sql == "insertGYS") {
@@ -106,6 +108,8 @@ exports.sqldo = function(req, res) {
 		UpdateDoc(req,res);
 	}else if(_sql == "UpdateDate"){
 		UpdateDate(req,res);
+	}else if(_sql == "UptateMat"){
+		UptateMat(req,res);
 	}
 	
 };
@@ -504,6 +508,36 @@ function toExcelputoutM(req, res) {
 	});
 }
 
+function UptateMat(req, res) {
+	var name = req.param('name');
+	var cate_id = req.param('cate_id');
+	var unit = req.param('unit');
+	var gys_id = req.param('gys_id');
+	var guige = req.param('guige');
+	var weight = req.param('weight');
+	var pinpai = req.param('pinpai');
+	var yujing = req.param('yujing');
+	var isEdit = req.param('id');
+	var sql1 = "update material set ";
+				sql1 += " name = '" + name + "',";
+				sql1 += " cate_id = '" + cate_id + "',";
+				sql1 += " unit = '" + unit + "',";
+				sql1 += " gys_id = '" + gys_id + "',";
+				sql1 += " guige = '" + guige + "',";
+				sql1 += " weight = '" + weight + "',";
+				sql1 += " pinpai = '" + pinpai + "',";
+				sql1 += " yujing = '" + yujing + "'";
+
+				sql1 += " where id = " + isEdit;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
 function insertM(req, res) {
 	var name = req.param('name');
 	var cate_id = req.param('cate_id');
@@ -667,6 +701,18 @@ function getOrd(req, res) {
 	k_store = k_store == '所有' ? '' : k_store;
 	var sql1 = "select * from c_orderlist where store like '%" + k_store + "%' and category like '%" + k_category + "%' and date = '" + k_date + "' order by no desc";
 	console.log(sql1);
+	mysql.query(sql1, function(error, rows) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.json(rows);
+	});
+};
+
+function getMatById(req, res) {
+	var id = req.param('id');
+	var sql1 = "select * from material where id = "+id;
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
 			console.log(error);
