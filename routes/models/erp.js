@@ -897,6 +897,8 @@ function insertPutin1(req, res) {
 		var num = r0[0].num;
 		//计算单价 = 总价/数量
 		//var num = Number(r0[0].num);
+		var arr1 = (r0[0].name).split("-");
+		var rname = arr1[0]+"-"+arr1[1]+"-"+arr1[2]+"-"+arr1[3]+"-"+arr1[4];
 		var unitPrice = total / num;
 		unitPrice = Math.round(unitPrice * 100) / 100;
 		//差价 = 总价 - 数量*单价
@@ -913,7 +915,7 @@ function insertPutin1(req, res) {
 				//入库
 				//1.判断是否库存已存在
 				//var sql2 = "select * from stock where name = '"+name+"' and unitPrice = "+unitPrice+" and category = '"+category+"'";
-				var sql2 = "select * from stock where name = '" + r0[0].name + "' and category = '" + r0[0].category + "' and store = '"+r0[0].store+"'";
+				var sql2 = "select * from stock where name = '" + rname + "'";
 				mysql.query(sql2, function(error, row2) {
 					if(error) {
 						console.log(error);
@@ -927,7 +929,7 @@ function insertPutin1(req, res) {
 						sql3 = "update stock set num = " + (row2[0].num + num) + ",unitPrice = " + n_unitPrice + " where id = " + row2[0].id;
 					} else {
 						//库存不存在，新增
-						sql3 = "insert into stock (name,unitPrice,num,category,store) values ('" + r0[0].name + "'," + unitPrice + "," + num + ",'" + r0[0].category + "','"+r0[0].store+"')";
+						sql3 = "insert into stock (name,unitPrice,num,category,store) values ('" + rname + "'," + unitPrice + "," + num + ",'" + r0[0].category + "','"+r0[0].store+"')";
 					}
 					mysql.query(sql3, function(error, row3) {
 						if(error) {

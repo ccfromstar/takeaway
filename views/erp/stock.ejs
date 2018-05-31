@@ -64,21 +64,23 @@
 		<tr>
 			<th>材料名称</th>
 			<th>单价</th>
-			<th>单位</th>
+			<th>所属分类</th>
 			<th>库存数</th>
+			<th>产品日期</th>
 			<!--<th>操作</th>-->
 		</tr>
-		<%for(var i in obj2){%>
+		<%for(var i in obj2){
+			var arr1 = (obj2[i].name).split(".");
+		%>
 		<tr>
 			<td>
-				<%=obj2[i].no%>.
-				<%=obj2[i].name%>
+				<%=arr1[1]%>
 			</td>
 			<td>
 				<%=obj2[i].unitPrice%>
 			</td>
 			<td>
-				<%=obj2[i].unit%>
+				<%=arr1[0]%>
 			</td>
 			<%if(obj2[i].num < 10){%>
 			<td style="background:#FF2F2F;color:#fff" id="dd_<%=obj2[i].id%>">
@@ -89,6 +91,10 @@
 				<%=obj2[i].num%>
 			</td>
 			<%}%>
+			<td>
+				<input type='text' id='cc_<%=obj2[i].id%>' style='cursor:pointer;height:30px' readonly  class='Wdate' onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" value='<%=obj2[i].date%>'></input>
+				<button type='button' style='display:inline !important' class='am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only' onclick='UpdateDoc1(<%=obj2[i].id%>)'>调整</button>
+			</td>
 			<!--
 			<td>
 				<input type="text" name="" id="cc_<%=obj2[i].id%>">
@@ -154,6 +160,22 @@
 -->
 
 <script>
+	function UpdateDoc1(id){
+			var num = $('#cc_'+id).val();
+			//console.log(num);
+	    	$.confirm({
+	    		title: '请确认',
+	    		content: '是否确认修改？',
+	    		confirm: function(){
+	        		$.ajax({ type:"POST" , url: "/erp/UpdateDate", data:{id:id,num:num}, success: function(data){
+	        			if(data==200){
+	              			window.location.reload();     
+	        			}
+	      			}});	
+	    		}
+			});
+	}
+
 	function moveStock(){
 			$.ajax({
 				type: "POST",

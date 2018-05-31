@@ -73,9 +73,9 @@
 			<tr>
 				<th>材料名称</th>
 				<th>单价</th>
-				<th>单位</th>
+				<th>分类</th>
 				<th>库存数</th>
-				<th>产品日期</th>
+				
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -142,9 +142,8 @@
 				<th>材料类别</th>
 				<th>数量</th>
 				<th>单价</th>
-				<th>单位</th>
 				<th>总价</th>
-				<th>操作</th>
+				<!--<th>操作</th>-->
 			</tr>
 		</thead>
 		<tbody id="content">
@@ -224,16 +223,15 @@
 					var html = "";
 					for(var i in data) {
 						//var h1 = "<input type='text' id='cc_"+data[i].id+"'>";
-						var h1 = "<input type='text' id='cc_"+data[i].id+"' style='cursor:pointer;height:30px' readonly  class='Wdate' onfocus='WdatePicker({doubleCalendar:false,dateFmt:\"yyyy-MM-dd\"})'' value='"+ data[i].date +"'></input>";
-						var h2 = "<button type='button' style='display:inline !important' class='am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only' onclick='UpdateDoc("+data[i].id+")'>调整</button>";
+						var arr1 = (data[i].name).split(".");
 						html += "<tr>";
 						//html += "<td>" + data[i].store + "</td>";
 						//html += "<td>" + data[i].category + "</td>";
-						html += "<td>" + data[i].name + "</td>";
+						html += "<td>" + arr1[1] + "</td>";
 						html += "<td>" + data[i].unitPrice + "元</td>";
-						html += "<td>" + data[i].unit + "</td>";
+						html += "<td>" + arr1[0] + "</td>";
 						html += "<td>" + data[i].num + "</td>";
-						html += "<td>" + h1 + h2 + "</td>";
+						//html += "<td>" + h1 + h2 + "</td>";
 						html += "<td><button style='display:inline !important' class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' onclick='output(" + data[i].id + "," + data[i].num + ",\"" + data[i].name + "\"," + data[i].unitPrice + ",\"" + data[i].category + "\",\"" + data[i].store + "\")'>出库</button></td>";
 						html += "</tr>";
 					}
@@ -349,16 +347,17 @@
 					var html = "";
 					var totalout = 0;
 					for(var i in data) {
+						var arr1 = (data[i].name).split(".");
 						html += "<tr>";
 						html += "<td>" + data[i].store + "</td>";
-						html += "<td>" + data[i].name + "</td>";
-						html += "<td>" + data[i].cname + "</td>";
+						html += "<td>" + arr1[1] + "</td>";
+						html += "<td>" + arr1[0] + "</td>";
 						//html += "<td>" + data[i].category + "</td>";
 						html += "<td>" + data[i].num + "</td>";
 						html += "<td>" + data[i].unitPrice + "元</td>";
-						html += "<td>" + data[i].unit + "</td>";
+						//html += "<td>" + data[i].unit + "</td>";
 						html += "<td>" + data[i].total + "元</td>";
-						html += "<td><button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' onclick='delputh(" + data[i].id + ")'>删除</button></td>";
+						//html += "<td><button class='am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only' onclick='delputh(" + data[i].id + ")'>删除</button></td>";
 						html += "</tr>";
 						totalout += data[i].total;
 					}

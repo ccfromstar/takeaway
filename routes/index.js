@@ -1394,10 +1394,11 @@ exports.erp_stock = function(req, res) {
 		k_n1 = tmp[1];
 	}
 	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-	var sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%" + k_n1 + "%' and no like '" + k_no + "%' and category = '" + k_category + "'  order by no desc";
-	if(k_category == '') {
-		sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%" + k_n1 + "%' and no like '" + k_no + "%'  order by no desc";
-	}
+	//var sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%" + k_n1 + "%' and no like '" + k_no + "%' and category = '" + k_category + "'  order by no desc";
+	//if(k_category == '') {
+	//	sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%" + k_n1 + "%' and no like '" + k_no + "%'  order by no desc";
+	//}
+	var sql1 = "select * from stock";
 	console.log(sql1);
 	var sql2 = "select * from category order by id desc";
 	var sql3 = "select * from material_category";
