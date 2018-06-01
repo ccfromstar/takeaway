@@ -40,8 +40,8 @@
 					<%}%>
 				</datalist>
 				</td>
-				<td>
-			<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
+				<td style="display: none">
+			<input  type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
 			<datalist id="mlist1">
 					<%for(var i in obj6){%>
 						<option value="<%=obj6[i].no%>">
@@ -50,7 +50,7 @@
 						<%}%>
 				</datalist>
 		</td>
-				<td>
+				<td style="display: none">
 					<input type="text" id="k_name" value="*.所有" list="mlist" />
 					<datalist id="mlist">
 					<option value="*.所有">
@@ -60,7 +60,7 @@
 				</datalist>
 		</td>
 		<td>
-				<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
+				<input type="text" id="s_name" placeholder="材料名检索"  />
 				</td>
 				<td>
 					<button class="am-btn am-btn-primary" onclick="getStockDate()">筛选</button>
@@ -103,7 +103,10 @@
 		<td>
 			<input type="text" id="k_date_end" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
-		<td style="display: none">
+		<td>
+			<input type="text" id="k_name1" style="cursor:pointer;height: 40px" ></input>
+		</td>
+		<td>
 			<input type="text" id="sk_store" list="list3a" value="所有" onblur="setCat(1);" />
 			<datalist id="list3a">
 					<%for(var i in obj5){%>
@@ -214,7 +217,7 @@
 				type: "POST",
 				url: "/erp/getStock",
 				data: {
-					k_store: $("#k_store").val(),
+					k_store: $("#s_name").val(),
 					k_category: $("#category").val(),
 					k_name: s[1],
 					k_cate_id: $("#cate_id").val()
@@ -341,7 +344,8 @@
 					k_store: $("#sk_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
-					k_date_end: $("#k_date_end").val()
+					k_date_end: $("#k_date_end").val(),
+					k_name1:$("#k_name1").val()
 				},
 				success: function(data) {
 					var html = "";

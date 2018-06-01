@@ -1385,7 +1385,7 @@ exports.erp_stock = function(req, res) {
 	var k_s = k_store;
 	var k_n = req.query.n;
 	k_category = k_category == '所有' ? '' : k_category;
-	k_store = k_store == '所有' ? '' : k_store;
+	//k_store = k_store == '所有' ? '' : k_store;
 	k_no = k_no ? k_no : "";
 	k_n = k_n ? k_n : "";
 	var k_n1 = "";
@@ -1398,7 +1398,7 @@ exports.erp_stock = function(req, res) {
 	//if(k_category == '') {
 	//	sql1 = "select * from c_stock where store like '%" + k_store + "%' and name like '%" + k_n1 + "%' and no like '" + k_no + "%'  order by no desc";
 	//}
-	var sql1 = "select * from stock";
+	var sql1 = "select * from stock where name like '%"+k_category+"%' and name like '%"+k_store+"%'";
 	console.log(sql1);
 	var sql2 = "select * from category order by id desc";
 	var sql3 = "select * from material_category";

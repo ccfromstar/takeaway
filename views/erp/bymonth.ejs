@@ -17,7 +17,7 @@
 					<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td style="display:none">
 			<input id="k_category" type="text" list="list1" placeholder="类别" />
 			<datalist id="list1">
 					<option value="所有">所有</option>
@@ -26,7 +26,7 @@
 					<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td style="display:none">
 			<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
 			<datalist id="mlist1">
 					<%for(var i in obj5){%>
@@ -36,7 +36,7 @@
 						<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td style="display:none">
 			<input type="text" id="k_name" value="*.所有" placeholder ="材料名" list="mlist" />
 			<datalist id="mlist">
 					<option value="*.所有">
@@ -46,7 +46,7 @@
 				</datalist>
 		</td>
 		<td>
-			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
+			<input type="text" id="s_name" placeholder="材料名检索"  />
 		</td>
 		<td>
 			<button class="am-btn am-btn-primary" onclick="filter()">筛选</button>
@@ -148,7 +148,8 @@
 				k_category: $("#k_category").val(),
 				k_date: $("#k_date").val(),
 				k_name: s[1],
-				k_cate_id: $("#cate_id").val()
+				k_cate_id: $("#cate_id").val(),
+				s_name:$("#s_name").val()
 			},
 			success: function(data) {
 				var html = "";
@@ -192,7 +193,8 @@
 				k_category: $("#k_category").val(),
 				k_date: $("#k_date").val(),
 				k_name: s[1],
-				k_cate_id: $("#cate_id").val()
+				k_cate_id: $("#cate_id").val(),
+				s_name:$("#s_name").val()
 			},
 			success: function(data) {
 				var html = "";

@@ -25,7 +25,7 @@
 					<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td  style="display: none">
 			<input type="text" id="cate_id" placeholder="所属分类" value="<%=k_no%>" list="mlist" onblur="setMat();" />
 			<datalist id="mlist">
 					<%for(var i in obj4){%>
@@ -35,7 +35,7 @@
 						<%}%>
 				</datalist>
 		</td>
-		<td>
+		<td style="display: none">
 			<input type="text" id="name" placeholder="材料名称" value="<%=k_n%>" list="mlist1" />
 			<datalist id="mlist1">
 					<%for(var i in obj6){%>
@@ -44,7 +44,7 @@
 				</datalist>
 		</td>
 		<td>
-			<input type="text" id="s_name" placeholder="材料名检索" onblur="filtermlist()" />
+			<input type="text" id="s_name1" placeholder="材料名检索" />
 		</td>
 		<td>
 			<button class="am-btn am-btn-primary" onclick="getDate()">筛选</button>
@@ -197,7 +197,7 @@
 	}
 	
 	function getDate() {
-		window.location = "/erp/stock?p=" + $('#k_category').val() + "&q=" + $('#cate_id').val() + "&s=" + $('#k_store').val()+"&n=" + $('#name').val();
+		window.location = "/erp/stock?p=" + $('#k_category').val() + "&q=" + $('#cate_id').val() + "&s=" + $('#s_name1').val()+"&n=" + $('#name').val();
 	}
 	/*导出采购单Excel表*/
 	function toExcel() {

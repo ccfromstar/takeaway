@@ -49,7 +49,7 @@
     				<input type="text" id="name" placeholder="材料名称" list="mlist" />
 			    <datalist id="mlist">
 					<%for(var i in obj2){%>
-						<option value="<%=obj2[i].no+'.'+obj2[i].name+'-'+obj2[i].unit+'-'+obj2[i].guige+'-'+obj2[i].weight+'-'+obj2[i].pinpai+'-'+obj2[i].gname%>">
+						<option value="<%=obj2[i].no+'@'+obj2[i].cname+'.'+obj2[i].name1+'-'+obj2[i].unit+'-'+obj2[i].guige+'-'+obj2[i].weight+'-'+obj2[i].pinpai+'-'+obj2[i].gname%>">
 							<%}%>
 				</datalist></td>
     		</tr>
@@ -86,6 +86,9 @@
 	<tr>
 		<td>
 			<input type="text" id="k_date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+		</td>
+		<td>
+			<input type="text" id="k_name1" style="cursor:pointer;height: 40px" ></input>
 		</td>
 		<td style="display: none">
 			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
@@ -180,7 +183,8 @@
 			data: {
 				k_store: $("#k_store").val(),
 				k_category: $("#k_category").val(),
-				k_date: $("#k_date").val()
+				k_date: $("#k_date").val(),
+				k_name1: $("#k_name1").val()
 			},
 			success: function(data) {
 				var html = "";
@@ -364,9 +368,9 @@
 		var v = $('#s_name').val();
 		var html = '';
 		<%for(var i in obj2){%>
-		var n = '<%=obj2[i].name%>';
+		var n = '<%=obj2[i].name1%>';
 		if(n.indexOf(v) != -1){
-			html += '<option value="<%=obj2[i].no+'.'+obj2[i].name+'-'+obj2[i].unit+'-'+obj2[i].guige+'-'+obj2[i].weight+'-'+obj2[i].pinpai+'-'+obj2[i].gname%>">';
+			html += '<option value="<%=obj2[i].no+'@'+obj2[i].cname+'.'+obj2[i].name1+'-'+obj2[i].unit+'-'+obj2[i].guige+'-'+obj2[i].weight+'-'+obj2[i].pinpai+'-'+obj2[i].gname%>">';
 		}			
 		<%}%>
 		$('#mlist').html(html);
@@ -378,7 +382,7 @@
 		<%for(var i in obj2){%>
 		var n = '<%=obj2[i].no%>';
 		if(n == v){
-			html += '<option value="<%=obj2[i].no+'.'+obj2[i].name+'-'+obj2[i].unit+'-'+obj2[i].guige+'-'+obj2[i].weight+'-'+obj2[i].pinpai+'-'+obj2[i].gname%>">';
+			html += '<option value="<%=obj2[i].no+'@'+obj2[i].cname+'.'+obj2[i].name1+'-'+obj2[i].unit+'-'+obj2[i].guige+'-'+obj2[i].weight+'-'+obj2[i].pinpai+'-'+obj2[i].gname%>">';
 		}			
 		<%}%>
 		$('#mlist').html(html);

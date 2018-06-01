@@ -730,9 +730,10 @@ function getOrd(req, res) {
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
+	var k_name1 = req.param('k_name1');
 	k_category = k_category == '所有' ? '' : k_category;
 	k_store = k_store == '所有' ? '' : k_store;
-	var sql1 = "select * from c_orderlist where store like '%" + k_store + "%' and category like '%" + k_category + "%' and date = '" + k_date + "' order by no desc";
+	var sql1 = "select * from c_orderlist where name like '%"+k_name1+"%' and store like '%" + k_store + "%' and category like '%" + k_category + "%' and date = '" + k_date + "' order by no desc";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
@@ -842,11 +843,12 @@ function getPutIn(req, res) {
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
 	var k_date_end = req.param('k_date_end');
+	var k_name1 = req.param('k_name1');
 	k_category = k_category == '所有' ? '' : k_category;
 	k_store = k_store == '所有' ? '' : k_store;
-	var sql1 = "select * from c_putin where state='已入库' and store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var sql1 = "select * from c_putin where name like '%"+k_name1+"%' and state='已入库' and store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_putin where state='已入库' and store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+		sql1 = "select * from c_putin where  name like '%"+k_name1+"%' and state='已入库' and store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
@@ -865,6 +867,7 @@ function getPutInbyDay(req, res) {
 	var k_date_end = req.param('k_date_end');
 	var k_name = req.param('k_name');
 	var k_cate_id = req.param('k_cate_id');
+	var s_name = req.param('s_name');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
@@ -872,7 +875,7 @@ function getPutInbyDay(req, res) {
 	if(k_cate_id != ''){
 		change1 = " no like '"+k_cate_id+"%' and ";
 	}
-	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and  date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + s_name + "%' and  date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
@@ -889,6 +892,7 @@ function getPutInbyMonth(req, res) {
 	var k_date = req.param('k_date');
 	var k_name = req.param('k_name');
 	var k_cate_id = req.param('k_cate_id');
+	var s_name = req.param('s_name');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
@@ -896,9 +900,9 @@ function getPutInbyMonth(req, res) {
 	if(k_cate_id != ''){
 		change1 = " no like '"+k_cate_id+"%' and ";
 	}
-	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%'  and date like '" + k_date + "%' order by id desc";
+	var sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + s_name + "%'  and date like '" + k_date + "%' order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and name like '%" + k_name + "%' and  date like '" + k_date + "%' order by id desc";
+		sql1 = "select * from c_putin where "+change1+" store like '%"+k_store+"%' and name like '%" + s_name + "%' and  date like '" + k_date + "%' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
@@ -1091,9 +1095,9 @@ function getStock(req, res) {
 	if(k_cate_id != ''){
 		change1 = " no like '"+k_cate_id+"%' and ";
 	}
-	var sql1 = "select * from c_stock where "+change1+" store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%' and num > 0 order by id desc";
+	var sql1 = "select * from c_stock where "+change1+" name like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%' and num > 0 order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_stock where "+change1+" store like '%"+k_store+"%' and name like '%" + k_name + "%' and num > 0 order by id desc";
+		sql1 = "select * from c_stock where "+change1+" name like '%"+k_store+"%' and name like '%" + k_name + "%' and num > 0 order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
@@ -1139,11 +1143,12 @@ function getPutout(req, res) {
 	var k_store = req.param('k_store');
 	var k_date = req.param('k_date');
 	var k_date_end = req.param('k_date_end');
+	var k_name1 = req.param('k_name1');
 	k_category = k_category == '所有' ? '' : k_category;
 	k_store = k_store == '所有' ? '' : k_store;
-	var sql1 = "select * from c_putout where store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var sql1 = "select * from c_putout where name like '%"+k_name1+"%' and store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_putout where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+		sql1 = "select * from c_putout where name like '%"+k_name1+"%' and store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
@@ -1161,10 +1166,11 @@ function getPutoutbyDay(req, res) {
 	var k_date = req.param('k_date');
 	var k_date_end = req.param('k_date_end');
 	var k_name = req.param('k_name');
+	var s_name = req.param('s_name');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	k_name = k_name == '所有' ? '' : k_name;
-	var sql1 = "select * from putout where store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + k_name + "%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var sql1 = "select * from putout where store like '%"+k_store+"%' and category like '%" + k_category + "%' and name like '%" + s_name + "%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
@@ -1182,6 +1188,7 @@ function getPutoutbyMonth(req, res) {
 	var k_name = req.param('k_name');
 	var k_hasInvoice = req.param('k_hasInvoice');
 	var k_cate_id = req.param('k_cate_id');
+	var s_name = req.param('s_name');
 
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
@@ -1196,9 +1203,9 @@ function getPutoutbyMonth(req, res) {
 		change1 = " no like '"+k_cate_id+"%' and ";
 	}
 
-	var sql1 = "select * from c_putout where  "+change1+"  store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + k_name + "%' and date like '" + k_date + "%' order by id desc";
+	var sql1 = "select * from c_putout where  "+change1+"  store like '%"+k_store+"%' and category = '" + k_category + "' and name like '%" + s_name + "%' and date like '" + k_date + "%' order by id desc";
 	if(k_category == '') {
-		sql1 = "select * from c_putout where  "+change1+"  store like '%"+k_store+"%' and name like '%" + k_name + "%' and date like '" + k_date + "%' order by id desc";
+		sql1 = "select * from c_putout where  "+change1+"  store like '%"+k_store+"%' and name like '%" + s_name + "%' and date like '" + k_date + "%' order by id desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {

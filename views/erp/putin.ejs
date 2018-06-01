@@ -139,6 +139,9 @@
 		<td>
 			<input type="text" id="k_date_end" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
+		<td>
+			<input type="text" id="k_name1" style="cursor:pointer;height: 40px" ></input>
+		</td>
 		<td style="display: none">
 			<input type="text" id="k_store" list="list3" value="所有" onblur="setCat(1);" />
 			<datalist id="list3">
@@ -231,6 +234,7 @@
 		$('.Wdate').val(_date);
 		/*获取入库列表*/
 		function getDate() {
+			//alert($("#k_name1").val());
 			$.ajax({
 				type: "POST",
 				url: "/erp/getPutIn",
@@ -238,7 +242,8 @@
 					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
-					k_date_end: $("#k_date_end").val()
+					k_date_end: $("#k_date_end").val(),
+					k_name1:$("#k_name1").val()
 				},
 				success: function(data) {
 					var html = "";

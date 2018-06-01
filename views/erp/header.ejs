@@ -14,6 +14,17 @@
 		<link rel="stylesheet" href="../framework/css/admin.css">
 		<script src="/js/basic.js"></script>
 		<script src="/js/check.js"></script>
+    <style type="text/css">
+      *{
+        font-size: 12px;
+      }
+      .am-form input[type=number], .am-form input[type=search], .am-form input[type=text], .am-form input[type=password], .am-form input[type=datetime], .am-form input[type=datetime-local], .am-form input[type=date], .am-form input[type=month], .am-form input[type=time], .am-form input[type=week], .am-form input[type=email], .am-form input[type=url], .am-form input[type=tel], .am-form input[type=color], .am-form select, .am-form textarea, .am-form-field{
+        font-size: 12px;
+      }
+      .am-btn{
+        font-size: 12px;
+      }
+    </style>
 	</head>
 	<body style="overflow: auto">
 		    <header class="am-topbar am-topbar-inverse admin-header">
@@ -46,7 +57,7 @@
         <li class="admin-parent">
           <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-table"></span> 库存管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
           <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
-            <li><a href="/erp/stock?p=所有&s=所有" class="am-cf"><span class="am-icon-puzzle-piece"></span> 库存数</a></li>
+            <li><a href="/erp/stock?p=所有&s=" class="am-cf"><span class="am-icon-puzzle-piece"></span> 库存数</a></li>
             <li><a href="/erp/putout"><span class="am-icon-puzzle-piece"></span> 出库</a></li>
           </ul>
         </li>
