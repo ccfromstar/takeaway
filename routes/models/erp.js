@@ -12,8 +12,10 @@ exports.sqldo = function(req, res) {
 		delM(req, res);
 	} else if(_sql == "getOrd") {
 		getOrd(req, res);
-	}  else if(_sql == "getMatById") {
+	} else if(_sql == "getMatById") {
 		getMatById(req, res);
+	} else if(_sql == "getGYSById") {
+		getGYSById(req, res);
 	} else if(_sql == "insertOrd") {
 		insertOrd(req, res);
 	} else if(_sql == "insertGYS") {
@@ -110,6 +112,8 @@ exports.sqldo = function(req, res) {
 		UpdateDate(req,res);
 	}else if(_sql == "UptateMat"){
 		UptateMat(req,res);
+	}else if(_sql == "UptateGYS"){
+		UptateGYS(req,res);
 	}
 	
 };
@@ -538,6 +542,34 @@ function UptateMat(req, res) {
 	});
 };
 
+function UptateGYS(req, res) {
+	var name = req.param('name');
+	var account = req.param('account');
+	var number = req.param('number');
+	var linkname = req.param('linkname');
+	var tel = req.param('tel');
+	var address = req.param('address');
+	var kaihuhang = req.param('kaihuhang');
+	var isEdit = req.param('id');
+	var sql1 = "update gys set ";
+				sql1 += " name = '" + name + "',";
+				sql1 += " account = '" + account + "',";
+				sql1 += " number = '" + number + "',";
+				sql1 += " linkname = '" + linkname + "',";
+				sql1 += " tel = '" + tel + "',";
+				sql1 += " address = '" + address + "',";
+				sql1 += " kaihuhang = '" + kaihuhang + "'";
+				sql1 += " where id = " + isEdit;
+    console.log(sql1);
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
 function insertM(req, res) {
 	var name = req.param('name');
 	var cate_id = req.param('cate_id');
@@ -594,7 +626,8 @@ function insertGYS(req, res) {
 	var linkname = req.param('linkname');
 	var tel = req.param('tel');
 	var address = req.param('address');
-	var sql1 = "insert into gys (name,account,number,linkname,tel,address) values ('" + name + "','" + account + "','" + number + "','" + linkname + "','" + tel + "','" + address + "')";
+	var kaihuhang = req.param('kaihuhang');
+	var sql1 = "insert into gys (name,account,number,linkname,tel,address,kaihuhang) values ('" + name + "','" + account + "','" + number + "','" + linkname + "','" + tel + "','" + address + "','" + kaihuhang + "')";
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
@@ -713,6 +746,18 @@ function getOrd(req, res) {
 function getMatById(req, res) {
 	var id = req.param('id');
 	var sql1 = "select * from material where id = "+id;
+	mysql.query(sql1, function(error, rows) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.json(rows);
+	});
+};
+
+function getGYSById(req, res) {
+	var id = req.param('id');
+	var sql1 = "select * from gys where id = "+id;
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
 			console.log(error);

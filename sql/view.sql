@@ -17,10 +17,12 @@ ON a.addressname = b.name;
 DROP VIEW IF EXISTS `c_material`;
 CREATE VIEW c_material
 AS
-SELECT a.*,b.no,b.name as cname
+SELECT a.*,b.no,b.name as cname,c.name as gname
 FROM material a
 LEFT JOIN material_category b
-ON a.cate_id = b.id;
+ON a.cate_id = b.id
+LEFT JOIN gys c
+ON a.gys_id = c.id;
 
 DROP VIEW IF EXISTS `c_orderlist`;
 CREATE VIEW c_orderlist
@@ -116,3 +118,11 @@ SELECT a.*,b.price as price
 FROM oldbooking a
 LEFT JOIN box b
 ON a.box = b.name;
+
+DROP VIEW IF EXISTS `m_gys`;
+CREATE VIEW m_gys
+AS
+SELECT a.*,b.name as gname
+FROM material a
+LEFT JOIN gys b
+ON a.gys_id = b.id;

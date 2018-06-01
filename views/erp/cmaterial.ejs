@@ -18,12 +18,16 @@
 	<div class="div_auto">
 		<table style="margin:5px" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
 			<tr>
+				<th>编号</th>
 				<th>大类名称</th>
 				<th>小类名称</th>
 				<th>操作</th>
 			</tr>
 			<%for(var i in obj){%>
 				<tr>
+					<td>
+						<%=obj[i].id%>
+					</td>
 					<td>
 						<%=obj[i].no%>
 					</td>

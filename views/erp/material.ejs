@@ -101,19 +101,23 @@
 		</table>
 	</div>
 	<div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
-	  <div class="am-modal-dialog" style="width:950px">
+	  <div class="am-modal-dialog" >
 	    <div class="am-modal-hd">编辑记录
 	      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
 	    </div>
 	    <div class="am-modal-bd">
-	      <table  class="am-form" style="margin:5px;width:900px">
+	      <table  class="am-form" style="margin:5px;width:100%">
 		<tr>
 			<td>
 				<input type="text" id="name1" placeholder="名称" />
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<input type="text" id="unit1" placeholder="单位" />
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<input type="text" id="cate_id1" placeholder="所属分类" list="mlist" />
 				<datalist id="mlist">
@@ -124,6 +128,8 @@
 						<%}%>
 				</datalist>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<input type="text" id="gys_id1" placeholder="供应商" list="gyslist" />
 				<datalist id="gyslist">
@@ -134,15 +140,23 @@
 						<%}%>
 				</datalist>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<input type="text" id="guige1" placeholder="规格" />
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<input type="text" id="weight1" placeholder="重量" />
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<input type="text" id="pinpai1" placeholder="品牌" />
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<input type="text" id="yujing1" value="10" placeholder="库存警示量" />
 			</td>

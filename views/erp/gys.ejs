@@ -11,6 +11,9 @@
 				<input type="text" id="account" placeholder="账户名" />
 			</td>
 			<td>
+				<input type="text" id="kaihuhang" placeholder="开户行" />
+			</td>
+			<td>
 				<input type="text" id="number" placeholder="账号" />
 			</td>
 			<td>
@@ -67,13 +70,120 @@
 						<%=obj[i].address%>
 					</td>
 					<td>
+						<button class="am-btn am-btn-default am-btn-xs am-text-success am-hide-sm-only" onclick="edit(<%=obj[i].id%>)"><span class="am-icon-trash-o"></span>编辑</button>
 						<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del(<%=obj[i].id%>)"><span class="am-icon-trash-o"></span>删除</button>
 					</td>
 				</tr>
 				<%}%>
 		</table>
 	</div>
+	<div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+	  <div class="am-modal-dialog" >
+	    <div class="am-modal-hd">编辑记录
+	      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+	    </div>
+	    <div class="am-modal-bd">
+	      <table  class="am-form" style="margin:5px;width:100%">
+		<tr>
+			<td>
+				<input type="text" id="name1" placeholder="名称" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" id="account1" placeholder="账户名" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" id="kaihuhang1" placeholder="开户行" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" id="number1" placeholder="账号" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" id="linkname1" placeholder="联系人" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" id="tel1" placeholder="电话" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" id="address1" placeholder="地址" />
+			</td>
+		</tr>
+	</table>
+					<button type="button" class="am-btn am-btn-danger" onclick="closeDoc();">关闭
+	            </button>
+					<button type="button" class="am-btn am-btn-primary" onclick="submitDoc();">
+	               提交
+	            </button>
+	    </div>
+	  </div>
+	</div>
 	<script>
+		var g_id = '';
+
+		function closeDoc(){
+			var $modal = $('#doc-modal-1');
+			$modal.modal('close');
+		}
+
+		function submitDoc() {
+			$.ajax({
+				type: "POST",
+				url: "/erp/UptateGYS",
+				data: {
+					id: g_id,
+					name: $("#name1").val(),
+					account: $("#account1").val(),
+					kaihuhang: $("#kaihuhang1").val(),
+					number: $("#number1").val(),
+					linkname: $("#linkname1").val(),
+					tel: $("#tel1").val(),
+					address: $("#address1").val()
+				},
+				success: function(data) {
+					if(data == 200) {
+						alert("更新成功");
+						window.location.reload();
+					}
+				}
+			});
+		}
+
+		function edit(id){
+			g_id = id;
+			$.ajax({
+				type: "POST",
+				url: "/erp/getGYSById",
+				data: {
+					id:id
+				},
+				success: function(data) {
+					if (data) {
+						var $modal = $('#doc-modal-1');
+						$modal.modal('toggle');
+						$('#name1').val(data[0].name);
+						$('#account1').val(data[0].account);
+						$('#kaihuhang1').val(data[0].kaihuhang);
+						$('#number1').val(data[0].number);
+						$('#linkname1').val(data[0].linkname);
+						$('#tel1').val(data[0].tel);
+						$('#address1').val(data[0].address);
+					}
+				}
+			});
+			
+		}
+
 		function add() {
 			
 			$.ajax({
@@ -85,7 +195,8 @@
 					number: $("#number").val(),
 					linkname: $("#linkname").val(),
 					tel: $("#tel").val(),
-					address: $("#address").val()
+					address: $("#address").val(),
+					kaihuhang: $("#kaihuhang").val()
 				},
 				success: function(data) {
 					if (data == 200) {
