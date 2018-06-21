@@ -523,7 +523,7 @@ function UptateMat(req, res) {
 	var yujing = req.param('yujing');
 	var isEdit = req.param('id');
 	var sql1 = "update material set ";
-				sql1 += " name = '" + name + "',";
+				sql1 += " name1 = '" + name + "',";
 				sql1 += " cate_id = '" + cate_id + "',";
 				sql1 += " unit = '" + unit + "',";
 				sql1 += " gys_id = '" + gys_id + "',";
@@ -579,7 +579,7 @@ function insertM(req, res) {
 	var weight = req.param('weight');
 	var pinpai = req.param('pinpai');
 	var yujing = req.param('yujing');
-	var sql1 = "insert into material (name,cate_id,unit,gys_id,guige,weight,pinpai,yujing) values ('" + name + "'," + cate_id + ",'" + unit + "','" + gys_id + "','" + guige + "','" + weight + "','" + pinpai + "','" + yujing + "')";
+	var sql1 = "insert into material (name1,cate_id,unit,gys_id,guige,weight,pinpai,yujing) values ('" + name + "'," + cate_id + ",'" + unit + "','" + gys_id + "','" + guige + "','" + weight + "','" + pinpai + "','" + yujing + "')";
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);

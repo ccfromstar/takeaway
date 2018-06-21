@@ -33,14 +33,22 @@
     		
     		<tr>
     			<td>材料所属分类</td>
-    			<td><input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
-			<datalist id="mlist1">
+    			<td><!--<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />-->
+    				<select id="cate_id" onchange="setMat();">
+    					<option value="-">所属分类</option>
+    					<%for(var i in obj4){%>
+							<option value="<%=obj4[i].no%>">
+								<%=obj4[i].name%>
+							</option>
+						<%}%>
+    				</select>
+				<!--<datalist id="mlist1">
 					<%for(var i in obj4){%>
 						<option value="<%=obj4[i].no%>">
 							<%=obj4[i].name%>
 						</option>
 						<%}%>
-				</datalist></td>
+				</datalist></td>-->
     		</tr>
     		<tr>
     			<td>材料名称</td>

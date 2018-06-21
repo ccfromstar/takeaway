@@ -11,6 +11,7 @@
 				<input type="text" id="unit" placeholder="单位" />
 			</td>
 			<td>
+				<!--
 				<input type="text" id="cate_id" placeholder="所属分类" list="mlist" />
 				<datalist id="mlist">
 					<%for(var i in obj2){%>
@@ -18,7 +19,15 @@
 							<%=obj2[i].name%>
 						</option>
 						<%}%>
-				</datalist>
+				</datalist>-->
+					<select id="cate_id" style="width:200px">
+    					<option value="-">所属分类</option>
+    					<%for(var i in obj2){%>
+							<option value="<%=obj2[i].id%>">
+								<%=obj2[i].name%>
+							</option>
+						<%}%>
+    				</select>
 			</td>
 			<td>
 				<input type="text" id="gys_id" placeholder="供应商" list="gyslist" />
