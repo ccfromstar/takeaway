@@ -142,7 +142,7 @@ function toExcelorderlist(req, res) {
 	var exlBuf = fs.readFileSync("./public/excelop/template/orderlist.xlsx");
 	var excelname = setFileName();
 	//数据源
-	var sql1 = "select * from c_orderlist where store like '%"+k_store+"%' and category like '%" + k_category + "%' and date = '" + k_date + "' order by no desc";
+	var sql1 = "select * from c_orderlist where date = '" + k_date + "' order by id desc";
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
@@ -206,10 +206,8 @@ function toExcelputin(req, res) {
 	var excelname = setFileName();
 	//数据源
 	//var sql1 = "select * from c_putin where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
-	var sql1 = "select * from c_putin where store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
-	if(k_category == '') {
-		sql1 = "select * from c_putin where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
-	}
+	var sql1 = "select * from c_putin where date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
@@ -323,9 +321,9 @@ function toExcelstock(req, res) {
 	var excelname = setFileName();
 	//数据源
 	//var sql1 = "select * from stock where category like '%"+k_category+"%' and num > 0 order by id desc";
-	var sql1 = "select * from c_stock where store like '%"+k_store+"%' and name like '%"+k_n1+"%' and no like '"+cate_id+"%' and category = '" + k_category + "'  order by no desc";
+	var sql1 = "select * from c_stock  order by no desc";
 	if(k_category == '') {
-		sql1 = "select * from c_stock where store like '%"+k_store+"%' and name like '%"+k_n1+"%' and no like '"+cate_id+"%' order by no desc";
+		sql1 = "select * from c_stock  order by no desc";
 	}
 	console.log(sql1);
 	mysql.query(sql1, function(error, obj) {
@@ -417,10 +415,8 @@ function toExcelputout(req, res) {
 	var excelname = setFileName();
 	//数据源
 	//var sql1 = "select * from putout where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
-	var sql1 = "select * from c_putout where store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
-	if(k_category == '') {
-		sql1 = "select * from c_putout where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
-	}
+	var sql1 = "select * from c_putout where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
