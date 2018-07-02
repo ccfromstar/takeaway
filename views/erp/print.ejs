@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>库存管理ERP系统 v3.0</title>
+		<script src="/js/jquery.min.js"></script>
+		
+		<link rel="stylesheet" href="../framework/amazeui/amazeui.min.css" />
+		<script type="text/javascript" src="/plugin/My97DatePicker/WdatePicker.js"></script>
+		<link href="/plugin/select2/dist/css/select2.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="/plugin/craftpip/dist/jquery-confirm.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/plugin/craftpip/css/jquery-confirm.css">
+		<script src="/plugin/select2/dist/js/select2.min.js"></script>
+		<script src="../framework/amazeui/amazeui.min.js"></script>
+		<link rel="stylesheet" href="../framework/css/admin.css">
+		<script src="/js/basic.js"></script>
+		<script src="/js/check.js"></script>
+    <style type="text/css">
+      *{
+        font-size: 12px;
+      }
+      .am-form input[type=number], .am-form input[type=search], .am-form input[type=text], .am-form input[type=password], .am-form input[type=datetime], .am-form input[type=datetime-local], .am-form input[type=date], .am-form input[type=month], .am-form input[type=time], .am-form input[type=week], .am-form input[type=email], .am-form input[type=url], .am-form input[type=tel], .am-form input[type=color], .am-form select, .am-form textarea, .am-form-field{
+        font-size: 12px;
+      }
+      .am-btn{
+        font-size: 12px;
+      }
+    </style>
+	</head>
+	<body>
+      <table class="am-table am-table-bordered" style="margin:5px;width:auto;">
+        <%if(frm == 'orderlist'){%>
+            <tr>
+              <td colspan="2" style="text-align: center;">
+                <div style="font-weight: bold;font-size: 30px;">采购单</div>
+              </td>
+            </tr>
+            <tr>
+              
+              <td colspan="2">
+                采购日期：<%=date[0].date%>
+                <br/>采购单号：<%=date[0].order_no%>
+              </td>
+            </tr>
+            <tr>
+              <th>材料名称</th>
+              <th>数量</th>
+            </tr>
+            <%for(var i in date){%>
+                <tr>
+                  <td><%=date[i].name%></td>
+                  <td><%=date[i].num%></td>
+                </tr>
+            <%}%>
+        <%}%>
+      </table>
+  </body>
+</html>

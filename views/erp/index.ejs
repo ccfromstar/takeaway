@@ -1,11 +1,11 @@
 <% include header %>
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">采购管理</strong> / <small>采购清单</small></div>
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">采购管理</strong> / <small>采购单</small></div>
 </div>
 <div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="doc-tab-demo-1">
   <ul class="am-tabs-nav am-nav am-nav-tabs">
-    <li class="am-active"><a href="javascript: void(0)">采购清单添加</a></li>
-    <li><a href="javascript: void(0)">采购清单查询</a></li>
+    <li class="am-active"><a href="javascript: void(0)">采购单添加</a></li>
+    <!--<li><a href="javascript: void(0)">采购单查询</a></li>-->
   </ul>
 
   <div class="am-tabs-bd">
@@ -13,8 +13,12 @@
     	<!--采购单BEGIN-->
 <div class="am-panel am-panel-default admin-sidebar-panel">
         <div class="am-panel-bd">
-          <p><span class="am-icon-bookmark"></span> 采购清单添加</p>
+          <p><span class="am-icon-bookmark"></span> 采购单添加</p>
           <table class="am-table am-table-bordered am-form">
+          	<tr>
+    			<td>采购单号</td>
+    			<td><input type="text" id="order_no" readonly></td>
+    		</tr>
     		<tr>
     			<td>日期</td>
     			<td><input type="text"  id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input></td>
@@ -30,7 +34,9 @@
 					<%}%>
 				</datalist></td>
     		</tr>
-    		
+    		<tr>
+    			<td colspan="2" style="background-color: rgb(14,144,210);color:white">添加采购材料</td>
+    		</tr>
     		<tr>
     			<td>材料所属分类</td>
     			<td><!--<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />-->
@@ -74,8 +80,34 @@
     			<td><input type="text" id="num" placeholder="数量" /></td>
     		</tr>
     		<tr>
-    			<td id="addorder"><button class="am-btn am-btn-primary"  onclick="add()">添加</button></td>
-    			<td></td>
+    			<td colspan="2" id="addorder"><button class="am-btn am-btn-primary"  onclick="add()">添加</button></td>
+    			
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="background-color: rgb(14,144,210);color:white">材料清单</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="">
+    				<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+						<thead>
+							<tr>
+								<th>材料名称</th>
+								<th>材料类别</th>
+								<th>数量</th>
+								<th>单价（元）</th>
+								<th>总价（元）</th>
+								<th>入库情况</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="content">
+						</tbody>
+					</table>
+    			</td>
+    		</tr>
+    		<tr id="btn_2">
+    			<td colspan="2" ><button class="am-btn am-btn-success"  onclick="subadd()">提交采购单</button></td>
+    			
     		</tr>
 			</table>
         </div>
@@ -130,21 +162,7 @@
     <div class="am-panel-bd">材料采购总预算金额：<span id="totalout"></span>元</div>
 </div>
 <div class="div_auto_short">
-	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
-		<thead>
-			<tr>
-				<th>材料名称</th>
-				<th>材料类别</th>
-				<th>数量</th>
-				<th>单价（元）</th>
-				<th>总价（元）</th>
-				<th>入库情况</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody id="content">
-		</tbody>
-	</table>
+	
 </div>
         </div>
       </div>
@@ -181,18 +199,27 @@
 	var y = myDate.getFullYear();
 	var m = (((myDate.getMonth() + 1) + "").length == 1) ? "0" + (myDate.getMonth() + 1) : (myDate.getMonth() + 1);
 	var d = (((myDate.getDate()) + "").length == 1) ? "0" + (myDate.getDate()) : (myDate.getDate());
+
 	var _date = y + "-" + m + "-" + d;
 	$('.Wdate').val(_date);
+
+	//生成采购单号
+	var order_no = Number(myDate);
+	$("#order_no").val(order_no);
+
+	var editid = window.sessionStorage.editid;
+	if(editid != ''){
+		$("#order_no").val(window.sessionStorage.orderno);
+		$(".Wdate").val(window.sessionStorage.orderdate);
+		$('#btn_2').css("display","none");
+	}
 	/*获取采购单列表*/
 	function getDate() {
 		$.ajax({
 			type: "POST",
 			url: "/erp/getOrd",
 			data: {
-				k_store: $("#k_store").val(),
-				k_category: $("#k_category").val(),
-				k_date: $("#k_date").val(),
-				k_name1: $("#k_name1").val()
+				order_no: $("#order_no").val()
 			},
 			success: function(data) {
 				var html = "";
@@ -238,14 +265,31 @@
 				category: $("#category").val(),
 				date: $("#date").val(),
 				name: tmp,
-				num: $("#num").val()
+				num: $("#num").val(),
+				order_no:$("#order_no").val()
 			},
 			success: function(data) {
 				if(data == 200) {
-					//alert('新增成功！');
+					alert('添加成功！');
 					getDate();
 					$('#name').val('');
 					$('#num').val('');
+				}
+			}
+		});
+	}
+	function subadd() {
+		$.ajax({
+			type: "POST",
+			url: "/erp/insertOrdFrm",
+			data: {
+				date: $("#date").val(),
+				order_no:$("#order_no").val()
+			},
+			success: function(data) {
+				if(data == 200) {
+					alert('提交成功！');
+					window.location = '/erp/frmorder';
 				}
 			}
 		});

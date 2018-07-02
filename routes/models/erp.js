@@ -18,6 +18,8 @@ exports.sqldo = function(req, res) {
 		getGYSById(req, res);
 	} else if(_sql == "insertOrd") {
 		insertOrd(req, res);
+	} else if(_sql == "insertOrdFrm") {
+		insertOrdFrm(req, res);
 	} else if(_sql == "insertGYS") {
 		insertGYS(req, res);
 	} else if(_sql == "delOrd") {
@@ -82,6 +84,8 @@ exports.sqldo = function(req, res) {
 		insertStore(req, res);
 	} else if(_sql == "delStore") {
 		delStore(req, res);
+	}  else if(_sql == "delfrmOrd") {
+		delfrmOrd(req, res);
 	} else if(_sql == "insertCM") {
 		insertCM(req, res);
 	} else if(_sql == "delCM") {
@@ -131,25 +135,28 @@ function setFileName() {
 
 /*导出采购单*/
 function toExcelorderlist(req, res) {
+	/*
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
 	k_store = k_store == '所有' ? '' : k_store;
 	k_category = k_category == '所有' ? '' : k_category;
 	var ks = k_store == '' ? '所有门店' : k_store;
-	var kc = k_category == '' ? '所有分类' : k_category;
+	var kc = k_category == '' ? '所有分类' : k_category;*/
+	var no = req.param('no');
 	//获得Excel模板的buffer对象
 	var exlBuf = fs.readFileSync("./public/excelop/template/orderlist.xlsx");
 	var excelname = setFileName();
 	//数据源
-	var sql1 = "select * from c_orderlist where date = '" + k_date + "' order by id desc";
+	var sql1 = "select * from orderlist where order_no = '" + no + "' order by id desc";
+	console.log(sql1);
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
 			console.log(error);
 			return false;
 		}
 		//用数据源(对象)data渲染Excel模板
-		var obj_str = '[ [{"date": "' + k_date + ' ' + ks + ' ' + kc + '"}],';
+		var obj_str = '[ [{"date": ""}],';
 		obj_str += JSON.stringify(obj) + "]";
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
 			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
@@ -645,6 +652,18 @@ function delStore(req, res) {
 	});
 };
 
+function delfrmOrd(req, res) {
+	var id = req.param('id');
+	var sql1 = "delete from frm_orderlist where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
 function delGYS(req, res) {
 	var id = req.param('id');
 	var sql1 = "delete from gys where id = " + id;
@@ -688,6 +707,7 @@ function insertOrd(req, res) {
 	var category = req.param('category');
 	var date = req.param('date');
 	var num = req.param('num');
+	var order_no = req.param('order_no');
 	/*先获取库存里是否有，有的话计算出单价*/
 	var sql0 = "select * from stock where name = '"+name+"' and store = '"+store+"' and category = '"+category+"'";
 	mysql.query(sql0, function(error, row0) {
@@ -699,7 +719,7 @@ function insertOrd(req, res) {
 		if(row0[0]){
 			unitPrice = row0[0].unitPrice;
 		}
-		var sql1 = "insert into orderlist (store,name,category,date,num,unitPrice) values ('" + store + "','" + name + "','" + category + "','" + date + "','" + num + "',"+unitPrice+")";
+		var sql1 = "insert into orderlist (store,name,category,date,num,unitPrice,order_no) values ('" + store + "','" + name + "','" + category + "','" + date + "','" + num + "',"+unitPrice+",'"+order_no+"')";
 		mysql.query(sql1, function(error, row) {
 			if(error) {
 				console.log(error);
@@ -708,6 +728,19 @@ function insertOrd(req, res) {
 			res.send('200');
 		});
 	});
+};
+
+function insertOrdFrm(req, res) {
+	var date = req.param('date');
+	var order_no = req.param('order_no');
+		var sql1 = "insert into frm_orderlist (no,date,createAt) values ('"+order_no+"','"+date+"',now())";
+		mysql.query(sql1, function(error, row) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			res.send('200');
+		});
 };
 
 function delM(req, res) {
@@ -723,13 +756,16 @@ function delM(req, res) {
 };
 
 function getOrd(req, res) {
+	/*
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
-	var k_name1 = req.param('k_name1');
-	k_category = k_category == '所有' ? '' : k_category;
-	k_store = k_store == '所有' ? '' : k_store;
-	var sql1 = "select * from c_orderlist where name like '%"+k_name1+"%' and store like '%" + k_store + "%' and category like '%" + k_category + "%' and date = '" + k_date + "' order by no desc";
+	var k_name1 = req.param('k_name1');*/
+	var order_no = req.param('order_no');
+	//k_category = k_category == '所有' ? '' : k_category;
+	//k_store = k_store == '所有' ? '' : k_store;
+	//var sql1 = "select * from c_orderlist where name like '%"+k_name1+"%' and store like '%" + k_store + "%' and category like '%" + k_category + "%' and date = '" + k_date + "' order by no desc";
+	var sql1 = "select * from orderlist where order_no = '"+order_no+"' order by id desc";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {

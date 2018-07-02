@@ -1,0 +1,116 @@
+<% include header %>
+<div class="am-cf am-padding">
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">采购管理</strong> / <small>采购单</small></div>
+</div>
+	<table class="am-form" style="margin:5px">
+		<tr>
+			<td>
+				<input type="text" id="k_date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
+			</td>
+			<td>
+				&nbsp;<button class="am-btn am-btn-primary" onclick="getDate()">检索</button>
+			</td>
+			<td>
+				&nbsp;<button class="am-btn am-btn-primary" onclick="window.sessionStorage.editid = '';window.location='/erp/index';">新增</button>
+			</td>
+		</tr>
+	</table>
+	<div class="div_auto">
+		<table style="margin:5px" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+			<tr>
+				<th>采购单日期</th>
+				<th>采购单编号</th>
+				<th>创建时间</th>
+				<th>操作</th>
+			</tr>
+			<%for(var i in obj){%>
+				<tr>
+					<td>
+						<%=obj[i].date%>
+					</td>
+					<td>
+						<%=obj[i].no%>
+					</td>
+					<td>
+						<%=obj[i].createAt%>
+					</td>
+					<td>
+						<button style="display: inline-block !important;" class="am-btn am-btn-default am-btn-xs am-text-default am-hide-sm-only" onclick="edit('<%=obj[i].id%>','<%=obj[i].no%>','<%=obj[i].date%>')">编辑</button>
+						<button style="display: inline-block !important;" class="am-btn am-btn-default am-btn-xs am-text-success am-hide-sm-only" onclick="toExcel(<%=obj[i].no%>)">导出</button>
+						<button style="display: inline-block !important;" class="am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only" onclick="print(<%=obj[i].no%>)">打印</button>
+						<button style="display: inline-block  !important;" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del(<%=obj[i].id%>)">删除</button>
+					</td>
+				</tr>
+				<%}%>
+		</table>
+	</div>
+	<script>
+		function print(no){
+			window.open('/erp/print?frm=orderlist&no='+no);
+		}
+
+		function toExcel(no) {
+			$.ajax({
+				type: "POST",
+				url: "/erp/toExcelorderlist",
+				data: {
+					no: no
+				},
+				success: function(data) {
+					window.open("/excelop/temp/" + data);
+				}
+			});
+		}
+
+
+		function getDate(){
+			var d = $("#k_date").val();
+			window.location = '/erp/frmorder?d='+d;
+		}
+
+		function add() {
+			if($('#name').val() ==''){
+				alert('请填写门店');return false;
+			}
+			$.ajax({
+				type: "POST",
+				url: "/erp/insertStore",
+				data: {
+					name: $("#name").val()
+				},
+				success: function(data) {
+					if (data == 200) {
+						//alert('新增成功！');
+						window.location.reload();
+					}
+				}
+			});
+		}
+
+		function edit(id,no,date){
+			window.sessionStorage.editid = id;
+			window.sessionStorage.orderno = no;
+			window.sessionStorage.orderdate = date;
+			window.location = '/erp/index';
+		}
+		
+		function del(id){
+			var _con = confirm("是否确认删除?");
+ 			if(_con){
+ 				$.ajax({
+					type: "POST",
+					url: "/erp/delfrmOrd",
+					data: {
+						id: id
+					},
+					success: function(data) {
+						if (data == 200) {
+							alert('删除成功！');
+							window.location.reload();
+						}
+					}
+				});	
+ 			}
+		}
+	</script>
+	<% include footer %>

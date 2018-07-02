@@ -179,6 +179,7 @@ module.exports = function (app, routes) {
     
     //erp
     app.get('/erp',routes.erp_home);
+    app.get('/erp/frmorder',routes.erp_frmorder);
     app.get('/erp/index',routes.erp_index);
     app.get('/erp/material',routes.erp_material);
     app.get('/erp/c_material',routes.erp_cmaterial);
@@ -193,6 +194,7 @@ module.exports = function (app, routes) {
     app.get('/erp/byday',routes.erp_byday);
     app.get('/erp/bymonth',routes.erp_bymonth);
     app.get('/erp/log',routes.erp_log);
+    app.get('/erp/print',routes.erp_print);
 
     app.post('/service/:sql',routes.servicedo);
 

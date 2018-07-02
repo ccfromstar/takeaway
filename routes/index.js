@@ -1609,6 +1609,24 @@ exports.erp_store = function(req, res) {
 	});
 };
 
+exports.erp_frmorder = function(req, res) {
+	var d = req.query.d;
+	d = d?d:"";
+	var sql1 = "select * from frm_orderlist where date like '%"+d+"%' order by date desc";
+	mysql.query(sql1, function(error, obj) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		for(var i in obj){
+			obj[i].createAt = (obj[i].createAt).Format("yyyy-MM-dd hh:mm:ss")
+		}
+		res.render('erp/frmorder', {
+			obj: obj
+		});
+	});
+};
+
 exports.erp_gys = function(req, res) {
 	var sql1 = "select * from gys order by id desc";
 	mysql.query(sql1, function(error, obj) {
@@ -1682,6 +1700,25 @@ exports.erp_log = function(req, res) {
 
 exports.erp_home = function(req, res) {
 	res.render('erp/home', {});
+};
+
+exports.erp_print = function(req, res) {
+	var frm = req.query.frm;
+	var sql = '';
+	if(frm == 'orderlist'){
+		var no = req.query.no;
+		sql = 'select * from orderlist where order_no = "'+no+'"';
+		mysql.query(sql, function(err, rows) {
+			if(err) {
+				console.log(err);
+				return false;
+			}
+			res.render('erp/print', {
+				date:rows,
+				frm:frm
+			});
+		});
+	}
 };
 
 /*store begin*/
