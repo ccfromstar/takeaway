@@ -12,7 +12,7 @@
 			<input type="text" id="k_date_end" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
 		</td>
 		<td>
-			<input id="k_store" type="text" list="list3" placeholder="门店" onblur="setCat(1);" />
+			<input id="k_store" type="text" style="height: 40px;" list="list3" placeholder="门店" onblur="setCat(1);" />
 			<datalist id="list3">
 					<option value="所有">门店</option>
 					<%for(var i in obj4){%>
@@ -49,10 +49,10 @@
 				</datalist>
 		</td>
 		<td>
-			<input type="text" id="s_name" placeholder="材料名检索"  />
+			<input type="text" id="s_name" style="height: 40px;" placeholder="材料名检索"  />
 		</td>
 		<td>
-			<button class="am-btn am-btn-primary" onclick="filter()">筛选</button>
+			&nbsp;<button class="am-btn am-btn-primary" onclick="filter()">筛选</button>
 		</td>
 	</tr>
 </table>

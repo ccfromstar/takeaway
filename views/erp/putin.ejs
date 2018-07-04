@@ -1,20 +1,113 @@
 <% include header %>
 <div class="am-cf am-padding">
-    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">采购管理</strong> / <small>入库</small></div>
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">采购管理</strong> / <small>入库单</small></div>
 </div>
 <div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="doc-tab-demo-1">
+	<!--
   <ul class="am-tabs-nav am-nav am-nav-tabs">
     <li class="am-active"><a href="javascript: void(0)">未入库列表</a></li>
     <li><a href="javascript: void(0)">待入库列表</a></li>
     <li><a href="javascript: void(0)">入库记录查询</a></li>
-  </ul>
+  </ul>-->
 
   <div class="am-tabs-bd">
     <div class="am-tab-panel am-active">
       
+    	<!--采购单BEGIN-->
+<div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 入库单添加</p>
+          <table class="am-table am-table-bordered am-form">
+          	<tr>
+    			<td>入库单号</td>
+    			<td><input type="text" id="order_no" readonly></td>
+    		</tr>
+    		<tr>
+    			<td>日期</td>
+    			<td><input type="text"  id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input></td>
+    		</tr>
+    		<tr>
+    			<td>选择采购单</td>
+    			<td>
+    				<input type="text" id="frm_order_no" placeholder="请输入采购单号" style="width:200px;display: inline-block !important;">
+    				<button class="am-btn am-btn-primary"  onclick="getStockDate()">检索</button>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="background-color: rgb(14,144,210);color:white">未入库列表</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="">
+    				<table class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+						<thead>
+						<tr>
+							<th>日期</th>
+							<th>材料名称</th>
+							<th>材料类别</th>
+							<th>数量</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody id="contentStock">
+						</tbody>
+					</table>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="background-color: rgb(14,144,210);color:white">待入库列表</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="">
+    				<table class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+						<thead>
+						<tr>
+							<th>日期</th>
+							<th>材料名称</th>
+							<th>材料类别</th>
+							<th>数量</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						<tbody id="contentStock1">
+						</tbody>
+					</table>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="background-color: rgb(14,144,210);color:white">已入库列表</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="">
+    				<table style="margin:5px;width:90%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+						<thead>
+							<tr>
+								<th>材料名称</th>
+								<th>材料类别</th>
+								<th>数量</th>
+								<th>总价</th>
+								<th>单价</th>
+								<th>差价</th>
+								
+							</tr>
+						</thead>
+						<tbody id="content">
+						</tbody>
+					</table>
+    			</td>
+    		</tr>
+    		<tr id="btn_2">
+    			<td colspan="2" ><button class="am-btn am-btn-success"  onclick="subadd()">提交入库单</button></td>
+    			
+    		</tr>
+			</table>
+        </div>
+      </div>
+<!--采购单END-->
+    </div>
+  </div>
 
 
-    	<div class="am-panel am-panel-default admin-sidebar-panel">
+    	<div class="am-panel am-panel-default admin-sidebar-panel" style="display: none">
         <div class="am-panel-bd">
           <p><span class="am-icon-bookmark"></span> 未入库列表</p>
           <table class="am-form">
@@ -49,19 +142,7 @@
 	</tr>
 </table>
 <div class="div_auto_stock">
-	<table class="am-table am-table-bordered am-table-radius am-table-striped table-main">
-		<thead>
-		<tr>
-			<th>日期</th>
-			<th>材料名称</th>
-			<th>材料类别</th>
-			<th>数量</th>
-			<th>操作</th>
-		</tr>
-		</thead>
-		<tbody id="contentStock">
-		</tbody>
-	</table>
+	
 </div>
         </div>
       </div>
@@ -69,7 +150,7 @@
 
 
     </div>
-    <div class="am-tab-panel">
+    <div class="am-tab-panel" style="display: none">
     	<!--待入库内容BEGIN-->
     	<div class="am-panel am-panel-default admin-sidebar-panel">
         <div class="am-panel-bd">
@@ -106,19 +187,7 @@
 	</tr>
 </table>
 <div class="div_auto_stock">
-	<table class="am-table am-table-bordered am-table-radius am-table-striped table-main">
-		<thead>
-		<tr>
-			<th>日期</th>
-			<th>材料名称</th>
-			<th>材料类别</th>
-			<th>数量</th>
-			<th>操作</th>
-		</tr>
-		</thead>
-		<tbody id="contentStock1">
-		</tbody>
-	</table>
+	
 </div>
         </div>
       </div>
@@ -128,7 +197,7 @@
       
 
 
-    <div class="am-panel am-panel-default admin-sidebar-panel">
+    <div class="am-panel am-panel-default admin-sidebar-panel" style="display: none">
         <div class="am-panel-bd">
           <p><span class="am-icon-bookmark"></span> 入库记录查询</p>
           <table class="am-form">
@@ -172,21 +241,7 @@
     <div class="am-panel-bd">材料采购总共消费金额：<span id="totalout"></span>元</div>
 </div>
 <div class="div_auto_short">
-	<table style="margin:5px;width:90%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
-		<thead>
-			<tr>
-				<th>材料名称</th>
-				<th>材料类别</th>
-				<th>数量</th>
-				<th>总价</th>
-				<th>单价</th>
-				<th>差价</th>
-				
-			</tr>
-		</thead>
-		<tbody id="content">
-		</tbody>
-	</table>
+	
 </div>
         </div>
       </div>
@@ -232,6 +287,19 @@
 		var d = (((myDate.getDate()) + "").length == 1) ? "0" + (myDate.getDate()) : (myDate.getDate());
 		var _date = y + "-" + m + "-" + d;
 		$('.Wdate').val(_date);
+
+		//生成采购单号
+		var order_no = Number(myDate);
+		$("#order_no").val(order_no);
+
+		var editid = window.sessionStorage.editid;
+		if(editid != ''){
+			$("#order_no").val(window.sessionStorage.orderno);
+			$("#frm_order_no").val(window.sessionStorage.corderno);
+			$(".Wdate").val(window.sessionStorage.orderdate);
+			$('#btn_2').css("display","none");
+		}
+
 		/*获取入库列表*/
 		function getDate() {
 			//alert($("#k_name1").val());
@@ -239,11 +307,13 @@
 				type: "POST",
 				url: "/erp/getPutIn",
 				data: {
+					/*
 					k_store: $("#k_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
 					k_date_end: $("#k_date_end").val(),
-					k_name1:$("#k_name1").val()
+					k_name1:$("#k_name1").val()*/
+					frm_order_no:$("#order_no").val()
 				},
 				success: function(data) {
 					var html = "";
@@ -267,6 +337,7 @@
 					$("#content").html(html);
 					//计算当天总支出
 					$('#totalout').html(totalout.toFixed(2));
+
 				}
 			});
 		}
@@ -384,15 +455,31 @@
 			});
 		}
 
+		function subadd() {
+			$.ajax({
+				type: "POST",
+				url: "/erp/insertOrdFrm1",
+				data: {
+					date: $("#date").val(),
+					order_no:$("#order_no").val(),
+					frm_order_no:$("#frm_order_no").val()
+				},
+				success: function(data) {
+					if(data == 200) {
+						alert('提交成功！');
+						window.location = '/erp/frmputin';
+					}
+				}
+			});
+		}
+
 		/*获取未入库采购清单列表*/
 		function getStockDate() {
 			$.ajax({
 				type: "POST",
 				url: "/erp/getUninOrd",
 				data: {
-					k_store: $("#k_store").val(),
-					k_category: $("#k_category").val(),
-					k_date: $("#k_date_s").val()
+					frm_order_no:$("#frm_order_no").val()
 				},
 				success: function(data) {
 					var html = "";
@@ -421,11 +508,10 @@
 				type: "POST",
 				url: "/erp/getUninOrd1",
 				data: {
-					k_store: $("#k_store1").val(),
-					k_category: $("#k_category1").val(),
-					k_date: $("#k_date_s1").val()
+					frm_order_no:$("#order_no").val()
 				},
 				success: function(data) {
+					console.log(data);
 					var html = "";
 					for(var i in data) {
 						html += "<tr>";
@@ -488,7 +574,10 @@
 					success: function(data) {
 						if(data == 200) {
 							//alert('删除成功！');
-							window.location.reload();
+							//window.location.reload();
+							getDate();
+							getStockDate();
+							getStockDate1();
 						}
 					}
 				});
@@ -561,7 +650,8 @@
 				data: {
 					num: $('#num').val(),
 					total: $('#total').val(),
-					id: g_id
+					id: g_id,
+					order_no: $("#order_no").val()
 				},
 				success: function(data) {
 					if(data == 200) {

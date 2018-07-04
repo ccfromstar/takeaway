@@ -52,6 +52,85 @@
                 </tr>
             <%}%>
         <%}%>
+        <%if(frm == 'putin'){%>
+            <tr>
+              <td colspan="5" style="text-align: center;">
+                <div style="font-weight: bold;font-size: 30px;">入库单</div>
+              </td>
+            </tr>
+            <tr>
+              
+              <td colspan="5">
+                入库日期：<%=date[0].date%>
+                <br/>入库单号：<%=date[0].order_no%>
+              </td>
+            </tr>
+            <tr>
+              <th>材料名称</th>
+              <th>数量</th>
+              <th>总价</th>
+              <th>单价</th>
+              <th>差价</th>
+            </tr>
+            <%for(var i in date){%>
+                <tr>
+                  <td><%=date[i].name%></td>
+                  <td><%=date[i].num%></td>
+                  <td><%=date[i].total%></td>
+                  <td><%=date[i].unitPrice%></td>
+                  <td><%=date[i].difference%></td>
+                </tr>
+            <%}%>
+        <%}%>
+        <%if(frm == 'stock'){%>
+            <tr>
+              <td colspan="5" style="text-align: center;">
+                <div style="font-weight: bold;font-size: 30px;">库存清单</div>
+              </td>
+            </tr>
+            <tr>
+              <th>材料名称</th>
+              <th>单价</th>
+              <th>库存数</th>
+            </tr>
+            <%for(var i in date){%>
+                <tr>
+                  <td><%=date[i].name%></td>
+                  <td><%=date[i].unitPrice%></td>
+                  <td><%=date[i].num%></td>
+                </tr>
+            <%}%>
+        <%}%>
+        <%if(frm == 'putout'){%>
+            <tr>
+              <td colspan="5" style="text-align: center;">
+                <div style="font-weight: bold;font-size: 30px;">出库单</div>
+              </td>
+            </tr>
+            <tr>
+              
+              <td colspan="5">
+                出库日期：<%=date[0].date%>
+                <br/>出库单号：<%=date[0].order_no%>
+              </td>
+            </tr>
+            <tr>
+              <th>门店</th>
+              <th>材料名称</th>
+              <th>数量</th>
+              <th>单价</th>
+              <th>总价</th>
+            </tr>
+            <%for(var i in date){%>
+                <tr>
+                  <td><%=date[i].store%></td>
+                  <td><%=date[i].name%></td>
+                  <td><%=date[i].num%></td>
+                  <td><%=date[i].unitPrice%></td>
+                  <td><%=date[i].total%></td>
+                </tr>
+            <%}%>
+        <%}%>
       </table>
   </body>
 </html>

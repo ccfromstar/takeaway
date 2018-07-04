@@ -3,20 +3,35 @@
     <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">库存管理</strong> / <small>出库</small></div>
 </div>
 <div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="doc-tab-demo-1">
+	<!--
   <ul class="am-tabs-nav am-nav am-nav-tabs">
     <li class="am-active"><a href="javascript: void(0)">出库操作</a></li>
     <li><a href="javascript: void(0)">出库记录查询</a></li>
-  </ul>
+  </ul>-->
 
   <div class="am-tabs-bd">
     <div class="am-tab-panel am-active">
       
-
-
-    <div class="am-panel am-panel-default admin-sidebar-panel">
+        	<!--采购单BEGIN-->
+<div class="am-panel am-panel-default admin-sidebar-panel">
         <div class="am-panel-bd">
-          <p><span class="am-icon-bookmark"></span> 出库操作</p>
-          <table class="am-form">
+          <p><span class="am-icon-bookmark"></span> 出库单添加</p>
+          <table class="am-table am-table-bordered am-form">
+          	<tr>
+    			<td>出库单号</td>
+    			<td><input type="text" id="order_no" readonly></td>
+    		</tr>
+    		<tr>
+    			<td>日期</td>
+    			<td><input type="text"  id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input></td>
+    		</tr>
+    		
+    		<tr>
+    			<td colspan="2" style="background-color: rgb(14,144,210);color:white">选择出库的材料</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="">
+    				 <table class="am-form">
 	<tr>
 		<td>
 			<input type="text" id="date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></input>
@@ -60,28 +75,66 @@
 				</datalist>
 		</td>
 		<td>
-				<input type="text" id="s_name" placeholder="材料名检索"  />
+				<input type="text" id="s_name" style="height: 40px;" placeholder="材料名检索"  />
 				</td>
 				<td>
-					<button class="am-btn am-btn-primary" onclick="getStockDate()">筛选</button>
+					&nbsp;<button class="am-btn am-btn-primary" onclick="getStockDate()">筛选</button>
 				</td>
 	</tr>
 </table>
+    				<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+						<thead>
+							<tr>
+								<th>材料名称</th>
+								<th>单价</th>
+								<th>分类</th>
+								<th>库存数</th>
+								
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="contentStock">
+						</tbody>
+					</table>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td colspan="2" style="background-color: rgb(14,144,210);color:white">出库记录列表</td>
+    		</tr>
+    		<tr>
+    			<td  colspan="2"> 
+    				<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
+						<thead>
+							<tr>
+								<th>门店</th>
+								<th>材料名称</th>
+								<th>材料类别</th>
+								<th>数量</th>
+								<th>单价</th>
+								<th>总价</th>
+								<!--<th>操作</th>-->
+							</tr>
+						</thead>
+						<tbody id="content">
+						</tbody>
+					</table>
+    			</td>
+    		</tr>
+    		<tr id="btn_2">
+    			<td colspan="2" ><button class="am-btn am-btn-success"  onclick="subadd()">提交出库单</button></td>
+    			
+    		</tr>
+			</table>
+        </div>
+      </div>
+<!--采购单END-->	
+
+    <div class="am-panel am-panel-default admin-sidebar-panel" style="display:none">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 出库操作</p>
+         
 <div class="div_auto_stock">
-	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
-		<thead>
-			<tr>
-				<th>材料名称</th>
-				<th>单价</th>
-				<th>分类</th>
-				<th>库存数</th>
-				
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody id="contentStock">
-		</tbody>
-	</table>
+	
 </div>
         </div>
       </div>
@@ -137,21 +190,7 @@
     <div class="am-panel-bd">材料出库总金额：<span id="totalout"></span>元</div>
 </div>
 <div class="div_auto_stock">
-	<table style="margin:5px;width:94%" class="am-table am-table-bordered am-table-radius am-table-striped table-main">
-		<thead>
-			<tr>
-				<th>门店</th>
-				<th>材料名称</th>
-				<th>材料类别</th>
-				<th>数量</th>
-				<th>单价</th>
-				<th>总价</th>
-				<!--<th>操作</th>-->
-			</tr>
-		</thead>
-		<tbody id="content">
-		</tbody>
-	</table>
+	
 </div>
         </div>
       </div>
@@ -209,6 +248,35 @@
 		var _date = y + "-" + m + "-" + d;
 		var g_num, g_name, g_unitPrice, g_category, g_id, g_store;
 		$('.Wdate').val(_date);
+
+		//生成采购单号
+		var order_no = Number(myDate);
+		$("#order_no").val(order_no);
+
+		var editid = window.sessionStorage.editid;
+		if(editid != ''){
+			$("#order_no").val(window.sessionStorage.orderno);
+			$(".Wdate").val(window.sessionStorage.orderdate);
+			$('#btn_2').css("display","none");
+		}
+
+		function subadd() {
+			$.ajax({
+				type: "POST",
+				url: "/erp/insertOrdFrm2",
+				data: {
+					date: $("#date").val(),
+					order_no:$("#order_no").val()
+				},
+				success: function(data) {
+					if(data == 200) {
+						alert('提交成功！');
+						window.location = '/erp/frmputout';
+					}
+				}
+			});
+		}
+
 		/*获取库存列表*/
 		function getStockDate() {
 			var tmp = $("#k_name").val();
@@ -321,7 +389,8 @@
 					name: g_name,
 					num: val,
 					unitPrice: g_unitPrice,
-					id: g_id
+					id: g_id,
+					order_no:$("#order_no").val()
 				},
 				success: function(data) {
 					if(data == 200) {
@@ -341,11 +410,13 @@
 				type: "POST",
 				url: "/erp/getPutout",
 				data: {
+					/*
 					k_store: $("#sk_store").val(),
 					k_category: $("#k_category").val(),
 					k_date: $("#k_date").val(),
 					k_date_end: $("#k_date_end").val(),
-					k_name1:$("#k_name1").val()
+					k_name1:$("#k_name1").val()*/
+					order_no:$("#order_no").val()
 				},
 				success: function(data) {
 					var html = "";
@@ -511,5 +582,9 @@
 			<%}%>
 			$('#mlist').html(html);
 		}
+
+		getDate();
+		//getStockDate();
+
 	</script>
 	<% include footer %>

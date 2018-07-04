@@ -52,6 +52,7 @@ $(function(){
     var cname = window.sessionStorage.getItem('cname');
     var url = window.location.href;
     //console.log(url);
+    /*
     if(store != '-'){
         $('nav').find('a').eq(4).attr('href',"/erp/stock?p=所有&s=" + store);
     }
@@ -107,7 +108,7 @@ $(function(){
         }else if(url.indexOf('bymonth') != -1){
             filter();
         }
-    }
+    }*/
 
     $('#exit').bind('click',function(){
         window.sessionStorage.removeItem("cid");

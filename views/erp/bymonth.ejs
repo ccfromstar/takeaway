@@ -9,7 +9,7 @@
 			<input type="text" id="k_date" style="cursor:pointer;height: 40px" readonly class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM'})"></input>
 		</td>
 		<td>
-			<input id="k_store" type="text" list="list3" placeholder="门店" onblur="setCat(1);" />
+			<input id="k_store" type="text" style="height: 40px;" list="list3" placeholder="门店" onblur="setCat(1);" />
 			<datalist id="list3">
 					<option value="所有">所有</option>
 					<%for(var i in obj4){%>
@@ -27,7 +27,7 @@
 				</datalist>
 		</td>
 		<td style="display:none">
-			<input type="text" id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
+			<input type="text"  id="cate_id" placeholder="所属分类" list="mlist1" onblur="setMat();" />
 			<datalist id="mlist1">
 					<%for(var i in obj5){%>
 						<option value="<%=obj5[i].no%>">
@@ -46,10 +46,10 @@
 				</datalist>
 		</td>
 		<td>
-			<input type="text" id="s_name" placeholder="材料名检索"  />
+			<input type="text" id="s_name" style="height: 40px;" placeholder="材料名检索"  />
 		</td>
 		<td>
-			<button class="am-btn am-btn-primary" onclick="filter()">筛选</button>
+			&nbsp;<button class="am-btn am-btn-primary" onclick="filter()">筛选</button>
 			<button class="am-btn am-btn-default" onclick="window.location.reload();">查看全部</button>
 		</td>
 	</tr>

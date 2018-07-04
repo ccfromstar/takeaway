@@ -20,6 +20,10 @@ exports.sqldo = function(req, res) {
 		insertOrd(req, res);
 	} else if(_sql == "insertOrdFrm") {
 		insertOrdFrm(req, res);
+	} else if(_sql == "insertOrdFrm1") {
+		insertOrdFrm1(req, res);
+	} else if(_sql == "insertOrdFrm2") {
+		insertOrdFrm2(req, res);
 	} else if(_sql == "insertGYS") {
 		insertGYS(req, res);
 	} else if(_sql == "delOrd") {
@@ -118,8 +122,11 @@ exports.sqldo = function(req, res) {
 		UptateMat(req,res);
 	}else if(_sql == "UptateGYS"){
 		UptateGYS(req,res);
-	}
-	
+	}else if(_sql == "delfrmPutin") {
+		delfrmPutin(req, res);
+	}else if(_sql == "delfrmPutout") {
+		delfrmPutout(req, res);
+	}  	
 };
 
 function setFileName() {
@@ -200,6 +207,7 @@ function Printorderlist(req, res) {
 
 /*导出入库单*/
 function toExcelputin(req, res) {
+	/*
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
@@ -208,12 +216,14 @@ function toExcelputin(req, res) {
 	k_category = k_category == '所有' ? '' : k_category;
 	var ks = k_store == '' ? '所有门店' : k_store;
 	var kc = k_category == '' ? '所有分类' : k_category;
+	*/
+	var no = req.param('no');
 	//获得Excel模板的buffer对象
 	var exlBuf = fs.readFileSync("./public/excelop/template/putin.xlsx");
 	var excelname = setFileName();
 	//数据源
 	//var sql1 = "select * from c_putin where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
-	var sql1 = "select * from c_putin where date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var sql1 = "select * from putin where order_no = '" + no + "' order by id desc";
 	
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
@@ -221,7 +231,7 @@ function toExcelputin(req, res) {
 			return false;
 		}
 		//用数据源(对象)data渲染Excel模板
-		var obj_str = '[ [{"date": "' + k_date + "~" + k_date_end + ' ' + ks + ' ' + kc + '"}],';
+		var obj_str = '[ [{"date": ""}],';
 		obj_str += JSON.stringify(obj) + "]";
 		//console.log(obj_str);
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
@@ -409,6 +419,7 @@ function Printstock(req, res) {
 
 /*导出出库单*/
 function toExcelputout(req, res) {
+	/*
 	var k_category = req.param('k_category');
 	var k_store = req.param('k_store');
 	var k_date = req.param('k_date');
@@ -416,13 +427,15 @@ function toExcelputout(req, res) {
 	k_category = k_category == '所有' ? '' : k_category;
 	k_store = k_store == '所有' ? '' : k_store;
 	var ks = k_store == '' ? '所有门店' : k_store;
-	var kc = k_category == '' ? '所有分类' : k_category;
+	var kc = k_category == '' ? '所有分类' : k_category;*/
+	var no = req.param('no');
 	//获得Excel模板的buffer对象
 	var exlBuf = fs.readFileSync("./public/excelop/template/putout.xlsx");
 	var excelname = setFileName();
 	//数据源
 	//var sql1 = "select * from putout where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
-	var sql1 = "select * from c_putout where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	//var sql1 = "select * from c_putout where store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
+	var sql1 = "select * from putout where order_no = '"+no+"' order by id desc";
 	
 	mysql.query(sql1, function(error, obj) {
 		if(error) {
@@ -430,7 +443,7 @@ function toExcelputout(req, res) {
 			return false;
 		}
 		//用数据源(对象)data渲染Excel模板
-		var obj_str = '[ [{"date": "' + k_date + "~" + k_date_end  + ' ' + ks + ' ' + kc + '"}],';
+		var obj_str = '[ [{"date": ""}],';
 		obj_str += JSON.stringify(obj) + "]";
 		ejsExcel.renderExcelCb(exlBuf, JSON.parse(obj_str), function(exlBuf2) {
 			fs.writeFileSync("./public/excelop/temp/" + excelname, exlBuf2);
@@ -664,6 +677,31 @@ function delfrmOrd(req, res) {
 	});
 };
 
+function delfrmPutin(req, res) {
+	var id = req.param('id');
+	var sql1 = "delete from frm_putin where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
+function delfrmPutout(req, res) {
+	var id = req.param('id');
+	var sql1 = "delete from frm_putout where id = " + id;
+	mysql.query(sql1, function(error, row) {
+		if(error) {
+			console.log(error);
+			return false;
+		}
+		res.send('200');
+	});
+};
+
+
 function delGYS(req, res) {
 	var id = req.param('id');
 	var sql1 = "delete from gys where id = " + id;
@@ -734,6 +772,34 @@ function insertOrdFrm(req, res) {
 	var date = req.param('date');
 	var order_no = req.param('order_no');
 		var sql1 = "insert into frm_orderlist (no,date,createAt) values ('"+order_no+"','"+date+"',now())";
+		mysql.query(sql1, function(error, row) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			res.send('200');
+		});
+};
+
+function insertOrdFrm1(req, res) {
+	var date = req.param('date');
+	var order_no = req.param('order_no');
+	var frm_order_no = req.param('frm_order_no');
+		var sql1 = "insert into frm_putin (no,date,createAt,cno) values ('"+order_no+"','"+date+"',now(),'"+frm_order_no+"')";
+		mysql.query(sql1, function(error, row) {
+			if(error) {
+				console.log(error);
+				return false;
+			}
+			res.send('200');
+		});
+};
+
+function insertOrdFrm2(req, res) {
+	var date = req.param('date');
+	var order_no = req.param('order_no');
+	//var frm_order_no = req.param('frm_order_no');
+		var sql1 = "insert into frm_putout (no,date,createAt) values ('"+order_no+"','"+date+"',now())";
 		mysql.query(sql1, function(error, row) {
 			if(error) {
 				console.log(error);
@@ -871,6 +937,7 @@ function delOrdh1(req, res) {
 };
 
 function getPutIn(req, res) {
+	/*
 	var k_store = req.param('k_store');
 	var k_category = req.param('k_category');
 	var k_date = req.param('k_date');
@@ -882,6 +949,9 @@ function getPutIn(req, res) {
 	if(k_category == '') {
 		sql1 = "select * from c_putin where  name like '%"+k_name1+"%' and state='已入库' and store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	}
+	*/
+	var frm_order_no = req.param('frm_order_no');
+	var sql1 = 'select * from putin where order_no = "'+frm_order_no+'" and state="已入库"';
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
@@ -950,6 +1020,7 @@ function insertPutin(req, res) {
 	var total = Number(req.param('total'));
 	var num = Number(req.param('num'));
 	var id = Number(req.param('id'));
+	var order_no = Number(req.param('order_no'));
 	//先根据id得到采购清单数据
 	var sql0 = "select * from orderlist where id = " + id;
 	mysql.query(sql0, function(error, r0) {
@@ -970,7 +1041,7 @@ function insertPutin(req, res) {
 				console.log(error);
 				return false;
 			}
-			var sql1 = "insert into putin (name,category,date,num,total,store,unitPrice,difference,state,oid) values ('" + r0[0].name + "','" + r0[0].category + "','" + r0[0].date + "','" + num + "'," + total + ",'" + r0[0].store + "'," + unitPrice + "," + difference + ",'待入库',"+id+")";
+			var sql1 = "insert into putin (name,category,date,num,total,store,unitPrice,difference,state,oid,order_no) values ('" + r0[0].name + "','" + r0[0].category + "','" + r0[0].date + "','" + num + "'," + total + ",'" + r0[0].store + "'," + unitPrice + "," + difference + ",'待入库',"+id+",'"+order_no+"')";
 			mysql.query(sql1, function(error, row) {
 				if(error) {
 					console.log(error);
@@ -1149,9 +1220,11 @@ function insertPutout(req, res) {
 	var num = Number(req.param('num'));
 	var unitPrice = Number(req.param('unitPrice'));
 	var id = req.param('id');
+	var order_no = req.param('order_no');
+
 	var total = num * unitPrice;
 	//插入出库记录
-	var sql1 = "insert into putout (name,category,date,num,unitPrice,total,store) values ('" + name + "','" + category + "','" + date + "'," + num + "," + unitPrice + "," + total + ",'"+store+"')";
+	var sql1 = "insert into putout (name,category,date,num,unitPrice,total,store,order_no) values ('" + name + "','" + category + "','" + date + "'," + num + "," + unitPrice + "," + total + ",'"+store+"','"+order_no+"')";
 	mysql.query(sql1, function(error, row) {
 		if(error) {
 			console.log(error);
@@ -1171,6 +1244,7 @@ function insertPutout(req, res) {
 
 function getPutout(req, res) {
 	//var sql1 = "select * from putout where category like '%"+k_category+"%' and date = '"+k_date+"' order by id desc";
+	/*
 	var k_category = req.param('k_category');
 	var k_store = req.param('k_store');
 	var k_date = req.param('k_date');
@@ -1181,7 +1255,9 @@ function getPutout(req, res) {
 	var sql1 = "select * from c_putout where name like '%"+k_name1+"%' and store like '%"+k_store+"%' and category = '" + k_category + "' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
 	if(k_category == '') {
 		sql1 = "select * from c_putout where name like '%"+k_name1+"%' and store like '%"+k_store+"%' and date >= '" + k_date + "' and date <= '" + k_date_end + "' order by id desc";
-	}
+	}*/
+	var order_no = Number(req.param('order_no'));
+	var sql1 = "select * from putout where order_no = '"+order_no+"'";
 	console.log(sql1);
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
@@ -1299,7 +1375,8 @@ function delCM(req, res) {
 };
 
 function getUninOrd(req, res) {
-	var sql1 = "select * from c_orderlist where inStock = '未入库' order by id desc";
+	var frm_order_no = req.param('frm_order_no');
+	var sql1 = "select * from orderlist where inStock = '未入库' and order_no = '"+frm_order_no+"' order by id desc";
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
 			console.log(error);
@@ -1310,7 +1387,8 @@ function getUninOrd(req, res) {
 };
 
 function getUninOrd1(req, res) {
-	var sql1 = "select * from c_putin where state = '待入库' order by id desc";
+	var frm_order_no = req.param('frm_order_no');
+	var sql1 = "select * from putin where state = '待入库' and order_no = '"+frm_order_no+"' order by id desc";
 	mysql.query(sql1, function(error, rows) {
 		if(error) {
 			console.log(error);

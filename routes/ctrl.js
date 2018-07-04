@@ -180,6 +180,9 @@ module.exports = function (app, routes) {
     //erp
     app.get('/erp',routes.erp_home);
     app.get('/erp/frmorder',routes.erp_frmorder);
+    app.get('/erp/frmputin',routes.erp_frmputin);
+    app.get('/erp/frmputout',routes.erp_frmputout);
+    
     app.get('/erp/index',routes.erp_index);
     app.get('/erp/material',routes.erp_material);
     app.get('/erp/c_material',routes.erp_cmaterial);
